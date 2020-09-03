@@ -8,8 +8,8 @@ Toteutan kurssilla ohjelman, joka vertailee erilaisia reitinhakualgoritmeja ([A*
 
 ## Dokumentaatio
 
-* [Määrittelydokumentti](https://github.com/joonaspartanen/tiralabra-pathfinder/blob/master/dokumentaatio/viikkoraportit/maarittelydokumentti.md)
+* [Määrittelydokumentti](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/maarittelydokumentti.md)
 
 ## Viikkoraportit
 
-* [Viikko 1](https://github.com/joonaspartanen/tiralabra-pathfinder/blob/master/dokumentaatio/viikkoraportit/vk1.md)
+* [Viikko 1](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/viikkoraportit/vk1.md)
