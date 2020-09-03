@@ -10,6 +10,12 @@ Aion toteuttaa aluksi leveyshakua (BFS) sekä A\*- ja _Jump point search_ algori
 
 Ajatuksena on aloittaa toteutus yksinkertaisemmasta ja nopeasti itselleni jo tutusta leveyshausta ja mahdollistaa työn helppo laajentaminen.
 
+## Toteutettavat tietorakenteet
+
+Reitinhakualgoritmeja toteuttaessani tarvitsen ilmeisesti ainakin jonoa (BFS) ja prioriteettijonoa (A\*). Voin aloittaa työn Javan valmiilla tietorakenteilla ja korvata ne myöhemmin omilla toteutuksilla.
+
+JPS-algoritmin osalta tutkimustyö on vielä kesken, joten en ole varma, tarvitsenko siihen muita tietorakenteita.
+
 ## Syötteet
 
 Ohjelma saa syötteenään kartan ja haettavan reitin alku- ja loppupisteet. Todennäköisesti ohjelmassa on valmiina valikoima karttoja, joista käyttäjä voi valita. Jos aika riittää, olisi hyvä lisätä ohjelmaan mahdollisuus lisätä myös uusia karttoja, mutta tämä ei ole algoritmien tarkastelun kannalta niin oleellista.
@@ -26,10 +32,13 @@ Taulukossa |V| = solmujen määrä ja |E| = kaarien määrä.
 
 ## Lähteet
 
-Tässä vaiheessa olen ehtinyt tutustumaan algoritmeihin vain lyhyesti Wikipediassa:
+Tässä vaiheessa olen ehtinyt tutustumaan algoritmeihin vain lyhyesti Wikipedian ja kurssimateriaalin linkatun artikkelin avulla:
 
 - https://en.wikipedia.org/wiki/A*_search_algorithm
+
 - https://en.wikipedia.org/wiki/Jump_point_search
+
+- http://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html
 
 ## Kurssin hallintaan liittyviä tietoja
 
