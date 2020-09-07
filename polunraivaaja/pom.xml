@@ -12,6 +12,11 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>12.0.2</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -34,7 +39,7 @@
                 </executions>
                 <configuration>
                     <excludes>
-                        <exclude>tiralabra.polunraivaaja/Main.class</exclude>
+                        <exclude>tiralabra/polunraivaaja/Main.class</exclude>
                     </excludes>
                 </configuration>
             </plugin>
