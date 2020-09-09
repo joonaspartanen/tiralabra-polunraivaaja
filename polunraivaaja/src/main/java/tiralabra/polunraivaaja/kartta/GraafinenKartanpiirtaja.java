@@ -2,9 +2,9 @@ package tiralabra.polunraivaaja.kartta;
 
 import java.util.List;
 
-import javafx.scene.layout.GridPane;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import tiralabra.polunraivaaja.apurakenteet.Koordinaatti;
 
 /**
@@ -15,7 +15,10 @@ import tiralabra.polunraivaaja.apurakenteet.Koordinaatti;
  */
 public class GraafinenKartanpiirtaja extends Kartanpiirtaja {
 
-    private GridPane karttaruudukko;
+    private Canvas karttapohja;
+    private GraphicsContext gc;
+    private final double RUUDUN_LEVEYS = 1;
+    private final double RUUDUN_KORKEUS = 1;
 
     /**
      * Konstruktori.
@@ -24,7 +27,8 @@ public class GraafinenKartanpiirtaja extends Kartanpiirtaja {
      */
     public GraafinenKartanpiirtaja(Kartta kartta) {
         super(kartta);
-        karttaruudukko = new GridPane();
+        karttapohja = new Canvas(kartta.getLeveys() * RUUDUN_LEVEYS, kartta.getKorkeus() * RUUDUN_KORKEUS);
+        gc = karttapohja.getGraphicsContext2D();
     }
 
     /**
@@ -34,7 +38,7 @@ public class GraafinenKartanpiirtaja extends Kartanpiirtaja {
     public void piirraKartta() {
         for (int i = 0; i < korkeus; i++) {
             for (int j = 0; j < leveys; j++) {
-                piirraRuutu(i, j);
+                piirraRuutu(i, j, false);
             }
         }
     }
@@ -48,25 +52,34 @@ public class GraafinenKartanpiirtaja extends Kartanpiirtaja {
     public void piirraKartta(List<Koordinaatti> reitti) {
         for (int i = 0; i < korkeus; i++) {
             for (int j = 0; j < leveys; j++) {
-                if (!reitti.contains(new Koordinaatti(i, j))) {
-                    piirraRuutu(i, j);
-                } else {
-                    Rectangle ruutu = new Rectangle(1, 1);
-                    ruutu.setFill(Color.CRIMSON);
-                    karttaruudukko.add(ruutu, j, i);
-                }
+                boolean kuuluuReittiin = reitti.contains(new Koordinaatti(i, j));
+                piirraRuutu(i, j, kuuluuReittiin);
             }
         }
     }
 
-    private void piirraRuutu(int rivi, int sarake) {
-        Rectangle ruutu = new Rectangle(1, 1);
-        ruutu.setFill(kartta.getRuutu(rivi, sarake) == 0 ? Color.GHOSTWHITE : Color.BLACK);
-        karttaruudukko.add(ruutu, sarake, rivi);
+    private void piirraRuutu(int rivi, int sarake, boolean kuuluuReittiin) {
+        if (kuuluuReittiin) {
+            gc.setFill(Color.CRIMSON);
+        } else {
+            gc.setFill(kartta.ruutuVapaa(rivi, sarake) ? Color.WHITESMOKE : Color.BLACK);
+        }
+
+        gc.fillRect(sarake * RUUDUN_LEVEYS, rivi * RUUDUN_KORKEUS, RUUDUN_LEVEYS, RUUDUN_KORKEUS);
     }
 
-    public GridPane getKarttaruudukko() {
-        return karttaruudukko;
+    /**
+     *
+     * @return GridPane-olio, joka muodostaa kartan.
+     */
+    public Canvas getKarttapohja() {
+        return karttapohja;
+    }
+
+    // TODO: Poista taikanumerot.
+    public void piirraPiste(Koordinaatti sijainti) {
+        gc.setFill(Color.CRIMSON);
+        gc.fillOval(sijainti.getSarake() - 3, sijainti.getRivi() - 3, 7, 7);
     }
 
 }
