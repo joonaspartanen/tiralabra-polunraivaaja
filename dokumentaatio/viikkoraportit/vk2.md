@@ -1,6 +1,6 @@
 # Viikkoraportti 2
 
-Toisella viikolla sain monta ohjelman osa-aluetta hyvään alkuun: toteutin luokan, joka lukee tekstitiedostona tallennetun kartan taulukoksi, ensimmäisen version leveyshausta sekä kartan konsoliin tulostavan luokan, jonka tosin ehdin jo korvata aivan alustavalla graafisella käyttöliittymällä. Sain myös testauksen hyvään alkuun, tosin testejä täytyy laajentaa vielä merkittävästi.
+Toisella viikolla sain monta ohjelman osa-aluetta hyvään alkuun: toteutin luokan, joka lukee tekstitiedostona tallennetun kartan taulukoksi, ensimmäisen version leveyshausta sekä kartan konsoliin tulostavan luokan, jonka tosin ehdin jo korvata aivan alustavalla graafisella käyttöliittymällä. Sain myös testauksen hyvään alkuun, tosin testejä täytyy laajentaa vielä merkittävästi. Aloitin JavaDocin kirjoittamista, mutta taidan jatkaa sitä vasta myöhemmin, kunhan metodit ja luokat alkavat asettua lopulliseen muotoonsa.
 
 Ensi viikolla aion keskittyä sovelluksen ydinsisältöön eli muiden reitinhakualgoritmien toteuttamiseen. Aloitan A*-algoritmista, jonka toimintaan ehdin jo perehtyä tällä viikolla varsin hyvin.
 
