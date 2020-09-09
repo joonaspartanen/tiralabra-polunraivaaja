@@ -27,6 +27,12 @@ public class Koordinaatti {
         return tulos;
     }
 
+    /**
+     * Kaksi koordinaattia ovat samat, mikäli niiden rivi ja sarake on sama.
+     *
+     * @param obj Verrattava objekti.
+     * @return True, jos koordinaatit ovat samat; false jos eivät.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -50,7 +56,7 @@ public class Koordinaatti {
 
     @Override
     public String toString() {
-        return "Koordinaatti: " + rivi + ", " + sarake;
+        return rivi + ", " + sarake;
     }
 
 }

@@ -7,15 +7,29 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import tiralabra.polunraivaaja.apurakenteet.Koordinaatti;
 
+/**
+ * Piirtää kartan graafiseen käyttöliittymään.
+ *
+ * @author Joonas Partanen <joonas.partanen@helsinki.fi>
+ *
+ */
 public class GraafinenKartanpiirtaja extends Kartanpiirtaja {
 
     private GridPane karttaruudukko;
 
+    /**
+     * Konstruktori.
+     *
+     * @param kartta Piirrettävä kartta.
+     */
     public GraafinenKartanpiirtaja(Kartta kartta) {
         super(kartta);
         karttaruudukko = new GridPane();
     }
 
+    /**
+     * Piirtää pelkän pohjakartan.
+     */
     @Override
     public void piirraKartta() {
         for (int i = 0; i < korkeus; i++) {
@@ -25,6 +39,11 @@ public class GraafinenKartanpiirtaja extends Kartanpiirtaja {
         }
     }
 
+    /**
+     * Piirtää pohjakartan ja siihen parametrina saadun reitin.
+     *
+     * @param reitti Pohjakartan päälle piirrettävä reitti.
+     */
     @Override
     public void piirraKartta(List<Koordinaatti> reitti) {
         for (int i = 0; i < korkeus; i++) {

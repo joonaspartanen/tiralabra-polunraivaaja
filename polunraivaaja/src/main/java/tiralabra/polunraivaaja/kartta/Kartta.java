@@ -1,5 +1,10 @@
 package tiralabra.polunraivaaja.kartta;
 
+/**
+ * Luokka, joka esittää karttaa binääritaulukkona (0 = kulkuväylä, 1 = este).
+ *
+ * @author Joonas Partanen <joonas.partanen@helsinki.fi>
+ */
 public class Kartta {
 
     private int korkeus;
@@ -34,6 +39,12 @@ public class Kartta {
         return kartta[rivi][sarake];
     }
 
+    /**
+     *
+     * @param rivi
+     * @param sarake
+     * @return
+     */
     public boolean ruutuVapaa(int rivi, int sarake) {
         return kartta[rivi][sarake] == 0;
     }

@@ -27,6 +27,10 @@ public class Leveyshaku implements Haku {
     private int[] rivisuunnat = {-1, 0, 0, 1, -1, -1, 1, 1};
     private int[] sarakesuunnat = {0, -1, 1, 0, -1, 1, -1, 1};
 
+    /**
+     *
+     * @param kartta Reittihaun kohteena oleva kartta.
+     */
     public Leveyshaku(Kartta kartta) {
         this.kartta = kartta;
     }
@@ -36,6 +40,15 @@ public class Leveyshaku implements Haku {
         this.kartta = kartta;
     }
 
+    /**
+     * Etsii jonkin lyhimmistä reiteistä parametreina saatujen alku- ja
+     * loppupisteiden välillä.
+     *
+     * @param alku Haettavan reitin alkupiste.
+     * @param loppu Haettavan reitin loppupiste.
+     * @return True, jos reitti löytyi; false, jos reittiä ei löytynyt tai ei
+     * voitu hakea.
+     */
     @Override
     public boolean etsiReitti(Koordinaatti alku, Koordinaatti loppu) {
 
@@ -119,6 +132,11 @@ public class Leveyshaku implements Haku {
         }
     }
 
+    /**
+     * Palauttaa haun löytämää reittiä kuvaavan listan Koordinaatteja.
+     *
+     * @return Lista Koordinaatteja.
+     */
     @Override
     public List<Koordinaatti> getReitti() {
         return reitti;

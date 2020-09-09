@@ -6,15 +6,31 @@ import java.util.Scanner;
 
 import tiralabra.polunraivaaja.kartta.Kartta;
 
+/**
+ * 
+ * 
+ * @author Joonas Partanen <joonas.partanen@helsinki.fi>
+ */
 public class Kartanlukija {
 
     private String kansio;
     private Kartta kartta;
 
+    /**
+     * Konstruktori.
+     *
+     * @param kansio Suhteellinen polku kansioon, josta kartat luetaan.
+     */
     public Kartanlukija(String kansio) {
         this.kansio = kansio;
     }
 
+    /**
+     * Lukee tekstitiedostona tallennetun kartan.
+     *
+     * @param tiedostonimi Luettavan kartan tiedostonimi.
+     * @return Luetusta tekstitiedostosta muodostettu Kartta-olio,
+     */
     public Kartta lueKarttatiedosto(String tiedostonimi) {
         File karttatiedosto = new File(kansio + "/" + tiedostonimi);
 
