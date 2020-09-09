@@ -15,6 +15,8 @@ public class Kartanlukija {
 
     private String kansio;
     private Kartta kartta;
+    int korkeus;
+    int leveys;
 
     /**
      * Konstruktori.
@@ -34,13 +36,13 @@ public class Kartanlukija {
     public Kartta lueKarttatiedosto(String tiedostonimi) {
         File karttatiedosto = new File(kansio + "/" + tiedostonimi);
 
-        try (Scanner lukija = new Scanner(karttatiedosto)) {
+        try ( Scanner lukija = new Scanner(karttatiedosto)) {
 
             // Kartan tyyppi – ei tarvita
             lukija.nextLine();
 
-            int korkeus = Integer.parseInt(lukija.nextLine().split(" ")[1]);
-            int leveys = Integer.parseInt(lukija.nextLine().split(" ")[1]);
+            korkeus = Integer.parseInt(lukija.nextLine().split(" ")[1]);
+            leveys = Integer.parseInt(lukija.nextLine().split(" ")[1]);
 
             // Kartta alkaa tämän rivin jälkeen
             lukija.nextLine();
@@ -50,7 +52,7 @@ public class Kartanlukija {
             int rivinumero = 0;
             while (lukija.hasNextLine()) {
                 String rivi = lukija.nextLine();
-                kartta.taytaRivi(rivinumero, rivi);
+                taytaRivi(rivinumero, rivi);
                 rivinumero++;
             }
         } catch (FileNotFoundException e) {
@@ -58,5 +60,12 @@ public class Kartanlukija {
             System.out.println(karttatiedosto.getAbsolutePath());
         }
         return kartta;
+    }
+    
+    private void taytaRivi(int rivinumero, String rivi) {
+        for (int i = 0; i < leveys; i++) {
+            byte merkki = (byte) (rivi.charAt(i) == 64 ? 1 : 0);
+            kartta.setRuutu(rivinumero, i, merkki); 
+        }
     }
 }
