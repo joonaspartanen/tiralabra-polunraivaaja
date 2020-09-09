@@ -64,4 +64,14 @@ public class LeveyshakuTest {
         assertThat(reitti.size(), is(17));
     }
 
+    @Test
+    public void palauttaaFalseJosReittiEiMahdollinen() {
+        Kartta kartta = lukija.lueKarttatiedosto("test_1_10.map");
+        Haku leveyshaku = new Leveyshaku(kartta);
+
+        boolean onnistui = leveyshaku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(9, 9));
+
+        assertFalse(onnistui);
+    }
+
 }
