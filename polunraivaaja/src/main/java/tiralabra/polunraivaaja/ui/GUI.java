@@ -85,8 +85,10 @@ public class GUI extends Application {
         pyyhiReittiNappi.setOnAction(e -> {
             piirtaja.piirraKartta();
             karttapohja = piirtaja.getKarttapohja();
+            alkupiste = null;
+            loppupiste = null;
+            paivitaHakupalkki();
         });
-
 
         hakupalkki = new HBox(alkupisteLabel, loppupisteLabel, piirraReittiNappi, pyyhiReittiNappi);
         hakupalkki.setSpacing(20);
