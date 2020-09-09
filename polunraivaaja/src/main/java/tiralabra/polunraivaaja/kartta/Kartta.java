@@ -32,6 +32,10 @@ public class Kartta {
     public byte getRuutu(int rivi, int sarake) {
         return kartta[rivi][sarake];
     }
+    
+    public void setRuutu(int rivi, int sarake, byte merkki) {
+        kartta[rivi][sarake] = merkki;
+    }
 
     /**
      *
