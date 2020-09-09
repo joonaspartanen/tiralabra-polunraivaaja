@@ -16,4 +16,4 @@ Lisäksi aion selvittää, minkälaista karttadataa sovelluksessa kannattaisi k�
 
 Olen muissa yhteyksissä ollut tekemisissä GeoJSON-karttojen kanssa ja olisikin hienoa tehdä ohjelma, joka etsii reittejä oikeasti käyttökelpoisella kartalla, mutta luultavasti ainakin aloitan jostain yksinkertaisemmasta karttaformaatista.
 
-Käytetty tuntimäärä viikolla: 10 h
+Viikolla käytetty tuntimäärä: 10 h
