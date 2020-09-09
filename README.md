@@ -10,6 +10,13 @@ Toteutan kurssilla ohjelman, joka vertailee erilaisia reitinhakualgoritmeja ([A*
 
 * [Määrittelydokumentti](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/maarittelydokumentti.md)
 
+* [Testausdokumentti](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/testausdokumentti.md)
+
+* [Käyttöohjeet](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/kayttoohjeet.md)
+
+
 ## Viikkoraportit
 
 * [Viikko 1](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/viikkoraportit/vk1.md)
+
+* [Viikko 2](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/viikkoraportit/vk2.md)
