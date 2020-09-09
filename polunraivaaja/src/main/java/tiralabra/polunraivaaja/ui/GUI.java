@@ -64,7 +64,12 @@ public class GUI extends Application {
             if (alkupiste == null || loppupiste == null) {
                 return;
             }
-            haku.etsiReitti(alkupiste, loppupiste);
+
+            boolean onnistui = haku.etsiReitti(alkupiste, loppupiste);
+            if (!onnistui) {
+                return;
+            }
+
             List<Koordinaatti> reitti = haku.getReitti();
             piirtaja.piirraKartta(reitti);
             karttapohja = piirtaja.getKarttapohja();
