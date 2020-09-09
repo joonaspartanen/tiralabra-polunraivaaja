@@ -6,6 +6,6 @@ Ensi viikolla aion keskittyä sovelluksen ydinsisältöön eli muiden reitinhaku
 
 Tällä hetkellä muutan kartat ruudukoksi, mikä toimii leveyshaun kanssa hyvin. Olen kuitenkin pohtinut, pitäisikö minun pyrkiä muuttamaan kartat painotetuiksi verkoiksi niin että ainoastaan jollain tavalla valitut avainpisteet olisivat solmuja. Pienemmällä määrällä solmuja reitinhaku olisi varmasti nopeampaa.
 
-Tällä viikolla ohjelmassa on vielä joitain Javan valmiita tietorakenteita (jono, lista), jotka ajattelin korjata pian omilla toteutuksilla. Ohjelmassa on myös jonkin verran hätäisesti tiettyyn tarpeeseen kirjoitettuja metodeita, jotka kaipaisivat refaktorointia. Myös ohjelman arkkitehtuuria pitäisi vielä pysähtyä miettimään ja lisätä siihen virheittenkäsittelyä.
+Tällä viikolla ohjelmassa on vielä joitain Javan valmiita tietorakenteita (jono, lista), jotka ajattelin korvata pian omilla toteutuksilla. Ohjelmassa on myös jonkin verran hätäisesti tiettyyn tarpeeseen kirjoitettuja metodeita, jotka kaipaisivat refaktorointia. Myös ohjelman arkkitehtuuria pitäisi vielä pysähtyä miettimään ja lisätä siihen virheittenkäsittelyä.
 
 Viikolla käytetty tuntimäärä: 12 h
