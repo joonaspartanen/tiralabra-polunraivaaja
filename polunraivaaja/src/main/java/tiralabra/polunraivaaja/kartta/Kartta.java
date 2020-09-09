@@ -21,12 +21,6 @@ public class Kartta {
         return kartta;
     }
 
-    public void taytaRivi(int rivinumero, String rivi) {
-        for (int i = 0; i < leveys; i++) {
-            kartta[rivinumero][i] = (byte) (rivi.charAt(i) == 64 ? 1 : 0);
-        }
-    }
-
     public int getKorkeus() {
         return korkeus;
     }
