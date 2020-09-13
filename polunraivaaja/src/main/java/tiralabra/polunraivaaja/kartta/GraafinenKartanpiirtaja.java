@@ -17,8 +17,11 @@ public class GraafinenKartanpiirtaja extends Kartanpiirtaja {
 
     private Canvas karttapohja;
     private GraphicsContext gc;
-    private final double RUUDUN_LEVEYS = 1;
-    private final double RUUDUN_KORKEUS = 1;
+    private final double KARTTAPOHJAN_LEVEYS = 512;
+    private final double KARTTAPOHJAN_KORKEUS = 512;
+
+    private double ruudunLeveys;
+    private double ruudunKorkeus;
 
     /**
      * Konstruktori.
@@ -27,7 +30,9 @@ public class GraafinenKartanpiirtaja extends Kartanpiirtaja {
      */
     public GraafinenKartanpiirtaja(Kartta kartta) {
         super(kartta);
-        karttapohja = new Canvas(kartta.getLeveys() * RUUDUN_LEVEYS, kartta.getKorkeus() * RUUDUN_KORKEUS);
+        karttapohja = new Canvas(KARTTAPOHJAN_LEVEYS, KARTTAPOHJAN_KORKEUS);
+        this.ruudunLeveys = KARTTAPOHJAN_LEVEYS / leveys;
+        this.ruudunKorkeus = KARTTAPOHJAN_KORKEUS / korkeus;
         gc = karttapohja.getGraphicsContext2D();
     }
 
@@ -65,7 +70,7 @@ public class GraafinenKartanpiirtaja extends Kartanpiirtaja {
             gc.setFill(kartta.ruutuVapaa(rivi, sarake) ? Color.WHITESMOKE : Color.BLACK);
         }
 
-        gc.fillRect(sarake * RUUDUN_LEVEYS, rivi * RUUDUN_KORKEUS, RUUDUN_LEVEYS, RUUDUN_KORKEUS);
+        gc.fillRect(sarake * ruudunLeveys, rivi * ruudunKorkeus, ruudunLeveys, ruudunKorkeus);
     }
 
     /**
@@ -79,7 +84,15 @@ public class GraafinenKartanpiirtaja extends Kartanpiirtaja {
     // TODO: Poista taikanumerot.
     public void piirraPiste(Koordinaatti sijainti) {
         gc.setFill(Color.CRIMSON);
-        gc.fillOval(sijainti.getSarake() - 3, sijainti.getRivi() - 3, 7, 7);
+        gc.fillOval(sijainti.getSarake() * ruudunLeveys - 3, sijainti.getRivi() * ruudunKorkeus - 3, 7, 7);
+    }
+
+    public double getRuudunLeveys() {
+        return ruudunLeveys;
+    }
+
+    public double getRuudunKorkeus() {
+        return ruudunKorkeus;
     }
 
 }
