@@ -22,7 +22,7 @@ import tiralabra.polunraivaaja.io.Kartanlukija;
  *
  * @author Joonas Partanen <joonas.partanen@helsinki.fi>
  */
-public class LeveyshakuTest {
+public class AStarTest {
 
     private Kartanlukija lukija;
 
@@ -34,54 +34,53 @@ public class LeveyshakuTest {
     @Test
     public void loytaaReitinTriviaaliKartta() {
         Kartta kartta = lukija.lueKarttatiedosto("test_0_5.map");
-        Haku leveyshaku = new Leveyshaku(kartta);
+        Haku haku = new AStar(kartta);
 
-        leveyshaku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(4, 4));
+        haku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(4, 4));
 
-        List<Koordinaatti> reitti = leveyshaku.getReitti();
+        List<Koordinaatti> reitti = haku.getReitti();
         assertFalse(reitti.isEmpty());
     }
 
     @Test
     public void loytaaLyhimmänReitinTriviaaliKartta() {
         Kartta kartta = lukija.lueKarttatiedosto("test_0_5.map");
-        Haku leveyshaku = new Leveyshaku(kartta);
+        Haku haku = new AStar(kartta);
 
-        leveyshaku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(4, 4));
+        haku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(4, 4));
 
-        List<Koordinaatti> reitti = leveyshaku.getReitti();
+        List<Koordinaatti> reitti = haku.getReitti();
         assertThat(reitti.size(), is(9));
     }
 
     @Test
     public void loytaaLyhimmanReitinHelppoKartta() {
         Kartta kartta = lukija.lueKarttatiedosto("test_0_10.map");
-        Haku leveyshaku = new Leveyshaku(kartta);
+        Haku haku = new AStar(kartta);
 
-        leveyshaku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(9, 9));
+        haku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(9, 9));
 
-        List<Koordinaatti> reitti = leveyshaku.getReitti();
+        List<Koordinaatti> reitti = haku.getReitti();
         assertThat(reitti.size(), is(19));
     }
 
     @Test
     public void loytaaLyhimmanReitinVaikeaKartta() {
         Kartta kartta = lukija.lueKarttatiedosto("Berlin_0_512.map");
-        Haku leveyshaku = new Leveyshaku(kartta);
+        Haku haku = new AStar(kartta);
 
-        leveyshaku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(511, 511));
+        haku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(511, 511));
 
-        List<Koordinaatti> reitti = leveyshaku.getReitti();
+        List<Koordinaatti> reitti = haku.getReitti();
         assertThat(reitti.size(), is(1023));
     }
-
 
     @Test
     public void palauttaaFalseJosReittiEiMahdollinen() {
         Kartta kartta = lukija.lueKarttatiedosto("test_1_10.map");
-        Haku leveyshaku = new Leveyshaku(kartta);
+        Haku haku = new AStar(kartta);
 
-        boolean onnistui = leveyshaku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(9, 9));
+        boolean onnistui = haku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(9, 9));
 
         assertFalse(onnistui);
     }
@@ -89,9 +88,9 @@ public class LeveyshakuTest {
     @Test
     public void palauttaaFalseJosReitinPaatEivatKelpaa() {
         Kartta kartta = lukija.lueKarttatiedosto("test_1_10.map");
-        Haku leveyshaku = new Leveyshaku(kartta);
+        Haku haku = new AStar(kartta);
 
-        boolean onnistui = leveyshaku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(3, 2));
+        boolean onnistui = haku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(3, 2));
 
         assertFalse(onnistui);
     }
