@@ -7,24 +7,29 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import tiralabra.polunraivaaja.algoritmit.Haku;
+import tiralabra.polunraivaaja.algoritmit.AStar;
 import tiralabra.polunraivaaja.algoritmit.Leveyshaku;
 import tiralabra.polunraivaaja.apurakenteet.Koordinaatti;
 import tiralabra.polunraivaaja.io.Kartanlukija;
 import tiralabra.polunraivaaja.kartta.GraafinenKartanpiirtaja;
 import tiralabra.polunraivaaja.kartta.Kartta;
+import tiralabra.polunraivaaja.algoritmit.Haku;
 
 public class GUI extends Application {
 
     private Canvas karttapohja;
+    private VBox valikko;
     private Koordinaatti alkupiste;
     private Koordinaatti loppupiste;
-    Label alkupisteLabel;
-    Label loppupisteLabel;
-    HBox hakupalkki;
+    private Label alkupisteLabel;
+    private Label loppupisteLabel;
+    private HBox hakupalkki;
+    private Haku haku;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -34,7 +39,12 @@ public class GUI extends Application {
         Kartta kartta = lukija.lueKarttatiedosto("Berlin_0_512.map");
         GraafinenKartanpiirtaja piirtaja = new GraafinenKartanpiirtaja(kartta);
 
-        Haku haku = new Leveyshaku(kartta);
+        ToggleGroup algoritmiToggleGroup = new ToggleGroup();
+        RadioButton leveyshakuNappi = new RadioButton("Leveyshaku");
+        leveyshakuNappi.setToggleGroup(algoritmiToggleGroup);
+        leveyshakuNappi.setSelected(true);
+        RadioButton aStarNappi = new RadioButton("A*");
+        aStarNappi.setToggleGroup(algoritmiToggleGroup);
 
         piirtaja.piirraKartta();
 
@@ -45,10 +55,12 @@ public class GUI extends Application {
 
         karttapohja.setOnMouseClicked(e -> {
             if (alkupiste == null) {
-                alkupiste = new Koordinaatti((int) e.getY(), (int) e.getX());
+                alkupiste = new Koordinaatti((int) e.getY() / (int) piirtaja.getRuudunKorkeus(),
+                        (int) e.getX() / (int) piirtaja.getRuudunLeveys());
                 piirtaja.piirraPiste(alkupiste);
             } else if (loppupiste == null) {
-                loppupiste = new Koordinaatti((int) e.getY(), (int) e.getX());
+                loppupiste = new Koordinaatti((int) e.getY() / (int) piirtaja.getRuudunKorkeus(),
+                        (int) e.getX() / (int) piirtaja.getRuudunLeveys());
                 piirtaja.piirraPiste(loppupiste);
             } else {
                 alkupiste = null;
@@ -65,6 +77,12 @@ public class GUI extends Application {
                 return;
             }
 
+            if (algoritmiToggleGroup.getSelectedToggle() == leveyshakuNappi) {
+                haku = new Leveyshaku(kartta);
+            } else if (algoritmiToggleGroup.getSelectedToggle() == aStarNappi) {
+                haku = new AStar(kartta);
+            }
+
             boolean onnistui = haku.etsiReitti(alkupiste, loppupiste);
             if (!onnistui) {
                 return;
@@ -73,6 +91,7 @@ public class GUI extends Application {
             List<Koordinaatti> reitti = haku.getReitti();
             piirtaja.piirraKartta(reitti);
             karttapohja = piirtaja.getKarttapohja();
+            System.out.println("Reitin pituus: " + reitti.size());
         });
 
         alkupisteLabel = new Label("Alku: ");
@@ -90,10 +109,15 @@ public class GUI extends Application {
             paivitaHakupalkki();
         });
 
+        HBox algoritmivalikko = new HBox(leveyshakuNappi, aStarNappi);
+        algoritmivalikko.setSpacing(20);
+
         hakupalkki = new HBox(alkupisteLabel, loppupisteLabel, piirraReittiNappi, pyyhiReittiNappi);
         hakupalkki.setSpacing(20);
 
-        mainContainer.getChildren().add(hakupalkki);
+        valikko = new VBox(algoritmivalikko, hakupalkki);
+
+        mainContainer.getChildren().add(valikko);
 
         primaryStage.setScene(new Scene(mainContainer, 1600, 1200));
         primaryStage.show();
