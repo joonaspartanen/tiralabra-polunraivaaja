@@ -1,9 +1,10 @@
 package tiralabra.polunraivaaja.apurakenteet;
 
-public class Koordinaatti {
+public class Koordinaatti implements Comparable<Koordinaatti> {
 
     private int rivi;
     private int sarake;
+    private int paino;
 
     public Koordinaatti(int rivi, int sarake) {
         this.rivi = rivi;
@@ -16,6 +17,10 @@ public class Koordinaatti {
 
     public int getSarake() {
         return sarake;
+    }
+
+    public int getPaino() {
+        return paino;
     }
 
     @Override
@@ -57,6 +62,11 @@ public class Koordinaatti {
     @Override
     public String toString() {
         return rivi + ", " + sarake;
+    }
+
+    @Override
+    public int compareTo(Koordinaatti toinen) {
+        return toinen.paino - this.paino;
     }
 
 }
