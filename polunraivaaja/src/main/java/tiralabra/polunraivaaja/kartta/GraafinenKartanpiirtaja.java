@@ -43,7 +43,7 @@ public class GraafinenKartanpiirtaja extends Kartanpiirtaja {
     public void piirraKartta() {
         for (int i = 0; i < korkeus; i++) {
             for (int j = 0; j < leveys; j++) {
-                piirraRuutu(i, j, false);
+                piirraRuutu(i, j, false, false);
             }
         }
     }
@@ -58,24 +58,36 @@ public class GraafinenKartanpiirtaja extends Kartanpiirtaja {
         for (int i = 0; i < korkeus; i++) {
             for (int j = 0; j < leveys; j++) {
                 boolean kuuluuReittiin = reitti.contains(new Koordinaatti(i, j));
-                piirraRuutu(i, j, kuuluuReittiin);
+                piirraRuutu(i, j, kuuluuReittiin, false);
             }
         }
     }
 
-    private void piirraRuutu(int rivi, int sarake, boolean kuuluuReittiin) {
+    @Override
+    public void piirraKartta(List<Koordinaatti> reitti, boolean[][] vierailtu) {
+        for (int i = 0; i < korkeus; i++) {
+            for (int j = 0; j < leveys; j++) {
+                boolean kuuluuReittiin = reitti.contains(new Koordinaatti(i, j));
+                boolean ruudussaVierailtu = vierailtu[i][j];
+                piirraRuutu(i, j, kuuluuReittiin, ruudussaVierailtu);
+            }
+        }
+    }
+
+    private void piirraRuutu(int rivi, int sarake, boolean kuuluuReittiin, boolean ruudussaVierailtu) {
         if (kuuluuReittiin) {
             gc.setFill(Color.CRIMSON);
+        } else if (ruudussaVierailtu) {
+            gc.setFill(Color.GREENYELLOW);
         } else {
             gc.setFill(kartta.ruutuVapaa(rivi, sarake) ? Color.WHITESMOKE : Color.BLACK);
         }
-
         gc.fillRect(sarake * ruudunLeveys, rivi * ruudunKorkeus, ruudunLeveys, ruudunKorkeus);
     }
 
     /**
      *
-     * @return GridPane-olio, joka muodostaa kartan.
+     * @return Canvas-olio, joka muodostaa kartan.
      */
     public Canvas getKarttapohja() {
         return karttapohja;
