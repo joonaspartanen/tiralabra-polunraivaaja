@@ -33,4 +33,14 @@ public abstract class Kartanpiirtaja {
      * @param reitti Pohjakartan päälle piirrettävä reitti.
      */
     public abstract void piirraKartta(List<Koordinaatti> reitti);
+
+    /**
+     * Piirtää pohjakartan ja siihen parametrina saadun reitin sekä vieraillut
+     * solmut.
+     *
+     * @param reitti    Pohjakartan päälle piirrettävä reitti.
+     * @param vierailtu boolean-taulukko, joka kertoo missä solmuissa on vierailtu.
+     *
+     */
+    public abstract void piirraKartta(List<Koordinaatti> reitti, boolean[][] vierailtu);
 }

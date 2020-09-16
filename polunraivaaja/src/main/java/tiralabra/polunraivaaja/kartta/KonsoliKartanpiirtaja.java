@@ -40,4 +40,9 @@ public class KonsoliKartanpiirtaja extends Kartanpiirtaja {
         }
     }
 
+    @Override
+    public void piirraKartta(List<Koordinaatti> reitti, boolean[][] vierailtu) {
+        // TODO Auto-generated method stub
+    }
+
 }
