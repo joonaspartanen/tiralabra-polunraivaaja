@@ -1,8 +1,8 @@
 # Viikkoraportti 3
 
-Viikon 3 suurin haaste oli odotetusti A*-algoritmin toteuttaminen. Sain kuitenkin algoritmin (uskoakseni!) toimimaan aivan oikein.
+Viikon 3 suurin haaste oli odotetusti A\*-algoritmin toteuttaminen. Sain kuitenkin algoritmin (uskoakseni!) toimimaan aivan oikein.
 
-1. viikon palautteessa oli hyvä huomio siitä, ettei leveyshaku tietenkään toimi jos diagonaaliset siirtymät sallitaan, joten korjasin toteutukseni tältä osin. A*-toteutukseen lisäsin mahdollisuuden sallia diagonaalisiirtymät – tosin täytyy vielä miettiä, pitäisikö kulmittaisten esteiden välistä livahtaminen joka tapauksessa estää. Olen myös valmistaunut mahdollisuuteen antaa kartan solmuille eri painoja kuvaamaan erilaista maastoa ja esim. teitä. Leveyshaun kohdalla tämä ei toki onnistu.
+Ensimmäisen viikon palautteessa oli hyvä huomio siitä, ettei leveyshaku tietenkään toimi jos diagonaaliset siirtymät sallitaan, joten korjasin toteutukseni tältä osin. A\*-toteutukseen lisäsin mahdollisuuden sallia diagonaalisiirtymät – tosin täytyy vielä miettiä, pitäisikö kulmittaisten esteiden välistä livahtaminen joka tapauksessa estää. Olen myös valmistaunut mahdollisuuteen antaa kartan solmuille eri painoja kuvaamaan erilaista maastoa ja esim. teitä. Leveyshaun kohdalla tämä ei toki onnistu.
 
 Viikolle mahtui myös melko paljon refaktorointia. Käärin myös reitinhaun tulokset omaan luokkaansa ja muutin graafista käyttöliittymää niin, että algoritmin tarkastelemat solmut värjätään kartalle omalla värillään. Tämä osoittautui yllättävänkin hyväksi tavaksi havainnollistaa algoritmien eroja. Seuraavaksi ajattelin mitata myös algoritmien käyttämää aikaa ja täydentää käyttöliittymää niin että hakutulokset näytettäisiin kunnolla käyttäjälle.
 
