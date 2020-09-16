@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 import tiralabra.polunraivaaja.kartta.Kartta;
+import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
 import tiralabra.polunraivaaja.apurakenteet.Koordinaatti;
 import tiralabra.polunraivaaja.apurakenteet.Suunnat;
 
@@ -31,11 +32,13 @@ public class Leveyshaku extends HakuPohja {
      *         hakea.
      */
     @Override
-    public boolean etsiReitti(Koordinaatti alku, Koordinaatti loppu) {
+    public Hakutulos etsiReitti(Koordinaatti alku, Koordinaatti loppu) {
+
+        solmujaTarkasteltu = 0;
 
         if (!reitinPaatVapaat(alku, loppu)) {
-            System.out.println("Alku- tai loppupiste ei kelpaa.");
-            return false;
+            tulos = new Hakutulos(false, "Alku- tai loppupiste ei kelpaa.", solmujaTarkasteltu, vierailtu);
+            return tulos;
         }
 
         this.alku = alku;
@@ -49,13 +52,7 @@ public class Leveyshaku extends HakuPohja {
         vieraile(alku.getRivi(), alku.getSarake());
 
         while (!jono.isEmpty()) {
-
             Koordinaatti nykyinenRuutu = jono.remove();
-
-            if (loppuSaavutettu(nykyinenRuutu.getRivi(), nykyinenRuutu.getSarake())) {
-                muodostaReitti();
-                return true;
-            }
 
             for (int i = 0; i < 4; i++) {
                 int rivi = nykyinenRuutu.getRivi() + Suunnat.riviSiirtymat[i];
@@ -63,17 +60,31 @@ public class Leveyshaku extends HakuPohja {
 
                 if (ruutuKelpaa(rivi, sarake) && !vierailtu[rivi][sarake]) {
                     vieraile(rivi, sarake);
-                    jono.add(new Koordinaatti(rivi, sarake));
                     edeltajat[rivi][sarake] = nykyinenRuutu;
+
+                    if (loppuSaavutettu(rivi, sarake)) {
+                        muodostaReitti();
+                        tulos = new Hakutulos(true, "Reitti löytyi.", solmujaTarkasteltu, reitti, vierailtu);
+                        return tulos;
+                    }
+
+                    jono.add(new Koordinaatti(rivi, sarake));
                 }
             }
         }
-        System.out.println("Reitti ei mahdollinen.");
-        return false;
+
+        tulos = new Hakutulos(false, "Reitti ei mahdollinen.", solmujaTarkasteltu, vierailtu);
+        return tulos;
     }
 
     private void vieraile(int rivi, int sarake) {
         vierailtu[rivi][sarake] = true;
+        solmujaTarkasteltu++;
+    }
+
+    @Override
+    public void setSalliDiagonaalisiirtymat(boolean salliDiagonaalisiirtymat) {
+        // Leveyshaku ei toimi, jos diagonaalisiirtymät sallitaan.
     }
 
 }

@@ -1,6 +1,8 @@
 package tiralabra.polunraivaaja.algoritmit;
 
 import java.util.List;
+
+import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
 import tiralabra.polunraivaaja.apurakenteet.Koordinaatti;
 import tiralabra.polunraivaaja.kartta.Kartta;
 
@@ -10,9 +12,8 @@ import tiralabra.polunraivaaja.kartta.Kartta;
  */
 public interface Haku {
 
+    Hakutulos etsiReitti(Koordinaatti alku, Koordinaatti loppu);
 
-    boolean etsiReitti(Koordinaatti alku, Koordinaatti loppu);
-  
     /**
      * Palauttaa haun löytämää reittiä kuvaavan listan Koordinaatteja.
      *
@@ -21,5 +22,6 @@ public interface Haku {
     List<Koordinaatti> getReitti();
 
     void setKartta(Kartta kartta);
-    
+
+    void setSalliDiagonaalisiirtymat(boolean salliDiagonaaliSiirtymat);
 }

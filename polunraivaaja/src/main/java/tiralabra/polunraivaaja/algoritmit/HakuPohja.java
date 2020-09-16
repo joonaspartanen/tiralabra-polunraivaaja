@@ -1,10 +1,10 @@
 package tiralabra.polunraivaaja.algoritmit;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import tiralabra.polunraivaaja.kartta.Kartta;
+import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
 import tiralabra.polunraivaaja.apurakenteet.Koordinaatti;
 
 /**
@@ -21,6 +21,8 @@ public abstract class HakuPohja implements Haku {
     protected Koordinaatti alku;
     protected Koordinaatti loppu;
     protected List<Koordinaatti> reitti;
+    protected int solmujaTarkasteltu;
+    protected Hakutulos tulos;
 
     public HakuPohja(Kartta kartta) {
         this.kartta = kartta;
@@ -42,7 +44,6 @@ public abstract class HakuPohja implements Haku {
      * @return True, jos reitti löytyi; false, jos reittiä ei löytynyt tai ei voitu
      *         hakea.
      */
-    public abstract boolean etsiReitti(Koordinaatti alku, Koordinaatti loppu);
 
     protected boolean reitinPaatVapaat(Koordinaatti... koordinaatit) {
         for (Koordinaatti koordinaatti : koordinaatit) {
