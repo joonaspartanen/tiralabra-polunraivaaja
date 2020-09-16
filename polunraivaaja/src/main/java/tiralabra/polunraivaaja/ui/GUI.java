@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -14,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tiralabra.polunraivaaja.algoritmit.AStar;
 import tiralabra.polunraivaaja.algoritmit.Leveyshaku;
+import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
 import tiralabra.polunraivaaja.apurakenteet.Koordinaatti;
 import tiralabra.polunraivaaja.io.Kartanlukija;
 import tiralabra.polunraivaaja.kartta.GraafinenKartanpiirtaja;
@@ -30,6 +32,7 @@ public class GUI extends Application {
     private Label loppupisteLabel;
     private HBox hakupalkki;
     private Haku haku;
+    CheckBox salliDiagonaaliSiirtymat;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -43,8 +46,10 @@ public class GUI extends Application {
         RadioButton leveyshakuNappi = new RadioButton("Leveyshaku");
         leveyshakuNappi.setToggleGroup(algoritmiToggleGroup);
         leveyshakuNappi.setSelected(true);
+        leveyshakuNappi.setOnAction(e -> salliDiagonaaliSiirtymat.setDisable(true));
         RadioButton aStarNappi = new RadioButton("A*");
         aStarNappi.setToggleGroup(algoritmiToggleGroup);
+        aStarNappi.setOnAction(e -> salliDiagonaaliSiirtymat.setDisable(false));
 
         piirtaja.piirraKartta();
 
@@ -81,17 +86,16 @@ public class GUI extends Application {
                 haku = new Leveyshaku(kartta);
             } else if (algoritmiToggleGroup.getSelectedToggle() == aStarNappi) {
                 haku = new AStar(kartta);
+                haku.setSalliDiagonaalisiirtymat(salliDiagonaaliSiirtymat.isSelected());
             }
 
-            boolean onnistui = haku.etsiReitti(alkupiste, loppupiste);
-            if (!onnistui) {
-                return;
-            }
+            Hakutulos tulos = haku.etsiReitti(alkupiste, loppupiste);
+            System.out.println(tulos);
 
-            List<Koordinaatti> reitti = haku.getReitti();
-            piirtaja.piirraKartta(reitti);
+            List<Koordinaatti> reitti = tulos.getReitti();
+            boolean[][] vierailtu = tulos.getVierailtu();
+            piirtaja.piirraKartta(reitti, vierailtu);
             karttapohja = piirtaja.getKarttapohja();
-            System.out.println("Reitin pituus: " + reitti.size());
         });
 
         alkupisteLabel = new Label("Alku: ");
@@ -109,13 +113,17 @@ public class GUI extends Application {
             paivitaHakupalkki();
         });
 
-        HBox algoritmivalikko = new HBox(leveyshakuNappi, aStarNappi);
+        salliDiagonaaliSiirtymat = new CheckBox("Salli diagonaalisiirtymät");
+        salliDiagonaaliSiirtymat.setDisable(true);
+
+        HBox algoritmivalikko = new HBox(leveyshakuNappi, aStarNappi, salliDiagonaaliSiirtymat);
         algoritmivalikko.setSpacing(20);
 
         hakupalkki = new HBox(alkupisteLabel, loppupisteLabel, piirraReittiNappi, pyyhiReittiNappi);
         hakupalkki.setSpacing(20);
 
         valikko = new VBox(algoritmivalikko, hakupalkki);
+        valikko.setSpacing(20);
 
         mainContainer.getChildren().add(valikko);
 
