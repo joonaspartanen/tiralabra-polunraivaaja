@@ -32,32 +32,16 @@ public class Hakutulos {
     return onnistui;
   }
 
-  public void setOnnistui(boolean onnistui) {
-    this.onnistui = onnistui;
-  }
-
   public String getViesti() {
     return viesti;
-  }
-
-  public void setViesti(String viesti) {
-    this.viesti = viesti;
   }
 
   public List<Koordinaatti> getReitti() {
     return reitti;
   }
 
-  public void setReitti(List<Koordinaatti> reitti) {
-    this.reitti = reitti;
-  }
-
   public int getTarkasteltujaSolmuja() {
     return solmujaTarkasteltu;
-  }
-
-  public void setTarkasteltujaSolmuja(int tarkasteltujaSolmuja) {
-    this.solmujaTarkasteltu = tarkasteltujaSolmuja;
   }
 
   public boolean[][] getVierailtu() {
