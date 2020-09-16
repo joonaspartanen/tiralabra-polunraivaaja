@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import tiralabra.polunraivaaja.kartta.Kartta;
+import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
 import tiralabra.polunraivaaja.apurakenteet.Koordinaatti;
 import tiralabra.polunraivaaja.io.Kartanlukija;
 
@@ -75,25 +76,24 @@ public class LeveyshakuTest {
         assertThat(reitti.size(), is(1023));
     }
 
-
     @Test
-    public void palauttaaFalseJosReittiEiMahdollinen() {
+    public void ilmoittaaJosReittiEiMahdollinen() {
         Kartta kartta = lukija.lueKarttatiedosto("test_1_10.map");
         Haku leveyshaku = new Leveyshaku(kartta);
 
-        boolean onnistui = leveyshaku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(9, 9));
+        Hakutulos tulos = leveyshaku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(9, 9));
 
-        assertFalse(onnistui);
+        assertFalse(tulos.isOnnistui());
     }
 
     @Test
-    public void palauttaaFalseJosReitinPaatEivatKelpaa() {
+    public void ilmoittaaJosReitinPaatEivatKelpaa() {
         Kartta kartta = lukija.lueKarttatiedosto("test_1_10.map");
         Haku leveyshaku = new Leveyshaku(kartta);
 
-        boolean onnistui = leveyshaku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(3, 2));
+        Hakutulos tulos = leveyshaku.etsiReitti(new Koordinaatti(0, 0), new Koordinaatti(3, 2));
 
-        assertFalse(onnistui);
+        assertFalse(tulos.isOnnistui());
     }
 
 }
