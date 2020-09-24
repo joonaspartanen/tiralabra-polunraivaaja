@@ -5,10 +5,11 @@ import java.util.Queue;
 
 import tiralabra.polunraivaaja.kartta.Kartta;
 import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
-import tiralabra.polunraivaaja.apurakenteet.Koordinaatti;
-import tiralabra.polunraivaaja.apurakenteet.Suunnat;
+import tiralabra.polunraivaaja.apurakenteet.Ruutu;
+import tiralabra.polunraivaaja.apurakenteet.Suunta;
 
 /**
+ * Leveyshakualgoritmin (BFS) toteutus. Hakee kartalta lyhimmän reitin kahden pisteen välillä.
  *
  * @author Joonas Partanen <joonas.partanen@helsinki.fi>
  */
@@ -26,37 +27,36 @@ public class Leveyshaku extends HakuPohja {
      * Etsii jonkin lyhimmistä reiteistä parametreina saatujen alku- ja
      * loppupisteiden välillä.
      *
-     * @param alku  Haettavan reitin alkupiste.
+     * @param alku Haettavan reitin alkupiste.
      * @param loppu Haettavan reitin loppupiste.
-     * @return True, jos reitti löytyi; false, jos reittiä ei löytynyt tai ei voitu
-     *         hakea.
+     * @return Palauttaa haun tulosta kuvaavan Hakutulos-olion.
      */
     @Override
-    public Hakutulos etsiReitti(Koordinaatti alku, Koordinaatti loppu) {
+    public Hakutulos etsiReitti(Ruutu alku, Ruutu loppu) {
 
-        solmujaTarkasteltu = 0;
+        ruutujaTarkasteltu = 0;
 
         if (!reitinPaatVapaat(alku, loppu)) {
-            tulos = new Hakutulos(false, "Alku- tai loppupiste ei kelpaa.", solmujaTarkasteltu, vierailtu);
+            tulos = new Hakutulos(false, "Alku- tai loppupiste ei kelpaa.", ruutujaTarkasteltu, vierailtu);
             return tulos;
         }
 
         this.alku = alku;
         this.loppu = loppu;
 
-        Queue<Koordinaatti> jono = new ArrayDeque<>();
-        edeltajat = new Koordinaatti[korkeus][leveys];
+        Queue<Ruutu> jono = new ArrayDeque<>();
+        edeltajat = new Ruutu[korkeus][leveys];
         vierailtu = new boolean[korkeus][leveys];
 
         jono.add(alku);
         vieraile(alku.getRivi(), alku.getSarake());
 
         while (!jono.isEmpty()) {
-            Koordinaatti nykyinenRuutu = jono.remove();
+            Ruutu nykyinenRuutu = jono.remove();
 
             for (int i = 0; i < 4; i++) {
-                int rivi = nykyinenRuutu.getRivi() + Suunnat.riviSiirtymat[i];
-                int sarake = nykyinenRuutu.getSarake() + Suunnat.sarakeSiirtymat[i];
+                int rivi = nykyinenRuutu.getRivi() + Suunta.riviSiirtymat[i];
+                int sarake = nykyinenRuutu.getSarake() + Suunta.sarakeSiirtymat[i];
 
                 if (ruutuKelpaa(rivi, sarake) && !vierailtu[rivi][sarake]) {
                     vieraile(rivi, sarake);
@@ -64,27 +64,22 @@ public class Leveyshaku extends HakuPohja {
 
                     if (loppuSaavutettu(rivi, sarake)) {
                         muodostaReitti();
-                        tulos = new Hakutulos(true, "Reitti löytyi.", solmujaTarkasteltu, reitti, vierailtu);
+                        tulos = new Hakutulos(true, "Reitti löytyi.", ruutujaTarkasteltu, reitti, vierailtu);
                         return tulos;
                     }
 
-                    jono.add(new Koordinaatti(rivi, sarake));
+                    jono.add(new Ruutu(rivi, sarake));
                 }
             }
         }
 
-        tulos = new Hakutulos(false, "Reitti ei mahdollinen.", solmujaTarkasteltu, vierailtu);
+        tulos = new Hakutulos(false, "Reitti ei mahdollinen.", ruutujaTarkasteltu, vierailtu);
         return tulos;
     }
 
     private void vieraile(int rivi, int sarake) {
         vierailtu[rivi][sarake] = true;
-        solmujaTarkasteltu++;
-    }
-
-    @Override
-    public void setSalliDiagonaalisiirtymat(boolean salliDiagonaalisiirtymat) {
-        // Leveyshaku ei toimi, jos diagonaalisiirtymät sallitaan.
+        ruutujaTarkasteltu++;
     }
 
 }

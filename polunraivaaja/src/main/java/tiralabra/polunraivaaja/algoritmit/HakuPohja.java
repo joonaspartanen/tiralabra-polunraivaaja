@@ -5,25 +5,76 @@ import java.util.List;
 
 import tiralabra.polunraivaaja.kartta.Kartta;
 import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
-import tiralabra.polunraivaaja.apurakenteet.Koordinaatti;
+import tiralabra.polunraivaaja.apurakenteet.Ruutu;
 
 /**
+ * Abstrakti luokka, joka sisältää useille reitinhakualgoritmeille yhteiset
+ * metodit ja oliomuuttujat.
  *
  * @author Joonas Partanen <joonas.partanen@helsinki.fi>
  */
 public abstract class HakuPohja implements Haku {
 
+    /**
+     * Reittihaun kohteena oleva suorakulmion muotoinen kartta.
+     */
     protected Kartta kartta;
+
+    /**
+     * Kohteena olevan kartan korkeus.
+     */
     protected int korkeus;
+
+    /**
+     * Kohteena olevan kartan leveys.
+     */
     protected int leveys;
-    protected Koordinaatti[][] edeltajat;
+
+    /**
+     * Pitää kirjaa siitä, minkä ruudun kautta kulloinkin tarkasteltavaan
+     * ruutuun on saavuttu.
+     */
+    protected Ruutu[][] edeltajat;
+
+    /**
+     * Pitää kirjaa jo vierailluista ruuduista.
+     */
     protected boolean[][] vierailtu;
-    protected Koordinaatti alku;
-    protected Koordinaatti loppu;
-    protected List<Koordinaatti> reitti;
-    protected int solmujaTarkasteltu;
+
+    /**
+     * Ruutu, josta haettava reitti alkaa.
+     */
+    protected Ruutu alku;
+
+    /**
+     * Ruutu, johon haettava reitti päättyy.
+     */
+    protected Ruutu loppu;
+
+    /**
+     * Määrittää, saako kartalla kulkea vinottain ruudusta toiseen.
+     */
+    protected boolean salliDiagonaalisiirtymat;
+
+    /**
+     * Lista ruutuja, jotka muodostavat haun löytämän lyhimmän reitin.
+     */
+    protected List<Ruutu> reitti;
+
+    /**
+     * Laskuri haun käsittelemistä ruuduista.
+     */
+    protected int ruutujaTarkasteltu;
+
+    /**
+     * Reittihaun tuloksen käärivä Hakutulos-olio.
+     */
     protected Hakutulos tulos;
 
+    /**
+     *
+     * @param kartta Han kohteena oleva kartta.
+     */
     public HakuPohja(Kartta kartta) {
         this.kartta = kartta;
         korkeus = kartta.getKorkeus();
@@ -36,41 +87,64 @@ public abstract class HakuPohja implements Haku {
     }
 
     /**
-     * Etsii jonkin lyhimmistä reiteistä parametreina saatujen alku- ja
-     * loppupisteiden välillä.
+     * Tarkistaa, ovatko haun alku- ja loppuruudut kuljettavissa (eli ovat
+     * kartalla eikä niissä ole esteitä).
      *
-     * @param alku  Haettavan reitin alkupiste.
-     * @param loppu Haettavan reitin loppupiste.
-     * @return True, jos reitti löytyi; false, jos reittiä ei löytynyt tai ei voitu
-     *         hakea.
+     * @param ruudut Tarkistettavat ruudut.
+     * @return True, jos reitin kumpikin pää on vapaa. False, jos jompikumpi ei
+     * ole kuljettavissa.
      */
-
-    protected boolean reitinPaatVapaat(Koordinaatti... koordinaatit) {
-        for (Koordinaatti koordinaatti : koordinaatit) {
-            if (!ruutuKelpaa(koordinaatti.getRivi(), koordinaatti.getSarake())) {
+    protected boolean reitinPaatVapaat(Ruutu... ruudut) {
+        for (Ruutu ruutu : ruudut) {
+            if (!ruutuKelpaa(ruutu.getRivi(), ruutu.getSarake())) {
                 return false;
             }
         }
         return true;
     }
 
+    /**
+     * Tarkistaa, onko ruutu kartalla ja kuljettavissa.
+     *
+     * @param rivi
+     * @param sarake
+     * @return
+     */
     protected boolean ruutuKelpaa(int rivi, int sarake) {
         return ruutuKartalla(rivi, sarake) && kartta.ruutuVapaa(rivi, sarake);
     }
 
+    /**
+     * Tarkistaa, onko ruutu kartalla.
+     *
+     * @param rivi
+     * @param sarake
+     * @return
+     */
     protected boolean ruutuKartalla(int rivi, int sarake) {
         return rivi >= 0 && rivi < korkeus && sarake >= 0 && sarake < leveys;
     }
 
+    /**
+     * Tarkistaa, vastaako jokin ruutu haun loppua.
+     *
+     * @param rivi Tarkasteltavan ruudun rivi.
+     * @param sarake Tarkasteltavan ruudun sarake.
+     * @return
+     */
     protected boolean loppuSaavutettu(int rivi, int sarake) {
         return rivi == loppu.getRivi() && sarake == loppu.getSarake();
     }
 
+    /**
+     * Muodostaa haun löytämän reitin seuraamalla edeltajat-taulukkoon
+     * tallennettuja edeltäjä-ruutuja reitin alkupisteeseen saakka.
+     */
     protected void muodostaReitti() {
         reitti = new ArrayList<>();
         reitti.add(loppu);
 
-        Koordinaatti ruutu = edeltajat[loppu.getRivi()][loppu.getSarake()];
+        Ruutu ruutu = edeltajat[loppu.getRivi()][loppu.getSarake()];
         reitti.add(ruutu);
 
         while (!(ruutu.getRivi() == alku.getRivi() && ruutu.getSarake() == alku.getSarake())) {
@@ -80,12 +154,16 @@ public abstract class HakuPohja implements Haku {
     }
 
     /**
-     * Palauttaa haun löytämää reittiä kuvaavan listan Koordinaatteja.
+     * Palauttaa haun löytämää reittiä kuvaavan listan Ruutuja.
      *
-     * @return Lista Koordinaatteja.
+     * @return Lista Ruutuja.
      */
     @Override
-    public List<Koordinaatti> getReitti() {
+    public List<Ruutu> getReitti() {
         return reitti;
+    }
+
+    public void setSalliDiagonaalisiirtymat(boolean salliDiagonaalisiirtymat) {
+        this.salliDiagonaalisiirtymat = salliDiagonaalisiirtymat;
     }
 }
