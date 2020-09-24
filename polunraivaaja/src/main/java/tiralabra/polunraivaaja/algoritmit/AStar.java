@@ -4,114 +4,113 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
-import tiralabra.polunraivaaja.apurakenteet.Koordinaatti;
-import tiralabra.polunraivaaja.apurakenteet.Suunnat;
+import tiralabra.polunraivaaja.apurakenteet.Ruutu;
+import tiralabra.polunraivaaja.apurakenteet.Suunta;
 import tiralabra.polunraivaaja.kartta.Kartta;
 
+/**
+ * A*-algoritmin toteutus. Hakee kartalta lyhimmän reitin kahden pisteen välillä
+ * käyttäen apuna heuristista funktiota, joka arvioi tarkasteltavien solmujen
+ * etäisyyttä reitin loppuun.
+ *
+ * @author Joonas Partanen <joonas.partanen@helsinki.fi>
+ */
 public class AStar extends HakuPohja {
 
-  // TODO: Huomioi tilanteet, joissa algoritmi luikahtaa diagonaalisiirtymällä
-  // kahden kulmittaisen esteen välistä?
-  private boolean salliDiagonaalisiirtymat;
-
-  public AStar(Kartta kartta) {
-    super(kartta);
-  }
-
-  @Override
-  public void setKartta(Kartta kartta) {
-    this.kartta = kartta;
-  }
-
-  public void setSalliDiagonaalisiirtymat(boolean salliDiagonaalisiirtymat) {
-    this.salliDiagonaalisiirtymat = salliDiagonaalisiirtymat;
-  }
-
-  // TODO: Refaktoroi metodi.
-  @Override
-  public Hakutulos etsiReitti(Koordinaatti alku, Koordinaatti loppu) {
-    solmujaTarkasteltu = 0;
-
-    if (!reitinPaatVapaat(alku, loppu)) {
-      tulos = new Hakutulos(false, "Alku- tai loppupiste ei kelpaa.", solmujaTarkasteltu, vierailtu);
-      return tulos;
+    public AStar(Kartta kartta) {
+        super(kartta);
     }
 
-    this.alku = alku;
-    this.loppu = loppu;
+    /**
+     * Etsii jonkin lyhimmistä reiteistä parametreina saatujen alku- ja
+     * loppupisteiden välillä.
+     *
+     * @param alku  Haettavan reitin alkupiste.
+     * @param loppu Haettavan reitin loppupiste.
+     * @return Palauttaa haun tulosta kuvaavan Hakutulos-olion.
+     */
+    @Override
+    public Hakutulos etsiReitti(Ruutu alku, Ruutu loppu) {
+        ruutujaTarkasteltu = 0;
 
-    double[][] etaisyysAlusta = new double[korkeus][leveys];
-    double[][] etaisyysarvioLoppuun = new double[korkeus][leveys];
+        if (!reitinPaatVapaat(alku, loppu)) {
+            tulos = new Hakutulos(false, "Alku- tai loppupiste ei kelpaa.", ruutujaTarkasteltu, vierailtu);
+            return tulos;
+        }
 
-    alustaTaulukko(etaisyysAlusta);
-    alustaTaulukko(etaisyysarvioLoppuun);
+        this.alku = alku;
+        this.loppu = loppu;
 
-    Queue<Koordinaatti> jono = new PriorityQueue<>((a,
-        b) -> etaisyysarvioLoppuun[a.getRivi()][a.getSarake()] - etaisyysarvioLoppuun[b.getRivi()][b.getSarake()] < 0
-            ? -1
-            : 1);
+        double[][] etaisyysAlusta = new double[korkeus][leveys];
+        double[][] etaisyysarvioLoppuun = new double[korkeus][leveys];
 
-    edeltajat = new Koordinaatti[korkeus][leveys];
-    vierailtu = new boolean[korkeus][leveys];
+        alustaTaulukko(etaisyysAlusta);
+        alustaTaulukko(etaisyysarvioLoppuun);
 
-    int alkuY = alku.getRivi();
-    int alkuX = alku.getSarake();
+        Queue<Ruutu> jono = new PriorityQueue<>((a, b) -> etaisyysarvioLoppuun[a.getRivi()][a.getSarake()]
+                - etaisyysarvioLoppuun[b.getRivi()][b.getSarake()] < 0 ? -1 : 1);
 
-    jono.add(alku);
-    etaisyysAlusta[alkuY][alkuX] = 0;
-    etaisyysarvioLoppuun[alkuY][alkuX] = laskeManhattanEtaisyys(alkuY, alkuX);
-    vierailtu[alkuY][alkuX] = true;
+        edeltajat = new Ruutu[korkeus][leveys];
+        vierailtu = new boolean[korkeus][leveys];
 
-    while (!jono.isEmpty()) {
-      Koordinaatti nykyinenRuutu = jono.remove();
+        int alkuY = alku.getRivi();
+        int alkuX = alku.getSarake();
 
-      int nykyinenY = nykyinenRuutu.getRivi();
-      int nykyinenX = nykyinenRuutu.getSarake();
+        jono.add(alku);
+        etaisyysAlusta[alkuY][alkuX] = 0;
+        etaisyysarvioLoppuun[alkuY][alkuX] = laskeManhattanEtaisyys(alkuY, alkuX);
+        vierailtu[alkuY][alkuX] = true;
 
-      if (loppuSaavutettu(nykyinenY, nykyinenX)) {
-        muodostaReitti();
-        tulos = new Hakutulos(true, "Reitti löytyi.", solmujaTarkasteltu, reitti, vierailtu);
+        while (!jono.isEmpty()) {
+            Ruutu nykyinenRuutu = jono.remove();
+
+            int nykyinenY = nykyinenRuutu.getRivi();
+            int nykyinenX = nykyinenRuutu.getSarake();
+
+            if (loppuSaavutettu(nykyinenY, nykyinenX)) {
+                muodostaReitti();
+                tulos = new Hakutulos(true, "Reitti löytyi.", ruutujaTarkasteltu, reitti, vierailtu);
+                return tulos;
+            }
+
+            int suuntienMaara = salliDiagonaalisiirtymat ? 8 : 4;
+
+            for (int i = 0; i < suuntienMaara; i++) {
+                int uusiY = nykyinenY + Suunta.riviSiirtymat[i];
+                int uusiX = nykyinenX + Suunta.sarakeSiirtymat[i];
+
+                if (!ruutuKelpaa(uusiY, uusiX) || vierailtu[uusiY][uusiX]) {
+                    continue;
+                }
+
+                // TODO: Poista taikanumerot.
+                double etaisyysSeuraavaan = i < 4 ? 1 : Math.sqrt(2);
+
+                double uusiEtaisyys = etaisyysAlusta[nykyinenY][nykyinenX] + etaisyysSeuraavaan;
+
+                if (uusiEtaisyys < etaisyysAlusta[uusiY][uusiX]) {
+                    etaisyysAlusta[uusiY][uusiX] = uusiEtaisyys;
+                    etaisyysarvioLoppuun[uusiY][uusiX] = uusiEtaisyys + laskeManhattanEtaisyys(uusiY, uusiX);
+                    edeltajat[uusiY][uusiX] = nykyinenRuutu;
+                    vierailtu[uusiY][uusiX] = true;
+                    jono.add(new Ruutu(uusiY, uusiX));
+                    ruutujaTarkasteltu++;
+                }
+            }
+        }
+        tulos = new Hakutulos(false, "Reitti ei mahdollinen.", ruutujaTarkasteltu, vierailtu);
         return tulos;
-      }
-
-      int suuntienMaara = salliDiagonaalisiirtymat ? 8 : 4;
-
-      for (int i = 0; i < suuntienMaara; i++) {
-        int uusiY = nykyinenY + Suunnat.riviSiirtymat[i];
-        int uusiX = nykyinenX + Suunnat.sarakeSiirtymat[i];
-
-        if (!ruutuKelpaa(uusiY, uusiX) || vierailtu[uusiY][uusiX]) {
-          continue;
-        }
-
-        // TODO: Poista taikanumerot.
-        double etaisyysSeuraavaan = i < 4 ? 1 : Math.sqrt(2);
-
-        double uusiEtaisyys = etaisyysAlusta[nykyinenY][nykyinenX] + etaisyysSeuraavaan;
-
-        if (uusiEtaisyys < etaisyysAlusta[uusiY][uusiX]) {
-          etaisyysAlusta[uusiY][uusiX] = uusiEtaisyys;
-          etaisyysarvioLoppuun[uusiY][uusiX] = uusiEtaisyys + laskeManhattanEtaisyys(uusiY, uusiX);
-          edeltajat[uusiY][uusiX] = nykyinenRuutu;
-          vierailtu[uusiY][uusiX] = true;
-          jono.add(new Koordinaatti(uusiY, uusiX));
-          solmujaTarkasteltu++;
-        }
-      }
     }
-    tulos = new Hakutulos(false, "Reitti ei mahdollinen.", solmujaTarkasteltu, vierailtu);
-    return tulos;
-  }
 
-  private int laskeManhattanEtaisyys(int rivi, int sarake) {
-    return Math.abs(rivi - loppu.getRivi()) + Math.abs(sarake - loppu.getSarake());
-  }
-
-  private void alustaTaulukko(double[][] taulukko) {
-    for (int i = 0; i < korkeus; i++) {
-      for (int j = 0; j < leveys; j++) {
-        taulukko[i][j] = Double.MAX_VALUE;
-      }
+    private int laskeManhattanEtaisyys(int rivi, int sarake) {
+        return Math.abs(rivi - loppu.getRivi()) + Math.abs(sarake - loppu.getSarake());
     }
-  }
+
+    private void alustaTaulukko(double[][] taulukko) {
+        for (int i = 0; i < korkeus; i++) {
+            for (int j = 0; j < leveys; j++) {
+                taulukko[i][j] = Double.MAX_VALUE;
+            }
+        }
+    }
 }
