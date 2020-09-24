@@ -6,14 +6,14 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 
-public class KoordinaattiTest {
+public class RuutuTest {
 
     @Test
     public void equalsToimiiOikein() {
-        Koordinaatti ruutu = new Koordinaatti(2, 4);
-        Koordinaatti samaRuutu = new Koordinaatti(2, 4);
-        Koordinaatti toinenRuutu = new Koordinaatti(3, 3);
-        Koordinaatti kolmasRuutu = new Koordinaatti(2, 3);
+        Ruutu ruutu = new Ruutu(2, 4);
+        Ruutu samaRuutu = new Ruutu(2, 4);
+        Ruutu toinenRuutu = new Ruutu(3, 3);
+        Ruutu kolmasRuutu = new Ruutu(2, 3);
 
         assertThat(ruutu, is(equalTo(ruutu)));
         assertThat(ruutu, is(equalTo(samaRuutu)));

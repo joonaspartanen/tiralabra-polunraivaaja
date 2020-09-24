@@ -1,14 +1,26 @@
 package tiralabra.polunraivaaja.apurakenteet;
 
-public class Koordinaatti implements Comparable<Koordinaatti> {
+/**
+ * Kuvaa karttaruutua ja sen sijaintia. Paino-muuttujaa ei vielä hyödynnetä,
+ * mutta se mahdollistaisi erilaisten "maastojen" kuvaamisen.
+ *
+ * @author Joonas Partanen <joonas.partanen@helsinki.fi>
+ */
+public class Ruutu implements Comparable<Ruutu> {
 
     private int rivi;
     private int sarake;
     private int paino;
 
-    public Koordinaatti(int rivi, int sarake) {
+    public Ruutu(int rivi, int sarake) {
         this.rivi = rivi;
         this.sarake = sarake;
+    }
+
+    public static Ruutu haeSeuraavaRuutu(Ruutu lahtoruutu, Suunta suunta) {
+        int seuraavaY = lahtoruutu.getRivi() + suunta.getDY();
+        int seuraavaX = lahtoruutu.getSarake() + suunta.getDX();
+        return new Ruutu(seuraavaY, seuraavaX);
     }
 
     public int getRivi() {
@@ -33,7 +45,7 @@ public class Koordinaatti implements Comparable<Koordinaatti> {
     }
 
     /**
-     * Kaksi koordinaattia ovat samat, mikäli niiden rivi ja sarake on sama.
+     * Kaksi ruutua ovat samat, mikäli niiden rivi ja sarake on sama.
      *
      * @param obj Verrattava objekti.
      * @return True, jos koordinaatit ovat samat; false jos eivät.
@@ -49,7 +61,7 @@ public class Koordinaatti implements Comparable<Koordinaatti> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Koordinaatti toinen = (Koordinaatti) obj;
+        Ruutu toinen = (Ruutu) obj;
         if (rivi != toinen.rivi) {
             return false;
         }
@@ -61,11 +73,11 @@ public class Koordinaatti implements Comparable<Koordinaatti> {
 
     @Override
     public String toString() {
-        return rivi + ", " + sarake;
+        return rivi + ", " + sarake + " | ";
     }
 
     @Override
-    public int compareTo(Koordinaatti toinen) {
+    public int compareTo(Ruutu toinen) {
         return toinen.paino - this.paino;
     }
 
