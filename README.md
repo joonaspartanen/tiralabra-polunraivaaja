@@ -4,7 +4,7 @@
 
 Tämä on repositorio Helsingin yliopiston tietojenkäsittelytieteen kurssille [Aineopintojen harjoitustyö: Tietorakenteet ja algoritmit](https://tiralabra.github.io/2020_p1/index).
 
-Toteutan kurssilla ohjelman, joka vertailee erilaisia reitinhakualgoritmeja ([A*](https://en.wikipedia.org/wiki/A*_search_algorithm), [JSP](https://en.wikipedia.org/wiki/Jump_point_search)). Ohjelmalle annetaan syötteenä kartta sekä reitin alku- ja loppupisteet. Ohjelma etsii pisteiden välisen lyhimmän reitin eri reitinhakualgoritmeja käyttäen ja tulostaa tietoa esimerkiksi algoritmien vaatimasta ajasta ja muistista.
+Toteutan kurssilla ohjelman, joka vertailee erilaisia reitinhakualgoritmeja ([BFS](https://en.wikipedia.org/wiki/Breadth-first_search), [A*](https://en.wikipedia.org/wiki/A*_search_algorithm), [JPS](https://en.wikipedia.org/wiki/Jump_point_search)). Ohjelmalle annetaan syötteenä kartta sekä reitin alku- ja loppupisteet. Ohjelma etsii pisteiden välisen lyhimmän reitin eri reitinhakualgoritmeja käyttäen ja tulostaa tietoa esimerkiksi algoritmien vaatimasta ajasta ja muistista.
 
 ## Dokumentaatio
 
@@ -22,3 +22,6 @@ Toteutan kurssilla ohjelman, joka vertailee erilaisia reitinhakualgoritmeja ([A*
 * [Viikko 2](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/viikkoraportit/vk2.md)
 
 * [Viikko 3](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/viikkoraportit/vk3.md)
+
+* [Viikko 4](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/viikkoraportit/vk4.md)
+
