@@ -41,6 +41,7 @@
                     <excludes>
                         <exclude>tiralabra/polunraivaaja/Main.class</exclude>
                         <exclude>tiralabra/polunraivaaja/ui/*.class</exclude>
+                        <exclude>tiralabra/polunraivaaja/suorituskykytestit/</exclude>
                         <exclude>tiralabra/polunraivaaja/kartta/*Kartanpiirtaja.class</exclude>
                     </excludes>
                 </configuration>
