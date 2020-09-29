@@ -139,17 +139,11 @@ public class JPS extends HakuPohja {
         int dy = suunta.getDY();
         int dx = suunta.getDX();
 
-        // TODO: Poista tuplatarkistukset.
-        if (dx != 0 && dy != 0) {
-            if (ruutuKelpaa(y + dy, x)) {
-                lisaaRuutuJosKelpaa(naapurit, y + dy, x);
-            }
-            if (ruutuKelpaa(y, x + dx)) {
-                lisaaRuutuJosKelpaa(naapurit, y, x + dx);
-            }
-            if (ruutuKelpaa(y + dy, x + dx)) {
-                lisaaRuutuJosKelpaa(naapurit, y + dy, x + dx);
-            }
+        if (suunta.isDiagonaalinen()) {
+            lisaaRuutuJosKelpaa(naapurit, y + dy, x);
+            lisaaRuutuJosKelpaa(naapurit, y, x + dx);
+            lisaaRuutuJosKelpaa(naapurit, y + dy, x + dx);
+
             if (!ruutuKelpaa(y, x - dx)) {
                 lisaaRuutuJosKelpaa(naapurit, y + dy, x - dx);
             }
@@ -158,7 +152,8 @@ public class JPS extends HakuPohja {
             }
         } else if (dx == 0) {
             if (ruutuKelpaa(y + dy, x)) {
-                lisaaRuutuJosKelpaa(naapurit, y + dy, x);
+                naapurit.lisaaRuutu(new Ruutu(y + dy, x));
+
                 if (!ruutuKelpaa(y, x + 1)) {
                     lisaaRuutuJosKelpaa(naapurit, y + dy, x + 1);
                 }
@@ -168,7 +163,8 @@ public class JPS extends HakuPohja {
             }
         } else {
             if (ruutuKelpaa(y, x + dx)) {
-                lisaaRuutuJosKelpaa(naapurit, y, x + dx);
+                naapurit.lisaaRuutu(new Ruutu(y, x + dx));
+
                 if (!ruutuKelpaa(y + 1, x)) {
                     lisaaRuutuJosKelpaa(naapurit, y + 1, x + dx);
                 }
@@ -202,7 +198,7 @@ public class JPS extends HakuPohja {
             return kohde;
         }
 
-        if (dx != 0 && dy != 0) {
+        if (suunta.isDiagonaalinen()) {
             if ((ruutuKelpaa(y + dy, x - dx) && !ruutuKelpaa(y, x - dx))
                     || (ruutuKelpaa(y - dy, x + dx) && !ruutuKelpaa(y - dy, x))) {
                 return kohde;
@@ -221,7 +217,7 @@ public class JPS extends HakuPohja {
                 }
             }
         }
-        if (dx != 0 && dy != 0) {
+        if (suunta.isDiagonaalinen()) {
             if (hyppaa(new Ruutu(y, x + dx), kohde) != null) {
                 return kohde;
             }

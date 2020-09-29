@@ -20,9 +20,6 @@ public enum Suunta {
         this.diagonaalinen = diagonaalinen;
     }
 
-    public static final int[] riviSiirtymat = { -1, 0, 0, 1, -1, -1, 1, 1 };
-    public static final int[] sarakeSiirtymat = { 0, -1, 1, 0, -1, 1, -1, 1 };
-
     public int getDX() {
         return dx;
     }
@@ -70,4 +67,8 @@ public enum Suunta {
         }
         return null;
     }
+
+    // Vanha implementaatio, joka on vielä käytössä Leveyshaussa.
+    public static final int[] riviSiirtymat = { -1, 0, 0, 1, -1, -1, 1, 1 };
+    public static final int[] sarakeSiirtymat = { 0, -1, 1, 0, -1, 1, -1, 1 };
 }
