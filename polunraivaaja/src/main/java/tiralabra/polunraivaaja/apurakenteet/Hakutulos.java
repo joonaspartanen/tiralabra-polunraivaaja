@@ -16,16 +16,6 @@ public class Hakutulos {
     private double reitinPituus;
     private long haunKesto;
 
-    public Hakutulos(boolean onnistui, String viesti, int tarkasteltujaSolmuja, boolean[][] vierailtu) {
-        this.onnistui = onnistui;
-        this.viesti = viesti;
-        this.reitti = new RuutuLista();
-        this.ruutujaTarkasteltu = tarkasteltujaSolmuja;
-        this.vierailtu = vierailtu;
-        this.reitinPituus = reitti.getRuutuja() - 1;
-        this.haunKesto = 0;
-    }
-
     /**
      *
      * @param onnistui           Totuusarvo, joka kertoo onnistuiko haku.
@@ -35,12 +25,14 @@ public class Hakutulos {
      * @param reitti             Haun lopputuloksena muodostettu reitti.
      * @param vierailtu          Taulukko, joka sisältää tiedon solmuista, joissa
      *                           hakualgoritmi vieraili.
+     * @param reitinPituus       Reitin pituus liukulukuna.
+     * @param haunKesto          Haun kesto nanosekunteina.
+     *
      */
-    public Hakutulos(boolean onnistui, String viesti, int tarkasteltujaSolmuja, RuutuLista reitti,
-            boolean[][] vierailtu) {
+    public Hakutulos(boolean onnistui, String viesti, int tarkasteltujaSolmuja, boolean[][] vierailtu) {
         this.onnistui = onnistui;
         this.viesti = viesti;
-        this.reitti = reitti;
+        this.reitti = new RuutuLista();
         this.ruutujaTarkasteltu = tarkasteltujaSolmuja;
         this.vierailtu = vierailtu;
         this.reitinPituus = reitti.getRuutuja() - 1;
@@ -84,7 +76,8 @@ public class Hakutulos {
 
     @Override
     public String toString() {
-        return viesti + "\n" + "Ruutuja tarkasteltu: " + ruutujaTarkasteltu + "\n" + "Reitin pituus: " + Math.round(reitinPituus) + "\n" + "Aikaa kului: " + haunKesto / 1000000 + " ms";
+        return viesti + "\n" + "Ruutuja tarkasteltu: " + ruutujaTarkasteltu + "\n" + "Reitin pituus: "
+                + Math.round(reitinPituus) + "\n" + "Aikaa kului: " + haunKesto / 1000000 + " ms";
     }
 
 }
