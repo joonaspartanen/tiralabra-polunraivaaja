@@ -22,6 +22,7 @@ public class JPS extends HakuPohja {
 
     public JPS(Kartta kartta) {
         super(kartta);
+        setSalliDiagonaalisiirtymat(true);
     }
 
     /**
@@ -36,8 +37,6 @@ public class JPS extends HakuPohja {
     public Hakutulos etsiReitti(Ruutu alku, Ruutu loppu) {
         long alkuAika = System.nanoTime();
 
-        // Pakotetaan diagonaalisiirtymät
-        this.salliDiagonaalisiirtymat = true;
         ruutujaTarkasteltu = 0;
 
         if (!reitinPaatVapaat(alku, loppu)) {
@@ -65,7 +64,7 @@ public class JPS extends HakuPohja {
 
         jono.add(alku);
         etaisyysAlusta[alkuY][alkuX] = 0;
-        etaisyysarvioLoppuun[alkuY][alkuX] = laskeDiagonaaliEtaisyys(alku, loppu);
+        etaisyysarvioLoppuun[alkuY][alkuX] = heuristiikka.laskeEtaisyys(alku, loppu);
         vierailtu[alkuY][alkuX] = true;
 
         while (!jono.isEmpty()) {
@@ -92,13 +91,13 @@ public class JPS extends HakuPohja {
                 int uusiY = seuraaja.getRivi();
                 int uusiX = seuraaja.getSarake();
 
-                double etaisyysTahan = laskeDiagonaaliEtaisyys(nykyinenRuutu, seuraaja);
+                double etaisyysTahan = heuristiikka.laskeEtaisyys(nykyinenRuutu, seuraaja);
 
                 double uusiEtaisyys = etaisyysAlusta[nykyinenY][nykyinenX] + etaisyysTahan;
 
                 if (uusiEtaisyys < etaisyysAlusta[uusiY][uusiX] || !vierailtu[uusiY][uusiX]) {
                     etaisyysAlusta[uusiY][uusiX] = uusiEtaisyys;
-                    etaisyysarvioLoppuun[uusiY][uusiX] = uusiEtaisyys + laskeDiagonaaliEtaisyys(seuraaja, loppu);
+                    etaisyysarvioLoppuun[uusiY][uusiX] = uusiEtaisyys + heuristiikka.laskeEtaisyys(seuraaja, loppu);
                     edeltajat[uusiY][uusiX] = nykyinenRuutu;
                     vierailtu[uusiY][uusiX] = true;
 
@@ -132,7 +131,7 @@ public class JPS extends HakuPohja {
         Ruutu edeltaja = edeltajat[y][x];
 
         if (edeltaja == null) {
-            return haeKaikkiNaapurit(ruutu);
+            return haeVapaatNaapurit(ruutu, salliDiagonaalisiirtymat);
         }
 
         List<Ruutu> naapurit = new ArrayList<>();
@@ -237,23 +236,6 @@ public class JPS extends HakuPohja {
         }
         return null;
 
-    }
-
-    // TODO: Poista toisto.
-    private List<Ruutu> haeKaikkiNaapurit(Ruutu ruutu) {
-        List<Ruutu> naapurit = new ArrayList<>();
-
-        int suuntienMaara = 8;
-
-        for (int i = 0; i < suuntienMaara; i++) {
-            int uusiY = ruutu.getRivi() + Suunta.riviSiirtymat[i];
-            int uusiX = ruutu.getSarake() + Suunta.sarakeSiirtymat[i];
-            if (ruutuKelpaa(uusiY, uusiX)) {
-                naapurit.add(new Ruutu(uusiY, uusiX));
-            }
-        }
-
-        return naapurit;
     }
 
     @Override
