@@ -166,4 +166,20 @@ public abstract class HakuPohja implements Haku {
     public void setSalliDiagonaalisiirtymat(boolean salliDiagonaalisiirtymat) {
         this.salliDiagonaalisiirtymat = salliDiagonaalisiirtymat;
     }
+
+    protected double laskeDiagonaaliEtaisyys(Ruutu lahto, Ruutu kohde) {
+
+        int dy = Math.abs(kohde.getRivi() - lahto.getRivi());
+        int dx = Math.abs(kohde.getSarake() - lahto.getSarake());
+
+        return (dx + dy) + (Math.sqrt(2) - 2) * Math.min(dx, dy);
+    }
+
+    protected void alustaTaulukko(double[][] taulukko) {
+        for (int i = 0; i < korkeus; i++) {
+            for (int j = 0; j < leveys; j++) {
+                taulukko[i][j] = Double.MAX_VALUE;
+            }
+        }
+    }
 }
