@@ -63,12 +63,21 @@ public class GUI extends Application {
         RadioButton leveyshakuNappi = new RadioButton("Leveyshaku");
         leveyshakuNappi.setToggleGroup(algoritmiToggleGroup);
         leveyshakuNappi.setSelected(true);
-        leveyshakuNappi.setOnAction(e -> salliDiagonaaliSiirtymat.setDisable(true));
+        leveyshakuNappi.setOnAction(e -> {
+            salliDiagonaaliSiirtymat.setSelected(false);
+            salliDiagonaaliSiirtymat.setDisable(true);
+        });
+
         RadioButton aStarNappi = new RadioButton("A*");
         aStarNappi.setToggleGroup(algoritmiToggleGroup);
         aStarNappi.setOnAction(e -> salliDiagonaaliSiirtymat.setDisable(false));
+        
         RadioButton jpsNappi = new RadioButton("JPS");
         jpsNappi.setToggleGroup(algoritmiToggleGroup);
+        jpsNappi.setOnAction(e -> {
+            salliDiagonaaliSiirtymat.setSelected(true);
+            salliDiagonaaliSiirtymat.setDisable(true);
+        });
 
         hakutulosnakyma = new Label();
         hakutulosnakyma.setFont(new Font("Segoe UI", 20));
