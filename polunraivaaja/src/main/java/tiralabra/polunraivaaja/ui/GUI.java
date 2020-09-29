@@ -25,6 +25,7 @@ import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
 import tiralabra.polunraivaaja.io.Kartanlukija;
 import tiralabra.polunraivaaja.kartta.Kartanpiirtaja;
 import tiralabra.polunraivaaja.kartta.Kartta;
+import tiralabra.polunraivaaja.suorituskykytestit.tietorakenteet.RuutuListaSuorituskykytesti;
 import tiralabra.polunraivaaja.algoritmit.Haku;
 import tiralabra.polunraivaaja.algoritmit.JPS;
 
@@ -167,6 +168,8 @@ public class GUI extends Application {
 
         primaryStage.setScene(new Scene(mainContainer, 1600, 1200));
         primaryStage.show();
+
+        System.out.println(RuutuListaSuorituskykytesti.suorita());
     }
 
     private void alustaKarttalista() {
