@@ -73,7 +73,7 @@ public class Ruutu implements Comparable<Ruutu> {
 
     @Override
     public String toString() {
-        return rivi + ", " + sarake + " | ";
+        return rivi + " : " + sarake;
     }
 
     @Override
