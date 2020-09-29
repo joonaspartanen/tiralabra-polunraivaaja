@@ -116,7 +116,6 @@ public class GUI extends Application {
 
             Hakutulos tulos = haku.etsiReitti(alkupiste, loppupiste);
             hakutulosnakyma.setText(tulos.toString());
-            System.out.println(tulos);
 
             if (tulos.isOnnistui()) {
                 List<Ruutu> reitti = tulos.getReitti();
