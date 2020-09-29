@@ -7,8 +7,8 @@ public class DiagonaaliEtaisyys implements Heuristiikka {
   @Override
   public double laskeEtaisyys(Ruutu lahto, Ruutu kohde) {
 
-    int dy = Math.abs(kohde.getRivi() - lahto.getRivi());
-    int dx = Math.abs(kohde.getSarake() - lahto.getSarake());
+    int dy = Math.abs(kohde.y - lahto.y);
+    int dx = Math.abs(kohde.x - lahto.x);
 
     return (dx + dy) + (Math.sqrt(2) - 2) * Math.min(dx, dy);
   }

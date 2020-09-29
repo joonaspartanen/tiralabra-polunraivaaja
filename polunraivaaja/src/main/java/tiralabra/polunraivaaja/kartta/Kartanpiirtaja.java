@@ -93,7 +93,7 @@ public class Kartanpiirtaja {
     private void piirraReitti(RuutuLista reitti) {
         for (int i = 0; i < reitti.getRuutuja(); i++) {
             Ruutu ruutu = reitti.haeRuutuIndeksissa(i);
-            piirraRuutu(ruutu.getRivi(), ruutu.getSarake(), true, false);
+            piirraRuutu(ruutu.y, ruutu.x, true, false);
         }
     }
 
@@ -112,7 +112,7 @@ public class Kartanpiirtaja {
      */
     public void piirraPiste(Ruutu sijainti) {
         gc.setFill(Color.CRIMSON);
-        gc.fillOval(sijainti.getSarake() * ruudunLeveys - 3, sijainti.getRivi() * ruudunKorkeus - 3, 7, 7);
+        gc.fillOval(sijainti.x * ruudunLeveys - 3, sijainti.y * ruudunKorkeus - 3, 7, 7);
     }
 
     public double getRuudunLeveys() {

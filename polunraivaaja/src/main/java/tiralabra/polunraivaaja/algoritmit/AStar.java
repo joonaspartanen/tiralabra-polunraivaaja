@@ -13,6 +13,8 @@ import tiralabra.polunraivaaja.kartta.Kartta;
  * A*-algoritmin toteutus. Hakee kartalta lyhimmän reitin kahden pisteen välillä
  * käyttäen apuna heuristista funktiota, joka arvioi tarkasteltavien solmujen
  * etäisyyttä reitin loppuun.
+ * 
+ * TODO: Tutki miksi löytää joskus hieman pidemmän reitin kuin JPS.
  *
  * @author Joonas Partanen <joonas.partanen@helsinki.fi>
  */
@@ -32,83 +34,56 @@ public class AStar extends HakuPohja {
      */
     @Override
     public Hakutulos etsiReitti(Ruutu alku, Ruutu loppu) {
-        long alkuAika = System.nanoTime();
+        alkuAika = System.nanoTime();
 
         ruutujaTarkasteltu = 0;
 
         if (!reitinPaatVapaat(alku, loppu)) {
-            tulos = new Hakutulos(false, "Alku- tai loppupiste ei kelpaa.", ruutujaTarkasteltu, vierailtu);
-            return tulos;
+            return new Hakutulos(false, "Alku- tai loppupiste ei kelpaa.", ruutujaTarkasteltu, vierailtu);
         }
 
         this.alku = alku;
         this.loppu = loppu;
 
-        double[][] etaisyysAlusta = new double[korkeus][leveys];
-        double[][] etaisyysarvioLoppuun = new double[korkeus][leveys];
+        alustaEtaisyysTaulukot(alku);
 
-        alustaTaulukko(etaisyysAlusta);
-        alustaTaulukko(etaisyysarvioLoppuun);
-
-        Queue<Ruutu> jono = new PriorityQueue<>((a, b) -> etaisyysarvioLoppuun[a.getRivi()][a.getSarake()]
-                - etaisyysarvioLoppuun[b.getRivi()][b.getSarake()] < 0 ? -1 : 1);
-
-        edeltajat = new Ruutu[korkeus][leveys];
-        vierailtu = new boolean[korkeus][leveys];
-
-        int alkuY = alku.getRivi();
-        int alkuX = alku.getSarake();
+        Queue<Ruutu> jono = new PriorityQueue<>(
+                (a, b) -> etaisyysarvioLoppuun[a.y][a.x] - etaisyysarvioLoppuun[b.y][b.x] < 0 ? -1 : 1);
 
         jono.add(alku);
-        etaisyysAlusta[alkuY][alkuX] = 0;
-        etaisyysarvioLoppuun[alkuY][alkuX] = heuristiikka.laskeEtaisyys(alku, loppu);
-        vierailtu[alkuY][alkuX] = true;
 
         while (!jono.isEmpty()) {
-            Ruutu nykyinenRuutu = jono.remove();
+            Ruutu nykyinen = jono.remove();
 
-            int nykyinenY = nykyinenRuutu.getRivi();
-            int nykyinenX = nykyinenRuutu.getSarake();
-
-            if (loppuSaavutettu(nykyinenY, nykyinenX)) {
-                muodostaReitti();
-                double reitinPituus = etaisyysAlusta[nykyinenY][nykyinenX];
-
-                long loppuAika = System.nanoTime();
-                long haunKesto = loppuAika - alkuAika;
-
-                tulos = new Hakutulos(true, "Reitti löytyi.", ruutujaTarkasteltu, reitti, vierailtu, reitinPituus,
-                        haunKesto);
-                return tulos;
+            if (loppuSaavutettu(nykyinen.y, nykyinen.x)) {
+                return muodostaHakutulos();
             }
 
-            RuutuLista naapurit = haeVapaatNaapurit(nykyinenRuutu, salliDiagonaalisiirtymat);
+            RuutuLista naapurit = haeVapaatNaapurit(nykyinen, salliDiagonaalisiirtymat);
 
             for (int i = 0; i < naapurit.getRuutuja(); i++) {
                 Ruutu naapuri = naapurit.haeRuutuIndeksissa(i);
-                int uusiY = naapuri.getRivi();
-                int uusiX = naapuri.getSarake();
 
-                if (!ruutuKelpaa(uusiY, uusiX) || vierailtu[uusiY][uusiX]) {
+                if (!ruutuKelpaa(naapuri.y, naapuri.x) || vierailtu[naapuri.y][naapuri.x]) {
                     continue;
                 }
 
-                double etaisyysTahan = Suunta.laskeSuunta(nykyinenRuutu, naapuri).isDiagonaalinen() ? Math.sqrt(2) : 1;
+                double etaisyysTahan = Suunta.laskeSuunta(nykyinen, naapuri).isDiagonaalinen() ? Math.sqrt(2) : 1;
 
-                double uusiEtaisyys = etaisyysAlusta[nykyinenY][nykyinenX] + etaisyysTahan;
+                double uusiEtaisyys = etaisyysAlusta[nykyinen.y][nykyinen.x] + etaisyysTahan;
 
-                if (uusiEtaisyys < etaisyysAlusta[uusiY][uusiX]) {
-                    etaisyysAlusta[uusiY][uusiX] = uusiEtaisyys;
-                    etaisyysarvioLoppuun[uusiY][uusiX] = uusiEtaisyys
+                if (uusiEtaisyys < etaisyysAlusta[naapuri.y][naapuri.x]) {
+                    etaisyysAlusta[naapuri.y][naapuri.x] = uusiEtaisyys;
+                    etaisyysarvioLoppuun[naapuri.y][naapuri.x] = uusiEtaisyys
                             + heuristiikka.laskeEtaisyys(naapuri, loppu);
-                    edeltajat[uusiY][uusiX] = nykyinenRuutu;
-                    vierailtu[uusiY][uusiX] = true;
+
+                    vieraile(naapuri.y, naapuri.x);
+                    edeltajat[naapuri.y][naapuri.x] = nykyinen;
+
                     jono.add(naapuri);
-                    ruutujaTarkasteltu++;
                 }
             }
         }
-        tulos = new Hakutulos(false, "Reitti ei mahdollinen.", ruutujaTarkasteltu, vierailtu);
-        return tulos;
+        return new Hakutulos(false, "Reitti ei mahdollinen.", ruutujaTarkasteltu, vierailtu);
     }
 }

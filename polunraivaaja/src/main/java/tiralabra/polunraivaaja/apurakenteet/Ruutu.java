@@ -1,33 +1,32 @@
 package tiralabra.polunraivaaja.apurakenteet;
 
 /**
- * Kuvaa karttaruutua ja sen sijaintia. Paino-muuttujaa ei vielä hyödynnetä,
- * mutta se mahdollistaisi erilaisten "maastojen" kuvaamisen.
+ * Kuvaa karttaruutua ja sen sijaintia.
  *
  * @author Joonas Partanen <joonas.partanen@helsinki.fi>
  */
 public class Ruutu {
 
-    private int rivi;
-    private int sarake;
+    public final int y;
+    public final int x;
 
-    public Ruutu(int rivi, int sarake) {
-        this.rivi = rivi;
-        this.sarake = sarake;
+    public Ruutu(int y, int x) {
+        this.y = y;
+        this.x = x;
     }
 
     public static Ruutu haeSeuraavaRuutu(Ruutu lahtoruutu, Suunta suunta) {
-        int seuraavaY = lahtoruutu.getRivi() + suunta.getDY();
-        int seuraavaX = lahtoruutu.getSarake() + suunta.getDX();
+        int seuraavaY = lahtoruutu.y + suunta.getDY();
+        int seuraavaX = lahtoruutu.x + suunta.getDX();
         return new Ruutu(seuraavaY, seuraavaX);
     }
 
-    public int getRivi() {
-        return rivi;
+    public int getY() {
+        return y;
     }
 
-    public int getSarake() {
-        return sarake;
+    public int getX() {
+        return x;
     }
 
     @Override
@@ -35,10 +34,10 @@ public class Ruutu {
         return super.hashCode();
     }
     /**
-     * Kaksi ruutua ovat samat, mikäli niiden rivi ja sarake on sama.
+     * Kaksi ruutua ovat samat, mikäli niiden rivi ja sarake ovat samat.
      *
      * @param obj Verrattava objekti.
-     * @return True, jos koordinaatit ovat samat; false jos eivät.
+     * @return True, jos ruutujen koordinaatit ovat samat; false jos eivät.
      */
     @Override
     public boolean equals(Object obj) {
@@ -51,11 +50,11 @@ public class Ruutu {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Ruutu toinen = (Ruutu) obj;
-        if (rivi != toinen.rivi) {
+        final Ruutu other = (Ruutu) obj;
+        if (this.y != other.y) {
             return false;
         }
-        if (sarake != toinen.sarake) {
+        if (this.x != other.x) {
             return false;
         }
         return true;
@@ -63,6 +62,6 @@ public class Ruutu {
 
     @Override
     public String toString() {
-        return rivi + " : " + sarake;
+        return y + " : " + x;
     }
 }

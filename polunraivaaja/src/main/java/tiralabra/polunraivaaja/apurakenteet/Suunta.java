@@ -33,11 +33,11 @@ public enum Suunta {
     }
 
     public static int laskeDX(Ruutu alku, Ruutu kohde) {
-        return kohde.getSarake() - alku.getSarake();
+        return kohde.x - alku.x;
     }
 
     public static int laskeDY(Ruutu alku, Ruutu kohde) {
-        return kohde.getRivi() - alku.getRivi();
+        return kohde.y - alku.y;
     }
 
     public static Suunta laskeSuunta(Ruutu lahto, Ruutu kohde) {

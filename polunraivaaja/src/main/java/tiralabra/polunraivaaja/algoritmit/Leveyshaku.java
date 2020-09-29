@@ -9,7 +9,8 @@ import tiralabra.polunraivaaja.apurakenteet.Ruutu;
 import tiralabra.polunraivaaja.apurakenteet.Suunta;
 
 /**
- * Leveyshakualgoritmin (BFS) toteutus. Hakee kartalta lyhimmän reitin kahden pisteen välillä.
+ * Leveyshakualgoritmin (BFS) toteutus. Hakee kartalta lyhimmän reitin kahden
+ * pisteen välillä.
  *
  * @author Joonas Partanen <joonas.partanen@helsinki.fi>
  */
@@ -27,63 +28,50 @@ public class Leveyshaku extends HakuPohja {
      * Etsii jonkin lyhimmistä reiteistä parametreina saatujen alku- ja
      * loppupisteiden välillä.
      *
-     * @param alku Haettavan reitin alkupiste.
+     * @param alku  Haettavan reitin alkupiste.
      * @param loppu Haettavan reitin loppupiste.
      * @return Palauttaa haun tulosta kuvaavan Hakutulos-olion.
      */
     @Override
     public Hakutulos etsiReitti(Ruutu alku, Ruutu loppu) {
-        long alkuAika = System.nanoTime();
+        alkuAika = System.nanoTime();
 
         ruutujaTarkasteltu = 0;
 
         if (!reitinPaatVapaat(alku, loppu)) {
-            tulos = new Hakutulos(false, "Alku- tai loppupiste ei kelpaa.", ruutujaTarkasteltu, vierailtu);
-            return tulos;
+            return new Hakutulos(false, "Alku- tai loppupiste ei kelpaa.", ruutujaTarkasteltu, vierailtu);
         }
 
         this.alku = alku;
         this.loppu = loppu;
 
         Queue<Ruutu> jono = new ArrayDeque<>();
-        edeltajat = new Ruutu[korkeus][leveys];
-        vierailtu = new boolean[korkeus][leveys];
 
         jono.add(alku);
-        vieraile(alku.getRivi(), alku.getSarake());
+        vieraile(alku.y, alku.x);
 
         while (!jono.isEmpty()) {
             Ruutu nykyinenRuutu = jono.remove();
 
             for (int i = 0; i < 4; i++) {
-                int rivi = nykyinenRuutu.getRivi() + Suunta.riviSiirtymat[i];
-                int sarake = nykyinenRuutu.getSarake() + Suunta.sarakeSiirtymat[i];
+                int y = nykyinenRuutu.y + Suunta.riviSiirtymat[i];
+                int x = nykyinenRuutu.x + Suunta.sarakeSiirtymat[i];
 
-                if (ruutuKelpaa(rivi, sarake) && !vierailtu[rivi][sarake]) {
-                    vieraile(rivi, sarake);
-                    edeltajat[rivi][sarake] = nykyinenRuutu;
-
-                    if (loppuSaavutettu(rivi, sarake)) {
-                        muodostaReitti();
-                        long loppuAika = System.nanoTime();
-                        long haunKesto = loppuAika - alkuAika;
-
-                        tulos = new Hakutulos(true, "Reitti löytyi.", ruutujaTarkasteltu, reitti, vierailtu, reitti.getRuutuja() - 1, haunKesto);
-                        return tulos;
-                    }
-
-                    jono.add(new Ruutu(rivi, sarake));
+                if (!ruutuKelpaa(y, x) || vierailtu[y][x]) {
+                    continue;
                 }
+
+                vieraile(y, x);
+                edeltajat[y][x] = nykyinenRuutu;
+
+                if (loppuSaavutettu(y, x)) {
+                    return muodostaHakutulos();
+                }
+
+                jono.add(new Ruutu(y, x));
             }
         }
 
-        tulos = new Hakutulos(false, "Reitti ei mahdollinen.", ruutujaTarkasteltu, vierailtu);
-        return tulos;
+        return new Hakutulos(false, "Reitti ei mahdollinen.", ruutujaTarkasteltu, vierailtu);
     }
-
-    private void vieraile(int rivi, int sarake) {
-        vierailtu[rivi][sarake] = true;
-        ruutujaTarkasteltu++;
-    }
-
 }

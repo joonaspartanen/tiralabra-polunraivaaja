@@ -31,81 +31,56 @@ public class JPS extends HakuPohja {
      */
     @Override
     public Hakutulos etsiReitti(Ruutu alku, Ruutu loppu) {
-        long alkuAika = System.nanoTime();
+        alkuAika = System.nanoTime();
 
         ruutujaTarkasteltu = 0;
 
         if (!reitinPaatVapaat(alku, loppu)) {
-            tulos = new Hakutulos(false, "Alku- tai loppupiste ei kelpaa.", ruutujaTarkasteltu, vierailtu);
-            return tulos;
+            return new Hakutulos(false, "Alku- tai loppupiste ei kelpaa.", ruutujaTarkasteltu, vierailtu);
         }
 
         this.alku = alku;
         this.loppu = loppu;
 
-        double[][] etaisyysAlusta = new double[korkeus][leveys];
-        double[][] etaisyysarvioLoppuun = new double[korkeus][leveys];
+        alustaEtaisyysTaulukot(alku);
 
-        alustaTaulukko(etaisyysAlusta);
-        alustaTaulukko(etaisyysarvioLoppuun);
-
-        Queue<Ruutu> jono = new PriorityQueue<>((a, b) -> etaisyysarvioLoppuun[a.getRivi()][a.getSarake()]
-                - etaisyysarvioLoppuun[b.getRivi()][b.getSarake()] < 0 ? -1 : 1);
-
-        edeltajat = new Ruutu[korkeus][leveys];
-        vierailtu = new boolean[korkeus][leveys];
-
-        int alkuY = alku.getRivi();
-        int alkuX = alku.getSarake();
+        Queue<Ruutu> jono = new PriorityQueue<>(
+                (a, b) -> etaisyysarvioLoppuun[a.y][a.x] - etaisyysarvioLoppuun[b.y][b.x] < 0 ? -1 : 1);
 
         jono.add(alku);
-        etaisyysAlusta[alkuY][alkuX] = 0;
-        etaisyysarvioLoppuun[alkuY][alkuX] = heuristiikka.laskeEtaisyys(alku, loppu);
-        vierailtu[alkuY][alkuX] = true;
+
+        vieraile(alku.y, alku.x);
 
         while (!jono.isEmpty()) {
-            Ruutu nykyinenRuutu = jono.remove();
+            Ruutu nykyinen = jono.remove();
 
-            int nykyinenY = nykyinenRuutu.getRivi();
-            int nykyinenX = nykyinenRuutu.getSarake();
-
-            if (loppuSaavutettu(nykyinenY, nykyinenX)) {
-                muodostaReitti();
-                double reitinPituus = etaisyysAlusta[nykyinenY][nykyinenX];
-
-                long loppuAika = System.nanoTime();
-                long haunKesto = loppuAika - alkuAika;
-
-                tulos = new Hakutulos(true, "Reitti löytyi.", ruutujaTarkasteltu, reitti, vierailtu, reitinPituus,
-                        haunKesto);
-                return tulos;
+            if (loppuSaavutettu(nykyinen.y, nykyinen.x)) {
+                return muodostaHakutulos();
             }
 
-            RuutuLista seuraajat = etsiSeuraajat(nykyinenRuutu);
+            RuutuLista seuraajat = etsiSeuraajat(nykyinen);
 
             for (int i = 0; i < seuraajat.getRuutuja(); i++) {
                 Ruutu seuraaja = seuraajat.haeRuutuIndeksissa(i);
 
-                int uusiY = seuraaja.getRivi();
-                int uusiX = seuraaja.getSarake();
+                double etaisyysTahan = heuristiikka.laskeEtaisyys(nykyinen, seuraaja);
 
-                double etaisyysTahan = heuristiikka.laskeEtaisyys(nykyinenRuutu, seuraaja);
+                double uusiEtaisyys = etaisyysAlusta[nykyinen.y][nykyinen.x] + etaisyysTahan;
 
-                double uusiEtaisyys = etaisyysAlusta[nykyinenY][nykyinenX] + etaisyysTahan;
+                if (uusiEtaisyys < etaisyysAlusta[seuraaja.y][seuraaja.x] || !vierailtu[seuraaja.y][seuraaja.x]) {
+                    etaisyysAlusta[seuraaja.y][seuraaja.x] = uusiEtaisyys;
+                    etaisyysarvioLoppuun[seuraaja.y][seuraaja.x] = uusiEtaisyys
+                            + heuristiikka.laskeEtaisyys(seuraaja, loppu);
 
-                if (uusiEtaisyys < etaisyysAlusta[uusiY][uusiX] || !vierailtu[uusiY][uusiX]) {
-                    etaisyysAlusta[uusiY][uusiX] = uusiEtaisyys;
-                    etaisyysarvioLoppuun[uusiY][uusiX] = uusiEtaisyys + heuristiikka.laskeEtaisyys(seuraaja, loppu);
-                    edeltajat[uusiY][uusiX] = nykyinenRuutu;
-                    vierailtu[uusiY][uusiX] = true;
+                    edeltajat[seuraaja.y][seuraaja.x] = nykyinen;
+                    vieraile(seuraaja.y, seuraaja.x);
 
-                    jono.add(new Ruutu(uusiY, uusiX));
+                    jono.add(new Ruutu(seuraaja.y, seuraaja.x));
                     ruutujaTarkasteltu++;
                 }
             }
         }
-        tulos = new Hakutulos(false, "Reitti ei mahdollinen.", ruutujaTarkasteltu, vierailtu);
-        return tulos;
+        return new Hakutulos(false, "Reitti ei mahdollinen.", ruutujaTarkasteltu, vierailtu);
     }
 
     private RuutuLista etsiSeuraajat(Ruutu ruutu) {
@@ -117,7 +92,7 @@ public class JPS extends HakuPohja {
             Ruutu naapuri = naapurit.haeRuutuIndeksissa(i);
             Ruutu hyppypiste = hyppaa(naapuri, ruutu);
 
-            if (hyppypiste != null && !vierailtu[hyppypiste.getRivi()][hyppypiste.getSarake()]) {
+            if (hyppypiste != null && !vierailtu[hyppypiste.y][hyppypiste.x]) {
                 seuraajat.lisaaRuutu(hyppypiste);
             }
         }
@@ -125,8 +100,8 @@ public class JPS extends HakuPohja {
     }
 
     private RuutuLista haeNaapurit(Ruutu ruutu) {
-        int y = ruutu.getRivi();
-        int x = ruutu.getSarake();
+        int y = ruutu.y;
+        int x = ruutu.x;
         Ruutu edeltaja = edeltajat[y][x];
 
         if (edeltaja == null) {
@@ -183,8 +158,8 @@ public class JPS extends HakuPohja {
     }
 
     private Ruutu hyppaa(Ruutu kohde, Ruutu lahto) {
-        int y = kohde.getRivi();
-        int x = kohde.getSarake();
+        int y = kohde.y;
+        int x = kohde.x;
 
         Suunta suunta = Suunta.laskeSuunta(lahto, kohde);
         int dx = suunta.getDX();
@@ -249,10 +224,10 @@ public class JPS extends HakuPohja {
 
             while (true) {
                 lahto = Ruutu.haeSeuraavaRuutu(lahto, suunta);
-                int lahtoY = lahto.getRivi();
-                int lahtoX = lahto.getSarake();
-                int kohdeY = kohde.getRivi();
-                int kohdeX = kohde.getSarake();
+                int lahtoY = lahto.y;
+                int lahtoX = lahto.x;
+                int kohdeY = kohde.y;
+                int kohdeX = kohde.x;
                 if (lahtoY == kohdeY && lahtoX == kohdeX) {
                     break;
                 }

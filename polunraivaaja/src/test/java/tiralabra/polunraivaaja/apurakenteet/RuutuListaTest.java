@@ -32,8 +32,8 @@ public class RuutuListaTest {
 
     for (int i = 0; i < 5; i++) {
       Ruutu ruutu = lista.haeRuutuIndeksissa(i);
-      assertThat(ruutu.getRivi(), is(i));
-      assertThat(ruutu.getSarake(), is(i));
+      assertThat(ruutu.y, is(i));
+      assertThat(ruutu.x, is(i));
     }
   }
 }

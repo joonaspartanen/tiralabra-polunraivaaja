@@ -69,14 +69,25 @@ public abstract class HakuPohja implements Haku {
     protected int ruutujaTarkasteltu;
 
     /**
-     * Reittihaun tuloksen käärivä Hakutulos-olio.
+     * Reittihaun alkamisen aikaleima.
      */
-    protected Hakutulos tulos;
+    protected long alkuAika;
 
     /**
      * A*- ja JPS-algoritmien käyttämä heuristinen funktio.
      */
     protected Heuristiikka heuristiikka;
+
+    /**
+     * Taulukko, jossa A* ja JPS pitävät kirjaa ruutujen etäisyydestä reitin alkuun.
+     */
+    protected double[][] etaisyysAlusta;
+
+    /**
+     * Taulukko, jossa A* ja JPS pitävät kirjaa heuristisen funktion laskemista
+     * etäisyysarvioista kustakin ruudusta reitin loppuun.
+     */
+    protected double[][] etaisyysarvioLoppuun;
 
     /**
      *
@@ -86,12 +97,29 @@ public abstract class HakuPohja implements Haku {
         this.kartta = kartta;
         korkeus = kartta.getKorkeus();
         leveys = kartta.getLeveys();
+        edeltajat = new Ruutu[korkeus][leveys];
+        vierailtu = new boolean[korkeus][leveys];
         this.heuristiikka = new ManhattanEtaisyys();
     }
 
     @Override
     public void setKartta(Kartta kartta) {
         this.kartta = kartta;
+    }
+
+    @Override
+    public RuutuLista getReitti() {
+        return reitti;
+    }
+
+    /**
+     * Asettaa salliDiagonaalisiirtymät lipun. Jos sallitaan, niin heuristiikka
+     * vaihdetaan asiaankuuluvaksi.
+     *
+     */
+    public void setSalliDiagonaalisiirtymat(boolean salliDiagonaalisiirtymat) {
+        this.salliDiagonaalisiirtymat = salliDiagonaalisiirtymat;
+        this.heuristiikka = new DiagonaaliEtaisyys();
     }
 
     /**
@@ -104,36 +132,11 @@ public abstract class HakuPohja implements Haku {
      */
     protected boolean reitinPaatVapaat(Ruutu... ruudut) {
         for (Ruutu ruutu : ruudut) {
-            if (!ruutuKelpaa(ruutu.getRivi(), ruutu.getSarake())) {
+            if (!ruutuKelpaa(ruutu.y, ruutu.x)) {
                 return false;
             }
         }
         return true;
-    }
-
-    protected RuutuLista haeVapaatNaapurit(Ruutu ruutu, boolean salliDiagonaalisiirtymat) {
-        RuutuLista naapurit = new RuutuLista();
-
-        int y = ruutu.getRivi();
-        int x = ruutu.getSarake();
-
-        for (Suunta suunta : Suunta.values()) {
-            if (!salliDiagonaalisiirtymat && suunta.isDiagonaalinen()) {
-                continue;
-            }
-
-            int uusiY = ruutu.getRivi() + suunta.getDY();
-            int uusiX = ruutu.getSarake() + suunta.getDX();
-
-            // Varmistetaan ettei haku kulje kulmien välistä.
-            if (suunta.isDiagonaalinen() && !ruutuKelpaa(uusiY, x) && !ruutuKelpaa(y, uusiX)) {
-                continue;
-            }
-
-            naapurit.lisaaRuutu(new Ruutu(uusiY, uusiX));
-        }
-
-        return naapurit;
     }
 
     /**
@@ -166,7 +169,50 @@ public abstract class HakuPohja implements Haku {
      * @return
      */
     protected boolean loppuSaavutettu(int rivi, int sarake) {
-        return rivi == loppu.getRivi() && sarake == loppu.getSarake();
+        return rivi == loppu.y && sarake == loppu.x;
+    }
+
+    protected Hakutulos muodostaHakutulos() {
+        long loppuAika = System.nanoTime();
+        long haunKesto = loppuAika - alkuAika;
+
+        muodostaReitti();
+        double reitinPituus = !salliDiagonaalisiirtymat ? reitti.getRuutuja() - 1 : etaisyysAlusta[loppu.y][loppu.x];
+
+        return new Hakutulos(true, "Reitti löytyi.", ruutujaTarkasteltu, reitti, vierailtu, reitinPituus, haunKesto);
+    }
+
+    /**
+     * Merkitsee ruudun vierailluksi ja päivittää ruutujaTarkasteltu-laskurin.
+     */
+    protected void vieraile(int rivi, int sarake) {
+        vierailtu[rivi][sarake] = true;
+        ruutujaTarkasteltu++;
+    }
+
+    protected RuutuLista haeVapaatNaapurit(Ruutu ruutu, boolean salliDiagonaalisiirtymat) {
+        RuutuLista naapurit = new RuutuLista();
+
+        int y = ruutu.y;
+        int x = ruutu.x;
+
+        for (Suunta suunta : Suunta.values()) {
+            if (!salliDiagonaalisiirtymat && suunta.isDiagonaalinen()) {
+                continue;
+            }
+
+            int uusiY = ruutu.y + suunta.getDY();
+            int uusiX = ruutu.x + suunta.getDX();
+
+            // Varmistetaan ettei haku kulje kulmien välistä.
+            if (suunta.isDiagonaalinen() && !ruutuKelpaa(uusiY, x) && !ruutuKelpaa(y, uusiX)) {
+                continue;
+            }
+
+            naapurit.lisaaRuutu(new Ruutu(uusiY, uusiX));
+        }
+
+        return naapurit;
     }
 
     /**
@@ -177,44 +223,35 @@ public abstract class HakuPohja implements Haku {
         reitti = new RuutuLista();
         reitti.lisaaRuutu(loppu);
 
-        Ruutu ruutu = edeltajat[loppu.getRivi()][loppu.getSarake()];
-        reitti.lisaaRuutu(ruutu);
+        Ruutu seuraava = edeltajat[loppu.y][loppu.x];
+        reitti.lisaaRuutu(seuraava);
 
-        while (!(ruutu.getRivi() == alku.getRivi() && ruutu.getSarake() == alku.getSarake())) {
-            ruutu = edeltajat[ruutu.getRivi()][ruutu.getSarake()];
-            reitti.lisaaRuutu(ruutu);
+        while (seuraava != alku) {
+            seuraava = edeltajat[seuraava.y][seuraava.x];
+            reitti.lisaaRuutu(seuraava);
         }
     }
 
-    /**
-     * Palauttaa haun löytämää reittiä kuvaavan listan Ruutuja.
-     *
-     * @return Lista Ruutuja.
-     */
-    @Override
-    public RuutuLista getReitti() {
-        return reitti;
-    }
-
-    /**
-     * Asettaa salliDiagonaalisiirtymät lipun. Jos sallitaan, niin heuristiikka
-     * vaihdetaan asiaankuuluvaksi.
-     *
-     */
-    public void setSalliDiagonaalisiirtymat(boolean salliDiagonaalisiirtymat) {
-        this.salliDiagonaalisiirtymat = salliDiagonaalisiirtymat;
-        this.heuristiikka = new DiagonaaliEtaisyys();
-    }
-
     protected double laskeDiagonaaliEtaisyys(Ruutu lahto, Ruutu kohde) {
-
-        int dy = Math.abs(kohde.getRivi() - lahto.getRivi());
-        int dx = Math.abs(kohde.getSarake() - lahto.getSarake());
+        int dy = Math.abs(kohde.y - lahto.y);
+        int dx = Math.abs(kohde.x - lahto.x);
 
         return (dx + dy) + (Math.sqrt(2) - 2) * Math.min(dx, dy);
     }
 
-    protected void alustaTaulukko(double[][] taulukko) {
+    protected void alustaEtaisyysTaulukot(Ruutu alku) {
+        etaisyysAlusta = new double[korkeus][leveys];
+        etaisyysarvioLoppuun = new double[korkeus][leveys];
+
+        alustaTaulukko(etaisyysAlusta);
+        alustaTaulukko(etaisyysarvioLoppuun);
+
+        etaisyysAlusta[alku.y][alku.x] = 0;
+        etaisyysarvioLoppuun[alku.y][alku.x] = heuristiikka.laskeEtaisyys(alku, loppu);
+
+    }
+
+    private void alustaTaulukko(double[][] taulukko) {
         for (int i = 0; i < korkeus; i++) {
             for (int j = 0; j < leveys; j++) {
                 taulukko[i][j] = Double.MAX_VALUE;
