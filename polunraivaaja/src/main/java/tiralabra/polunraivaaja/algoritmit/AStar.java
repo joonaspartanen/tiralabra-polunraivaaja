@@ -31,6 +31,8 @@ public class AStar extends HakuPohja {
      */
     @Override
     public Hakutulos etsiReitti(Ruutu alku, Ruutu loppu) {
+        long alkuAika = System.nanoTime();
+
         ruutujaTarkasteltu = 0;
 
         if (!reitinPaatVapaat(alku, loppu)) {
@@ -58,7 +60,7 @@ public class AStar extends HakuPohja {
 
         jono.add(alku);
         etaisyysAlusta[alkuY][alkuX] = 0;
-        etaisyysarvioLoppuun[alkuY][alkuX] = laskeManhattanEtaisyys(alkuY, alkuX);
+        etaisyysarvioLoppuun[alkuY][alkuX] = laskeDiagonaaliEtaisyys(alku, loppu);
         vierailtu[alkuY][alkuX] = true;
 
         while (!jono.isEmpty()) {
@@ -69,7 +71,13 @@ public class AStar extends HakuPohja {
 
             if (loppuSaavutettu(nykyinenY, nykyinenX)) {
                 muodostaReitti();
-                tulos = new Hakutulos(true, "Reitti löytyi.", ruutujaTarkasteltu, reitti, vierailtu);
+                double reitinPituus = etaisyysAlusta[nykyinenY][nykyinenX];
+
+                long loppuAika = System.nanoTime();
+                long haunKesto = loppuAika - alkuAika;
+
+                tulos = new Hakutulos(true, "Reitti löytyi.", ruutujaTarkasteltu, reitti, vierailtu, reitinPituus,
+                        haunKesto);
                 return tulos;
             }
 
@@ -90,7 +98,8 @@ public class AStar extends HakuPohja {
 
                 if (uusiEtaisyys < etaisyysAlusta[uusiY][uusiX]) {
                     etaisyysAlusta[uusiY][uusiX] = uusiEtaisyys;
-                    etaisyysarvioLoppuun[uusiY][uusiX] = uusiEtaisyys + laskeManhattanEtaisyys(uusiY, uusiX);
+                    etaisyysarvioLoppuun[uusiY][uusiX] = uusiEtaisyys
+                            + laskeDiagonaaliEtaisyys(new Ruutu(uusiY, uusiX), loppu);
                     edeltajat[uusiY][uusiX] = nykyinenRuutu;
                     vierailtu[uusiY][uusiX] = true;
                     jono.add(new Ruutu(uusiY, uusiX));
@@ -104,13 +113,5 @@ public class AStar extends HakuPohja {
 
     private int laskeManhattanEtaisyys(int rivi, int sarake) {
         return Math.abs(rivi - loppu.getRivi()) + Math.abs(sarake - loppu.getSarake());
-    }
-
-    private void alustaTaulukko(double[][] taulukko) {
-        for (int i = 0; i < korkeus; i++) {
-            for (int j = 0; j < leveys; j++) {
-                taulukko[i][j] = Double.MAX_VALUE;
-            }
-        }
     }
 }

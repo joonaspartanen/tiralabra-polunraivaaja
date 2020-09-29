@@ -34,6 +34,7 @@ public class JPS extends HakuPohja {
      */
     @Override
     public Hakutulos etsiReitti(Ruutu alku, Ruutu loppu) {
+        long alkuAika = System.nanoTime();
 
         // Pakotetaan diagonaalisiirtymät
         this.salliDiagonaalisiirtymat = true;
@@ -75,9 +76,13 @@ public class JPS extends HakuPohja {
 
             if (loppuSaavutettu(nykyinenY, nykyinenX)) {
                 muodostaReitti();
-                tulos = new Hakutulos(true,
-                        "Reitti löytyi, mutta JPS ei osaa vielä muodostaa oikeaa tulosta ja piirrettävää reittiä.",
-                        ruutujaTarkasteltu, reitti, vierailtu);
+                double reitinPituus = etaisyysAlusta[nykyinenY][nykyinenX];
+
+                long loppuAika = System.nanoTime();
+                long haunKesto = loppuAika - alkuAika;
+
+                tulos = new Hakutulos(true, "Reitti löytyi.", ruutujaTarkasteltu, reitti, vierailtu, reitinPituus,
+                        haunKesto);
                 return tulos;
             }
 
@@ -144,10 +149,13 @@ public class JPS extends HakuPohja {
             if (ruutuKelpaa(y, x + dx)) {
                 lisaaRuutuJosKelpaa(naapurit, y, x + dx);
             }
-            if (ruutuKelpaa(y + dy, x) || ruutuKelpaa(y, x + dx)) {
+            if (ruutuKelpaa(y + dy, x + dx)) {
                 lisaaRuutuJosKelpaa(naapurit, y + dy, x + dx);
             }
-            if (!ruutuKelpaa(y, x - dx) && ruutuKelpaa(y + dy, x)) {
+            if (!ruutuKelpaa(y, x - dx)) {
+                lisaaRuutuJosKelpaa(naapurit, y + dy, x - dx);
+            }
+            if (!ruutuKelpaa(y-dy, x)) {
                 lisaaRuutuJosKelpaa(naapurit, y - dy, x + dx);
             }
         } else if (dx == 0) {
@@ -248,20 +256,33 @@ public class JPS extends HakuPohja {
         return naapurit;
     }
 
-    private double laskeDiagonaaliEtaisyys(Ruutu lahto, Ruutu kohde) {
+    @Override
+    public void muodostaReitti() {
+        super.muodostaReitti();
 
-        int dy = Math.abs(kohde.getRivi() - lahto.getRivi());
-        int dx = Math.abs(kohde.getSarake() - lahto.getSarake());
+        List<Ruutu> taysiReitti = new ArrayList<>();
 
-        return (dx + dy) + (Math.sqrt(2) - 2) * Math.min(dx, dy);
-    }
+        for (int i = 0; i < reitti.size() - 1; i++) {
+            Ruutu lahto = reitti.get(i);
+            Ruutu kohde = reitti.get(i + 1);
 
-    private void alustaTaulukko(double[][] taulukko) {
-        for (int i = 0; i < korkeus; i++) {
-            for (int j = 0; j < leveys; j++) {
-                taulukko[i][j] = Double.MAX_VALUE;
+            taysiReitti.add(lahto);
+
+            Suunta suunta = Suunta.laskeSuunta(lahto, kohde);
+
+            while (true) {
+                lahto = Ruutu.haeSeuraavaRuutu(lahto, suunta);
+                int lahtoY = lahto.getRivi();
+                int lahtoX = lahto.getSarake();
+                int kohdeY = kohde.getRivi();
+                int kohdeX = kohde.getSarake();
+                if (lahtoY == kohdeY && lahtoX == kohdeX) {
+                    break;
+                }
+                taysiReitti.add(lahto);
             }
         }
+        taysiReitti.add(alku);
+        reitti = taysiReitti;
     }
-
 }
