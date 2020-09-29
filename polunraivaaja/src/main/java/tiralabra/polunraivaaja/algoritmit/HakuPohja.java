@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tiralabra.polunraivaaja.kartta.Kartta;
+import tiralabra.polunraivaaja.algoritmit.heuristiikka.DiagonaaliEtaisyys;
+import tiralabra.polunraivaaja.algoritmit.heuristiikka.Heuristiikka;
+import tiralabra.polunraivaaja.algoritmit.heuristiikka.ManhattanEtaisyys;
 import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
 import tiralabra.polunraivaaja.apurakenteet.Ruutu;
+import tiralabra.polunraivaaja.apurakenteet.Suunta;
 
 /**
  * Abstrakti luokka, joka sisältää useille reitinhakualgoritmeille yhteiset
@@ -31,8 +35,8 @@ public abstract class HakuPohja implements Haku {
     protected int leveys;
 
     /**
-     * Pitää kirjaa siitä, minkä ruudun kautta kulloinkin tarkasteltavaan
-     * ruutuun on saavuttu.
+     * Pitää kirjaa siitä, minkä ruudun kautta kulloinkin tarkasteltavaan ruutuun on
+     * saavuttu.
      */
     protected Ruutu[][] edeltajat;
 
@@ -72,6 +76,11 @@ public abstract class HakuPohja implements Haku {
     protected Hakutulos tulos;
 
     /**
+     * A*- ja JPS-algoritmien käyttämä heuristinen funktio.
+     */
+    protected Heuristiikka heuristiikka;
+
+    /**
      *
      * @param kartta Han kohteena oleva kartta.
      */
@@ -79,6 +88,7 @@ public abstract class HakuPohja implements Haku {
         this.kartta = kartta;
         korkeus = kartta.getKorkeus();
         leveys = kartta.getLeveys();
+        this.heuristiikka = new ManhattanEtaisyys();
     }
 
     @Override
@@ -87,12 +97,12 @@ public abstract class HakuPohja implements Haku {
     }
 
     /**
-     * Tarkistaa, ovatko haun alku- ja loppuruudut kuljettavissa (eli ovat
-     * kartalla eikä niissä ole esteitä).
+     * Tarkistaa, ovatko haun alku- ja loppuruudut kuljettavissa (eli ovat kartalla
+     * eikä niissä ole esteitä).
      *
      * @param ruudut Tarkistettavat ruudut.
-     * @return True, jos reitin kumpikin pää on vapaa. False, jos jompikumpi ei
-     * ole kuljettavissa.
+     * @return True, jos reitin kumpikin pää on vapaa. False, jos jompikumpi ei ole
+     *         kuljettavissa.
      */
     protected boolean reitinPaatVapaat(Ruutu... ruudut) {
         for (Ruutu ruutu : ruudut) {
@@ -101,6 +111,31 @@ public abstract class HakuPohja implements Haku {
             }
         }
         return true;
+    }
+
+    protected List<Ruutu> haeVapaatNaapurit(Ruutu ruutu, boolean salliDiagonaalisiirtymat) {
+        List<Ruutu> naapurit = new ArrayList<>();
+
+        int y = ruutu.getRivi();
+        int x = ruutu.getSarake();
+
+        for (Suunta suunta : Suunta.values()) {
+            if (!salliDiagonaalisiirtymat && suunta.isDiagonaalinen()) {
+                continue;
+            }
+
+            int uusiY = ruutu.getRivi() + suunta.getDY();
+            int uusiX = ruutu.getSarake() + suunta.getDX();
+
+            // Varmistetaan ettei haku kulje kulmien välistä.
+            if (suunta.isDiagonaalinen() && !ruutuKelpaa(uusiY, x) && !ruutuKelpaa(y, uusiX)) {
+                continue;
+            }
+
+            naapurit.add(new Ruutu(uusiY, uusiX));
+        }
+
+        return naapurit;
     }
 
     /**
@@ -128,7 +163,7 @@ public abstract class HakuPohja implements Haku {
     /**
      * Tarkistaa, vastaako jokin ruutu haun loppua.
      *
-     * @param rivi Tarkasteltavan ruudun rivi.
+     * @param rivi   Tarkasteltavan ruudun rivi.
      * @param sarake Tarkasteltavan ruudun sarake.
      * @return
      */
@@ -137,8 +172,8 @@ public abstract class HakuPohja implements Haku {
     }
 
     /**
-     * Muodostaa haun löytämän reitin seuraamalla edeltajat-taulukkoon
-     * tallennettuja edeltäjä-ruutuja reitin alkupisteeseen saakka.
+     * Muodostaa haun löytämän reitin seuraamalla edeltajat-taulukkoon tallennettuja
+     * edeltäjä-ruutuja reitin alkupisteeseen saakka.
      */
     protected void muodostaReitti() {
         reitti = new ArrayList<>();
@@ -163,8 +198,14 @@ public abstract class HakuPohja implements Haku {
         return reitti;
     }
 
+    /**
+     * Asettaa salliDiagonaalisiirtymät lipun. Jos sallitaan, niin heuristiikka
+     * vaihdetaan asiaankuuluvaksi.
+     *
+     */
     public void setSalliDiagonaalisiirtymat(boolean salliDiagonaalisiirtymat) {
         this.salliDiagonaalisiirtymat = salliDiagonaalisiirtymat;
+        this.heuristiikka = new DiagonaaliEtaisyys();
     }
 
     protected double laskeDiagonaaliEtaisyys(Ruutu lahto, Ruutu kohde) {
