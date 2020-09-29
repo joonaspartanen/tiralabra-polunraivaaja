@@ -79,7 +79,7 @@ public class JPSTest {
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(511, 511));
 
         List<Ruutu> reitti = haku.getReitti();
-        assertThat(reitti.size(), is(702));
+        assertThat(reitti.size(), is(633));
     }
 
     @Test
