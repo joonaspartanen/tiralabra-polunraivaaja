@@ -1,8 +1,5 @@
 package tiralabra.polunraivaaja.apurakenteet;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Luokka, joka käärii reittihaun lopputuloksena saadun reitin ja muita haun
  * metatietoja.
@@ -13,7 +10,7 @@ public class Hakutulos {
 
     private boolean onnistui;
     private String viesti;
-    private List<Ruutu> reitti;
+    private RuutuLista reitti;
     private int ruutujaTarkasteltu;
     private boolean[][] vierailtu;
     private double reitinPituus;
@@ -22,10 +19,10 @@ public class Hakutulos {
     public Hakutulos(boolean onnistui, String viesti, int tarkasteltujaSolmuja, boolean[][] vierailtu) {
         this.onnistui = onnistui;
         this.viesti = viesti;
-        this.reitti = new ArrayList<>();
+        this.reitti = new RuutuLista();
         this.ruutujaTarkasteltu = tarkasteltujaSolmuja;
         this.vierailtu = vierailtu;
-        this.reitinPituus = reitti.size() - 1;
+        this.reitinPituus = reitti.getRuutuja() - 1;
         this.haunKesto = 0;
     }
 
@@ -39,18 +36,18 @@ public class Hakutulos {
      * @param vierailtu          Taulukko, joka sisältää tiedon solmuista, joissa
      *                           hakualgoritmi vieraili.
      */
-    public Hakutulos(boolean onnistui, String viesti, int tarkasteltujaSolmuja, List<Ruutu> reitti,
+    public Hakutulos(boolean onnistui, String viesti, int tarkasteltujaSolmuja, RuutuLista reitti,
             boolean[][] vierailtu) {
         this.onnistui = onnistui;
         this.viesti = viesti;
         this.reitti = reitti;
         this.ruutujaTarkasteltu = tarkasteltujaSolmuja;
         this.vierailtu = vierailtu;
-        this.reitinPituus = reitti.size() - 1;
+        this.reitinPituus = reitti.getRuutuja() - 1;
         this.haunKesto = 0;
     }
 
-    public Hakutulos(boolean onnistui, String viesti, int tarkasteltujaSolmuja, List<Ruutu> reitti,
+    public Hakutulos(boolean onnistui, String viesti, int tarkasteltujaSolmuja, RuutuLista reitti,
             boolean[][] vierailtu, double reitinPituus, long haunKesto) {
         this.onnistui = onnistui;
         this.viesti = viesti;
@@ -69,7 +66,7 @@ public class Hakutulos {
         return viesti;
     }
 
-    public List<Ruutu> getReitti() {
+    public RuutuLista getReitti() {
         return reitti;
     }
 

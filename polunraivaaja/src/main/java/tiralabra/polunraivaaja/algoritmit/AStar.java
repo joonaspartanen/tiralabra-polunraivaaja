@@ -1,11 +1,11 @@
 package tiralabra.polunraivaaja.algoritmit;
 
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
 import tiralabra.polunraivaaja.apurakenteet.Ruutu;
+import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
 import tiralabra.polunraivaaja.apurakenteet.Suunta;
 import tiralabra.polunraivaaja.kartta.Kartta;
 
@@ -82,9 +82,10 @@ public class AStar extends HakuPohja {
                 return tulos;
             }
 
-            List<Ruutu> naapurit = haeVapaatNaapurit(nykyinenRuutu, salliDiagonaalisiirtymat);
+            RuutuLista naapurit = haeVapaatNaapurit(nykyinenRuutu, salliDiagonaalisiirtymat);
 
-            for (Ruutu naapuri : naapurit) {
+            for (int i = 0; i < naapurit.getRuutuja(); i++) {
+                Ruutu naapuri = naapurit.haeRuutuIndeksissa(i);
                 int uusiY = naapuri.getRivi();
                 int uusiX = naapuri.getSarake();
 

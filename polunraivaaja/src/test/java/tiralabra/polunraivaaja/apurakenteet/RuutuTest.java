@@ -17,6 +17,7 @@ public class RuutuTest {
 
         assertThat(ruutu, is(equalTo(ruutu)));
         assertThat(ruutu, is(equalTo(samaRuutu)));
+        assertThat(ruutu, is(equalTo(new Ruutu(2, 4))));
         assertThat(ruutu, is(not(equalTo(toinenRuutu))));
         assertThat(ruutu, is(not(equalTo(kolmasRuutu))));
         assertThat(ruutu, is(not(equalTo(new Kartta(10, 10)))));

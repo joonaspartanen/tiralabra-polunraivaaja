@@ -1,9 +1,8 @@
 package tiralabra.polunraivaaja.algoritmit;
 
-import java.util.List;
-
 import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
 import tiralabra.polunraivaaja.apurakenteet.Ruutu;
+import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
 import tiralabra.polunraivaaja.kartta.Kartta;
 
 /**
@@ -28,7 +27,7 @@ public interface Haku {
      *
      * @return Lista Ruutuja.
      */
-    List<Ruutu> getReitti();
+    RuutuLista getReitti();
 
     /**
      *

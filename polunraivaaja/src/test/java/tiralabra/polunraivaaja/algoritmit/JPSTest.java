@@ -7,9 +7,8 @@ package tiralabra.polunraivaaja.algoritmit;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
-
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +16,7 @@ import org.junit.Test;
 import tiralabra.polunraivaaja.kartta.Kartta;
 import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
 import tiralabra.polunraivaaja.apurakenteet.Ruutu;
+import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
 import tiralabra.polunraivaaja.io.Kartanlukija;
 
 /**
@@ -42,8 +42,8 @@ public class JPSTest {
 
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(4, 4));
 
-        List<Ruutu> reitti = haku.getReitti();
-        assertFalse(reitti.isEmpty());
+        RuutuLista reitti = haku.getReitti();
+        assertTrue(reitti.getRuutuja() > 0);
     }
 
     @Test
@@ -54,8 +54,8 @@ public class JPSTest {
 
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(4, 4));
 
-        List<Ruutu> reitti = haku.getReitti();
-        assertThat(reitti.size(), is(5));
+        RuutuLista reitti = haku.getReitti();
+        assertThat(reitti.getRuutuja(), is(5));
     }
 
     @Test
@@ -66,8 +66,8 @@ public class JPSTest {
 
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(9, 9));
 
-        List<Ruutu> reitti = haku.getReitti();
-        assertThat(reitti.size(), is(17));
+        RuutuLista reitti = haku.getReitti();
+        assertThat(reitti.getRuutuja(), is(17));
     }
 
     @Test
@@ -78,8 +78,8 @@ public class JPSTest {
 
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(511, 511));
 
-        List<Ruutu> reitti = haku.getReitti();
-        assertThat(reitti.size(), is(633));
+        RuutuLista reitti = haku.getReitti();
+        assertThat(reitti.getRuutuja(), is(633));
     }
 
     @Test

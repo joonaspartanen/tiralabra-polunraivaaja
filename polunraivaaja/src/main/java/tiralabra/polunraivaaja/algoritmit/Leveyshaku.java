@@ -68,7 +68,7 @@ public class Leveyshaku extends HakuPohja {
                         long loppuAika = System.nanoTime();
                         long haunKesto = loppuAika - alkuAika;
 
-                        tulos = new Hakutulos(true, "Reitti löytyi.", ruutujaTarkasteltu, reitti, vierailtu, reitti.size() - 1, haunKesto);
+                        tulos = new Hakutulos(true, "Reitti löytyi.", ruutujaTarkasteltu, reitti, vierailtu, reitti.getRuutuja() - 1, haunKesto);
                         return tulos;
                     }
 

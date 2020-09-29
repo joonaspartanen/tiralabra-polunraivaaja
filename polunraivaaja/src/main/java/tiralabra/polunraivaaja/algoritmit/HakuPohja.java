@@ -1,14 +1,12 @@
 package tiralabra.polunraivaaja.algoritmit;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import tiralabra.polunraivaaja.kartta.Kartta;
 import tiralabra.polunraivaaja.algoritmit.heuristiikka.DiagonaaliEtaisyys;
 import tiralabra.polunraivaaja.algoritmit.heuristiikka.Heuristiikka;
 import tiralabra.polunraivaaja.algoritmit.heuristiikka.ManhattanEtaisyys;
 import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
 import tiralabra.polunraivaaja.apurakenteet.Ruutu;
+import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
 import tiralabra.polunraivaaja.apurakenteet.Suunta;
 
 /**
@@ -63,7 +61,7 @@ public abstract class HakuPohja implements Haku {
     /**
      * Lista ruutuja, jotka muodostavat haun löytämän lyhimmän reitin.
      */
-    protected List<Ruutu> reitti;
+    protected RuutuLista reitti;
 
     /**
      * Laskuri haun käsittelemistä ruuduista.
@@ -113,8 +111,8 @@ public abstract class HakuPohja implements Haku {
         return true;
     }
 
-    protected List<Ruutu> haeVapaatNaapurit(Ruutu ruutu, boolean salliDiagonaalisiirtymat) {
-        List<Ruutu> naapurit = new ArrayList<>();
+    protected RuutuLista haeVapaatNaapurit(Ruutu ruutu, boolean salliDiagonaalisiirtymat) {
+        RuutuLista naapurit = new RuutuLista();
 
         int y = ruutu.getRivi();
         int x = ruutu.getSarake();
@@ -132,7 +130,7 @@ public abstract class HakuPohja implements Haku {
                 continue;
             }
 
-            naapurit.add(new Ruutu(uusiY, uusiX));
+            naapurit.lisaaRuutu(new Ruutu(uusiY, uusiX));
         }
 
         return naapurit;
@@ -176,15 +174,15 @@ public abstract class HakuPohja implements Haku {
      * edeltäjä-ruutuja reitin alkupisteeseen saakka.
      */
     protected void muodostaReitti() {
-        reitti = new ArrayList<>();
-        reitti.add(loppu);
+        reitti = new RuutuLista();
+        reitti.lisaaRuutu(loppu);
 
         Ruutu ruutu = edeltajat[loppu.getRivi()][loppu.getSarake()];
-        reitti.add(ruutu);
+        reitti.lisaaRuutu(ruutu);
 
         while (!(ruutu.getRivi() == alku.getRivi() && ruutu.getSarake() == alku.getSarake())) {
             ruutu = edeltajat[ruutu.getRivi()][ruutu.getSarake()];
-            reitti.add(ruutu);
+            reitti.lisaaRuutu(ruutu);
         }
     }
 
@@ -194,7 +192,7 @@ public abstract class HakuPohja implements Haku {
      * @return Lista Ruutuja.
      */
     @Override
-    public List<Ruutu> getReitti() {
+    public RuutuLista getReitti() {
         return reitti;
     }
 

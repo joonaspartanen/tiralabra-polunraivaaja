@@ -1,11 +1,10 @@
 package tiralabra.polunraivaaja.kartta;
 
-import java.util.List;
-
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import tiralabra.polunraivaaja.apurakenteet.Ruutu;
+import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
 
 /**
  * Piirtää kartan graafiseen käyttöliittymään.
@@ -54,13 +53,13 @@ public class Kartanpiirtaja {
      *
      * @param reitti Pohjakartan päälle piirrettävä reitti.
      */
-    public void piirraKartta(List<Ruutu> reitti) {
+    public void piirraKartta(RuutuLista reitti) {
         for (int i = 0; i < korkeus; i++) {
             for (int j = 0; j < leveys; j++) {
-                boolean kuuluuReittiin = reitti.contains(new Ruutu(i, j));
-                piirraRuutu(i, j, kuuluuReittiin, false);
+                piirraRuutu(i, j, false, false);
             }
         }
+        piirraReitti(reitti);
     }
 
     /**
@@ -70,18 +69,18 @@ public class Kartanpiirtaja {
      *
      *
      */
-    public void piirraKartta(List<Ruutu> reitti, boolean[][] vierailtu) {
+    public void piirraKartta(RuutuLista reitti, boolean[][] vierailtu) {
         for (int i = 0; i < korkeus; i++) {
             for (int j = 0; j < leveys; j++) {
-                boolean kuuluuReittiin = reitti.contains(new Ruutu(i, j));
                 boolean ruudussaVierailtu = vierailtu[i][j];
-                piirraRuutu(i, j, kuuluuReittiin, ruudussaVierailtu);
+                piirraRuutu(i, j, false, ruudussaVierailtu);
             }
         }
+        piirraReitti(reitti);
     }
 
-    private void piirraRuutu(int rivi, int sarake, boolean kuuluuReittiin, boolean ruudussaVierailtu) {
-        if (kuuluuReittiin) {
+    private void piirraRuutu(int rivi, int sarake, boolean ruutuKuuluuReittiin, boolean ruudussaVierailtu) {
+        if (ruutuKuuluuReittiin) {
             gc.setFill(Color.CRIMSON);
         } else if (ruudussaVierailtu) {
             gc.setFill(Color.GREENYELLOW);
@@ -89,6 +88,13 @@ public class Kartanpiirtaja {
             gc.setFill(kartta.ruutuVapaa(rivi, sarake) ? Color.WHITESMOKE : Color.BLACK);
         }
         gc.fillRect(sarake * ruudunLeveys, rivi * ruudunKorkeus, ruudunLeveys, ruudunKorkeus);
+    }
+
+    private void piirraReitti(RuutuLista reitti) {
+        for (int i = 0; i < reitti.getRuutuja(); i++) {
+            Ruutu ruutu = reitti.haeRuutuIndeksissa(i);
+            piirraRuutu(ruutu.getRivi(), ruutu.getSarake(), true, false);
+        }
     }
 
     /**

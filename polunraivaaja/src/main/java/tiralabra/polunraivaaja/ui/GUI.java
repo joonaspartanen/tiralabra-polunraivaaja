@@ -2,7 +2,6 @@ package tiralabra.polunraivaaja.ui;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.List;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -22,6 +21,7 @@ import tiralabra.polunraivaaja.algoritmit.AStar;
 import tiralabra.polunraivaaja.algoritmit.Leveyshaku;
 import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
 import tiralabra.polunraivaaja.apurakenteet.Ruutu;
+import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
 import tiralabra.polunraivaaja.io.Kartanlukija;
 import tiralabra.polunraivaaja.kartta.Kartanpiirtaja;
 import tiralabra.polunraivaaja.kartta.Kartta;
@@ -127,7 +127,7 @@ public class GUI extends Application {
             hakutulosnakyma.setText(tulos.toString());
 
             if (tulos.isOnnistui()) {
-                List<Ruutu> reitti = tulos.getReitti();
+                RuutuLista reitti = tulos.getReitti();
                 boolean[][] vierailtu = tulos.getVierailtu();
                 piirtaja.piirraKartta(reitti, vierailtu);
                 karttapohja = piirtaja.getKarttapohja();

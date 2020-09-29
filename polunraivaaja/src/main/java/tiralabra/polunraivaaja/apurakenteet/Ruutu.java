@@ -6,11 +6,10 @@ package tiralabra.polunraivaaja.apurakenteet;
  *
  * @author Joonas Partanen <joonas.partanen@helsinki.fi>
  */
-public class Ruutu implements Comparable<Ruutu> {
+public class Ruutu {
 
     private int rivi;
     private int sarake;
-    private int paino;
 
     public Ruutu(int rivi, int sarake) {
         this.rivi = rivi;
@@ -31,19 +30,10 @@ public class Ruutu implements Comparable<Ruutu> {
         return sarake;
     }
 
-    public int getPaino() {
-        return paino;
-    }
-
     @Override
     public int hashCode() {
-        final int alkuluku = 31;
-        int tulos = 1;
-        tulos = alkuluku * tulos + rivi;
-        tulos = alkuluku * tulos + sarake;
-        return tulos;
+        return super.hashCode();
     }
-
     /**
      * Kaksi ruutua ovat samat, mikäli niiden rivi ja sarake on sama.
      *
@@ -75,10 +65,4 @@ public class Ruutu implements Comparable<Ruutu> {
     public String toString() {
         return rivi + " : " + sarake;
     }
-
-    @Override
-    public int compareTo(Ruutu toinen) {
-        return toinen.paino - this.paino;
-    }
-
 }

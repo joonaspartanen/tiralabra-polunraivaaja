@@ -1,12 +1,11 @@
 package tiralabra.polunraivaaja.algoritmit;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
 import tiralabra.polunraivaaja.apurakenteet.Ruutu;
+import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
 import tiralabra.polunraivaaja.apurakenteet.Suunta;
 import tiralabra.polunraivaaja.kartta.Kartta;
 
@@ -85,9 +84,11 @@ public class JPS extends HakuPohja {
                 return tulos;
             }
 
-            List<Ruutu> seuraajat = etsiSeuraajat(nykyinenRuutu);
+            RuutuLista seuraajat = etsiSeuraajat(nykyinenRuutu);
 
-            for (Ruutu seuraaja : seuraajat) {
+            for (int i = 0; i < seuraajat.getRuutuja(); i++) {
+                Ruutu seuraaja = seuraajat.haeRuutuIndeksissa(i);
+
                 int uusiY = seuraaja.getRivi();
                 int uusiX = seuraaja.getSarake();
 
@@ -110,22 +111,23 @@ public class JPS extends HakuPohja {
         return tulos;
     }
 
-    private List<Ruutu> etsiSeuraajat(Ruutu ruutu) {
+    private RuutuLista etsiSeuraajat(Ruutu ruutu) {
 
-        List<Ruutu> seuraajat = new ArrayList<>();
-        List<Ruutu> naapurit = haeNaapurit(ruutu);
+        RuutuLista seuraajat = new RuutuLista();
+        RuutuLista naapurit = haeNaapurit(ruutu);
 
-        for (Ruutu naapuri : naapurit) {
+        for (int i = 0; i < naapurit.getRuutuja(); i++) {
+            Ruutu naapuri = naapurit.haeRuutuIndeksissa(i);
             Ruutu hyppypiste = hyppaa(naapuri, ruutu);
 
             if (hyppypiste != null && !vierailtu[hyppypiste.getRivi()][hyppypiste.getSarake()]) {
-                seuraajat.add(hyppypiste);
+                seuraajat.lisaaRuutu(hyppypiste);
             }
         }
         return seuraajat;
     }
 
-    private List<Ruutu> haeNaapurit(Ruutu ruutu) {
+    private RuutuLista haeNaapurit(Ruutu ruutu) {
         int y = ruutu.getRivi();
         int x = ruutu.getSarake();
         Ruutu edeltaja = edeltajat[y][x];
@@ -134,7 +136,7 @@ public class JPS extends HakuPohja {
             return haeVapaatNaapurit(ruutu, salliDiagonaalisiirtymat);
         }
 
-        List<Ruutu> naapurit = new ArrayList<>();
+        RuutuLista naapurit = new RuutuLista();
 
         Suunta suunta = Suunta.laskeSuunta(edeltaja, ruutu);
         int dy = suunta.getDY();
@@ -154,7 +156,7 @@ public class JPS extends HakuPohja {
             if (!ruutuKelpaa(y, x - dx)) {
                 lisaaRuutuJosKelpaa(naapurit, y + dy, x - dx);
             }
-            if (!ruutuKelpaa(y-dy, x)) {
+            if (!ruutuKelpaa(y - dy, x)) {
                 lisaaRuutuJosKelpaa(naapurit, y - dy, x + dx);
             }
         } else if (dx == 0) {
@@ -181,9 +183,9 @@ public class JPS extends HakuPohja {
         return naapurit;
     }
 
-    private void lisaaRuutuJosKelpaa(List<Ruutu> lista, int y, int x) {
+    private void lisaaRuutuJosKelpaa(RuutuLista lista, int y, int x) {
         if (ruutuKelpaa(y, x)) {
-            lista.add(new Ruutu(y, x));
+            lista.lisaaRuutu(new Ruutu(y, x));
         }
     }
 
@@ -242,13 +244,13 @@ public class JPS extends HakuPohja {
     public void muodostaReitti() {
         super.muodostaReitti();
 
-        List<Ruutu> taysiReitti = new ArrayList<>();
+        RuutuLista taysiReitti = new RuutuLista();
 
-        for (int i = 0; i < reitti.size() - 1; i++) {
-            Ruutu lahto = reitti.get(i);
-            Ruutu kohde = reitti.get(i + 1);
+        for (int i = 0; i < reitti.getRuutuja() - 1; i++) {
+            Ruutu lahto = reitti.haeRuutuIndeksissa(i);
+            Ruutu kohde = reitti.haeRuutuIndeksissa(i + 1);
 
-            taysiReitti.add(lahto);
+            taysiReitti.lisaaRuutu(lahto);
 
             Suunta suunta = Suunta.laskeSuunta(lahto, kohde);
 
@@ -261,10 +263,10 @@ public class JPS extends HakuPohja {
                 if (lahtoY == kohdeY && lahtoX == kohdeX) {
                     break;
                 }
-                taysiReitti.add(lahto);
+                taysiReitti.lisaaRuutu(lahto);
             }
         }
-        taysiReitti.add(alku);
+        taysiReitti.lisaaRuutu(alku);
         reitti = taysiReitti;
     }
 }
