@@ -10,10 +10,7 @@ import tiralabra.polunraivaaja.apurakenteet.Suunta;
 import tiralabra.polunraivaaja.kartta.Kartta;
 
 /**
- * JPS-algoritmin toteutus. Näyttäisi siltä, että algoritmi löytää jo oikean
- * reitin, mutta "hyppimisen" takia piirrettävän reitin muodostaminen ja
- * pituuden laskeminen täytyy vielä toteuttaa toisella tavalla. Luokkaa tulisi
- * myös refaktoroida ja selkeyttää.
+ * JPS-algoritmin toteutus, joka kaipaa vielä refaktorointia.
  *
  * @author Joonas Partanen <joonas.partanen@helsinki.fi>
  */
