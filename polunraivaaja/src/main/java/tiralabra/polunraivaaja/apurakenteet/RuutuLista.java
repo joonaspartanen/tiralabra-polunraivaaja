@@ -1,5 +1,12 @@
 package tiralabra.polunraivaaja.apurakenteet;
 
+/**
+ * Yksinkertainen, Ruutu-olioita säilövä lista, joka tarjoaa metodit Ruutujen
+ * lisäämiseen ja lukemiseen. Kasvattaa pohjalla olevan taulukon kokoa
+ * tarvittaessa.
+ *
+ * @author Joonas Partanen <joonas.partanen@helsinki.fi>
+ */
 public class RuutuLista {
 
   private Ruutu[] lista;
