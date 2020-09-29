@@ -81,6 +81,10 @@ public class Hakutulos {
         return vierailtu;
     }
 
+    public double getReitinPituus() {
+        return reitinPituus;
+    }
+
     @Override
     public String toString() {
         return viesti + "\n" + "Ruutuja tarkasteltu: " + ruutujaTarkasteltu + "\n" + "Reitin pituus: " + Math.round(reitinPituus) + "\n" + "Aikaa kului: " + haunKesto / 1000000 + " ms";
