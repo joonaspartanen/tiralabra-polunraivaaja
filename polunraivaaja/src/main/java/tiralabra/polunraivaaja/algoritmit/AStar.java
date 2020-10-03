@@ -6,6 +6,8 @@ import java.util.Queue;
 import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
 import tiralabra.polunraivaaja.apurakenteet.Ruutu;
 import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
+import tiralabra.polunraivaaja.apurakenteet.Laskin;
+
 import tiralabra.polunraivaaja.apurakenteet.Suunta;
 import tiralabra.polunraivaaja.kartta.Kartta;
 
@@ -47,8 +49,7 @@ public class AStar extends HakuPohja {
 
         alustaEtaisyysTaulukot(alku);
 
-        Queue<Ruutu> jono = new PriorityQueue<>(
-                (a, b) -> etaisyysarvioLoppuun[a.y][a.x] - etaisyysarvioLoppuun[b.y][b.x] < 0 ? -1 : 1);
+        Queue<Ruutu> jono = new PriorityQueue<>((a, b) -> etaisyysarvioLoppuun[a.y][a.x] - etaisyysarvioLoppuun[b.y][b.x] < 0 ? -1 : 1);
 
         jono.add(alku);
 
@@ -68,7 +69,7 @@ public class AStar extends HakuPohja {
                     continue;
                 }
 
-                double etaisyysTahan = Suunta.laskeSuunta(nykyinen, naapuri).isDiagonaalinen() ? Math.sqrt(2) : 1;
+                double etaisyysTahan = Suunta.laskeSuunta(nykyinen, naapuri).isDiagonaalinen() ? Laskin.SQRT_2 : 1;
 
                 double uusiEtaisyys = etaisyysAlusta[nykyinen.y][nykyinen.x] + etaisyysTahan;
 

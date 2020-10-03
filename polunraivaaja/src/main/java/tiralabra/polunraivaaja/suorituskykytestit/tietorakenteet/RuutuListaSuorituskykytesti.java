@@ -15,47 +15,47 @@ import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
  */
 public class RuutuListaSuorituskykytesti {
 
-  public static Vertailutulos suorita() {
-    int iteraatioita = 1000000;
+    public static Vertailutulos suorita() {
+        int iteraatioita = 1000000;
 
-    long javaRakenteenAika = suoritaArrayListilla(iteraatioita);
-    long omanRakenteenAika = suoritaRuutuListalla(iteraatioita);
+        long javaRakenteenAika = suoritaArrayListilla(iteraatioita);
+        long omanRakenteenAika = suoritaRuutuListalla(iteraatioita);
 
-    return new Vertailutulos(omanRakenteenAika, javaRakenteenAika, iteraatioita);
-  }
-
-  private static long suoritaRuutuListalla(int iteraatioita) {
-    long alku = System.nanoTime();
-
-    RuutuLista lista = new RuutuLista();
-    for (int i = 0; i < iteraatioita; i++) {
-      lista.lisaaRuutu(new Ruutu(i, i));
+        return new Vertailutulos(omanRakenteenAika, javaRakenteenAika, iteraatioita);
     }
 
-    for (int i = 0; i < iteraatioita; i++) {
-      Ruutu ruutu = lista.haeRuutuIndeksissa(i);
+    private static long suoritaRuutuListalla(int iteraatioita) {
+        long alku = System.nanoTime();
+
+        RuutuLista lista = new RuutuLista();
+        for (int i = 0; i < iteraatioita; i++) {
+            lista.lisaaRuutu(new Ruutu(i, i));
+        }
+
+        for (int i = 0; i < iteraatioita; i++) {
+            Ruutu ruutu = lista.haeRuutuIndeksissa(i);
+        }
+
+        long loppu = System.nanoTime();
+
+        return loppu - alku;
     }
 
-    long loppu = System.nanoTime();
+    private static long suoritaArrayListilla(int iteraatioita) {
+        long alku = System.nanoTime();
 
-    return loppu - alku;
-  }
+        List<Ruutu> lista = new ArrayList<>();
+        for (int i = 0; i < iteraatioita; i++) {
+            lista.add(new Ruutu(i, i));
+        }
 
-  private static long suoritaArrayListilla(int iteraatioita) {
-    long alku = System.nanoTime();
+        for (int i = 0; i < iteraatioita; i++) {
+            Ruutu ruutu = lista.get(i);
+        }
 
-    List<Ruutu> lista = new ArrayList<>();
-    for (int i = 0; i < iteraatioita; i++) {
-      lista.add(new Ruutu(i, i));
+        long loppu = System.nanoTime();
+
+        return loppu - alku;
     }
-
-    for (int i = 0; i < iteraatioita; i++) {
-      Ruutu ruutu = lista.get(i);
-    }
-
-    long loppu = System.nanoTime();
-
-    return loppu - alku;
-  }
 
 }

@@ -4,5 +4,5 @@ import tiralabra.polunraivaaja.apurakenteet.Ruutu;
 
 public interface Heuristiikka {
 
-  double laskeEtaisyys(Ruutu lahto, Ruutu kohde);
+    double laskeEtaisyys(Ruutu lahto, Ruutu kohde);
 }

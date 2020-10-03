@@ -5,6 +5,7 @@ import tiralabra.polunraivaaja.algoritmit.heuristiikka.DiagonaaliEtaisyys;
 import tiralabra.polunraivaaja.algoritmit.heuristiikka.Heuristiikka;
 import tiralabra.polunraivaaja.algoritmit.heuristiikka.ManhattanEtaisyys;
 import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
+import tiralabra.polunraivaaja.apurakenteet.Laskin;
 import tiralabra.polunraivaaja.apurakenteet.Ruutu;
 import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
 import tiralabra.polunraivaaja.apurakenteet.Suunta;
@@ -183,6 +184,23 @@ public abstract class HakuPohja implements Haku {
     }
 
     /**
+     * Muodostaa haun löytämän reitin seuraamalla edeltajat-taulukkoon tallennettuja
+     * edeltäjä-ruutuja reitin alkupisteeseen saakka.
+     */
+    protected void muodostaReitti() {
+        reitti = new RuutuLista();
+        reitti.lisaaRuutu(loppu);
+
+        Ruutu seuraava = edeltajat[loppu.y][loppu.x];
+        reitti.lisaaRuutu(seuraava);
+
+        while (seuraava != alku) {
+            seuraava = edeltajat[seuraava.y][seuraava.x];
+            reitti.lisaaRuutu(seuraava);
+        }
+    }
+
+    /**
      * Merkitsee ruudun vierailluksi ja päivittää ruutujaTarkasteltu-laskurin.
      */
     protected void vieraile(int rivi, int sarake) {
@@ -215,30 +233,6 @@ public abstract class HakuPohja implements Haku {
         return naapurit;
     }
 
-    /**
-     * Muodostaa haun löytämän reitin seuraamalla edeltajat-taulukkoon tallennettuja
-     * edeltäjä-ruutuja reitin alkupisteeseen saakka.
-     */
-    protected void muodostaReitti() {
-        reitti = new RuutuLista();
-        reitti.lisaaRuutu(loppu);
-
-        Ruutu seuraava = edeltajat[loppu.y][loppu.x];
-        reitti.lisaaRuutu(seuraava);
-
-        while (seuraava != alku) {
-            seuraava = edeltajat[seuraava.y][seuraava.x];
-            reitti.lisaaRuutu(seuraava);
-        }
-    }
-
-    protected double laskeDiagonaaliEtaisyys(Ruutu lahto, Ruutu kohde) {
-        int dy = Math.abs(kohde.y - lahto.y);
-        int dx = Math.abs(kohde.x - lahto.x);
-
-        return (dx + dy) + (Math.sqrt(2) - 2) * Math.min(dx, dy);
-    }
-
     protected void alustaEtaisyysTaulukot(Ruutu alku) {
         etaisyysAlusta = new double[korkeus][leveys];
         etaisyysarvioLoppuun = new double[korkeus][leveys];
@@ -248,7 +242,6 @@ public abstract class HakuPohja implements Haku {
 
         etaisyysAlusta[alku.y][alku.x] = 0;
         etaisyysarvioLoppuun[alku.y][alku.x] = heuristiikka.laskeEtaisyys(alku, loppu);
-
     }
 
     private void alustaTaulukko(double[][] taulukko) {

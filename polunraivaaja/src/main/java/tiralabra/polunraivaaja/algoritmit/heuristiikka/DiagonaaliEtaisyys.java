@@ -1,16 +1,17 @@
 package tiralabra.polunraivaaja.algoritmit.heuristiikka;
 
+import tiralabra.polunraivaaja.apurakenteet.Laskin;
 import tiralabra.polunraivaaja.apurakenteet.Ruutu;
 
 public class DiagonaaliEtaisyys implements Heuristiikka {
 
-  @Override
-  public double laskeEtaisyys(Ruutu lahto, Ruutu kohde) {
+    @Override
+    public double laskeEtaisyys(Ruutu lahto, Ruutu kohde) {
 
-    int dy = Math.abs(kohde.y - lahto.y);
-    int dx = Math.abs(kohde.x - lahto.x);
+        int dy = Laskin.laskeItseisarvo(kohde.y - lahto.y);
+        int dx = Laskin.laskeItseisarvo(kohde.x - lahto.x);
 
-    return (dx + dy) + (Math.sqrt(2) - 2) * Math.min(dx, dy);
-  }
+        return (dx + dy) + (Laskin.SQRT_2 - 2) * Laskin.valitsePienempi(dx, dy);
+    }
 
 }
