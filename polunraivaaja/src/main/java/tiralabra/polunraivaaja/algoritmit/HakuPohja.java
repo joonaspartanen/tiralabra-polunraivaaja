@@ -5,7 +5,6 @@ import tiralabra.polunraivaaja.algoritmit.heuristiikka.DiagonaaliEtaisyys;
 import tiralabra.polunraivaaja.algoritmit.heuristiikka.Heuristiikka;
 import tiralabra.polunraivaaja.algoritmit.heuristiikka.ManhattanEtaisyys;
 import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
-import tiralabra.polunraivaaja.apurakenteet.Laskin;
 import tiralabra.polunraivaaja.apurakenteet.Ruutu;
 import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
 import tiralabra.polunraivaaja.apurakenteet.Suunta;
