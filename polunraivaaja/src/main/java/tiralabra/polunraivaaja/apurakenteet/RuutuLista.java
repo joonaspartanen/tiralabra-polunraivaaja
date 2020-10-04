@@ -38,20 +38,36 @@ public class RuutuLista {
     }
 
     private void kopioiTaulukko(Ruutu[] taulukko, Ruutu[] kopio) {
-        for (int i = 0; i < taulukko.length; i++) {
+        for (int i = 0; i < ruutuja; i++) {
             kopio[i] = taulukko[i];
         }
     }
 
     public Ruutu haeRuutuIndeksissa(int indeksi) {
+        if (indeksi < 0 || indeksi >= ruutuja) {
+            return null;
+        }
         return lista[indeksi];
+    }
+
+    public Ruutu poistaRuutuIndeksissa(int indeksi) {
+        Ruutu ruutu = lista[indeksi];
+        siirraVasemmalle(indeksi);
+        ruutuja--;
+        return ruutu;
+    }
+
+    private void siirraVasemmalle(int alkaenIndeksista) {
+        for (int i = alkaenIndeksista; i < ruutuja - 1; i++) {
+            lista[i] = lista[i + 1];
+        }
     }
 
     public int haeKapasiteetti() {
         return lista.length;
     }
 
-    public int getRuutuja() {
+    public int haePituus() {
         return ruutuja;
     }
 }

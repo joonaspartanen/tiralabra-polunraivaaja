@@ -40,7 +40,7 @@ public class AStarTest {
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(4, 4));
 
         RuutuLista reitti = haku.getReitti();
-        assertTrue(reitti.getRuutuja() > 0);
+        assertTrue(reitti.haePituus() > 0);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class AStarTest {
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(4, 4));
 
         RuutuLista reitti = haku.getReitti();
-        assertThat(reitti.getRuutuja(), is(9));
+        assertThat(reitti.haePituus(), is(9));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class AStarTest {
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(4, 4));
 
         RuutuLista reitti = haku.getReitti();
-        assertThat(reitti.getRuutuja(), is(5));
+        assertThat(reitti.haePituus(), is(5));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class AStarTest {
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(9, 9));
 
         RuutuLista reitti = haku.getReitti();
-        assertThat(reitti.getRuutuja(), is(19));
+        assertThat(reitti.haePituus(), is(19));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class AStarTest {
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(9, 9));
 
         RuutuLista reitti = haku.getReitti();
-        assertThat(reitti.getRuutuja(), is(17));
+        assertThat(reitti.haePituus(), is(17));
     }
 
     @Test
@@ -97,7 +97,7 @@ public class AStarTest {
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(511, 511));
 
         RuutuLista reitti = haku.getReitti();
-        assertThat(reitti.getRuutuja(), is(1023));
+        assertThat(reitti.haePituus(), is(1023));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class AStarTest {
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(511, 511));
 
         RuutuLista reitti = haku.getReitti();
-        assertThat(reitti.getRuutuja(), is(633));
+        assertThat(reitti.haePituus(), is(633));
     }
 
     @Test

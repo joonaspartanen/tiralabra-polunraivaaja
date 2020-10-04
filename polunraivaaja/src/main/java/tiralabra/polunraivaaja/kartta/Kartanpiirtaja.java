@@ -91,7 +91,7 @@ public class Kartanpiirtaja {
     }
 
     private void piirraReitti(RuutuLista reitti) {
-        for (int i = 0; i < reitti.getRuutuja(); i++) {
+        for (int i = 0; i < reitti.haePituus(); i++) {
             Ruutu ruutu = reitti.haeRuutuIndeksissa(i);
             piirraRuutu(ruutu.y, ruutu.x, true, false);
         }

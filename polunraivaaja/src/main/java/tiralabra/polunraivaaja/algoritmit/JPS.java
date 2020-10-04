@@ -60,7 +60,7 @@ public class JPS extends HakuPohja {
 
             RuutuLista seuraajat = etsiSeuraajat(nykyinen);
 
-            for (int i = 0; i < seuraajat.getRuutuja(); i++) {
+            for (int i = 0; i < seuraajat.haePituus(); i++) {
                 Ruutu seuraaja = seuraajat.haeRuutuIndeksissa(i);
 
                 double etaisyysTahan = heuristiikka.laskeEtaisyys(nykyinen, seuraaja);
@@ -88,7 +88,7 @@ public class JPS extends HakuPohja {
         RuutuLista seuraajat = new RuutuLista();
         RuutuLista naapurit = haeNaapurit(ruutu);
 
-        for (int i = 0; i < naapurit.getRuutuja(); i++) {
+        for (int i = 0; i < naapurit.haePituus(); i++) {
             Ruutu naapuri = naapurit.haeRuutuIndeksissa(i);
             Ruutu hyppypiste = hyppaa(naapuri, ruutu);
 
@@ -214,7 +214,7 @@ public class JPS extends HakuPohja {
 
         RuutuLista taysiReitti = new RuutuLista();
 
-        for (int i = 0; i < reitti.getRuutuja() - 1; i++) {
+        for (int i = 0; i < reitti.haePituus() - 1; i++) {
             Ruutu lahto = reitti.haeRuutuIndeksissa(i);
             Ruutu kohde = reitti.haeRuutuIndeksissa(i + 1);
 

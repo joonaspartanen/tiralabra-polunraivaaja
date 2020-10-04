@@ -35,7 +35,7 @@ public class Hakutulos {
         this.reitti = new RuutuLista();
         this.ruutujaTarkasteltu = tarkasteltujaSolmuja;
         this.vierailtu = vierailtu;
-        this.reitinPituus = reitti.getRuutuja() - 1;
+        this.reitinPituus = reitti.haePituus() - 1;
         this.haunKesto = 0;
     }
 

@@ -37,10 +37,9 @@ public class LeveyshakuTest {
         Kartta kartta = lukija.lueKarttatiedosto("test_0_5.map");
         Haku leveyshaku = new Leveyshaku(kartta);
 
-        leveyshaku.etsiReitti(new Ruutu(0, 0), new Ruutu(4, 4));
+        Hakutulos tulos = leveyshaku.etsiReitti(new Ruutu(0, 0), new Ruutu(4, 4));
 
-        RuutuLista reitti = leveyshaku.getReitti();
-        assertTrue(reitti.getRuutuja() > 0);
+        assertTrue(tulos.getReitinPituus() > 0);
     }
 
     @Test
@@ -51,7 +50,7 @@ public class LeveyshakuTest {
         leveyshaku.etsiReitti(new Ruutu(0, 0), new Ruutu(4, 4));
 
         RuutuLista reitti = leveyshaku.getReitti();
-        assertThat(reitti.getRuutuja(), is(9));
+        assertThat(reitti.haePituus(), is(9));
     }
 
     @Test
@@ -62,7 +61,7 @@ public class LeveyshakuTest {
         leveyshaku.etsiReitti(new Ruutu(0, 0), new Ruutu(9, 9));
 
         RuutuLista reitti = leveyshaku.getReitti();
-        assertThat(reitti.getRuutuja(), is(19));
+        assertThat(reitti.haePituus(), is(19));
     }
 
     @Test
@@ -73,7 +72,7 @@ public class LeveyshakuTest {
         leveyshaku.etsiReitti(new Ruutu(0, 0), new Ruutu(511, 511));
 
         RuutuLista reitti = leveyshaku.getReitti();
-        assertThat(reitti.getRuutuja(), is(1023));
+        assertThat(reitti.haePituus(), is(1023));
     }
 
     @Test

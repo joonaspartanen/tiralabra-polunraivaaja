@@ -43,7 +43,7 @@ public class JPSTest {
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(4, 4));
 
         RuutuLista reitti = haku.getReitti();
-        assertTrue(reitti.getRuutuja() > 0);
+        assertTrue(reitti.haePituus() > 0);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class JPSTest {
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(4, 4));
 
         RuutuLista reitti = haku.getReitti();
-        assertThat(reitti.getRuutuja(), is(5));
+        assertThat(reitti.haePituus(), is(5));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class JPSTest {
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(9, 9));
 
         RuutuLista reitti = haku.getReitti();
-        assertThat(reitti.getRuutuja(), is(17));
+        assertThat(reitti.haePituus(), is(17));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class JPSTest {
         haku.etsiReitti(new Ruutu(0, 0), new Ruutu(511, 511));
 
         RuutuLista reitti = haku.getReitti();
-        assertThat(reitti.getRuutuja(), is(633));
+        assertThat(reitti.haePituus(), is(633));
     }
 
     @Test

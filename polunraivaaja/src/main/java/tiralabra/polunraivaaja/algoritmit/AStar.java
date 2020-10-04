@@ -62,7 +62,7 @@ public class AStar extends HakuPohja {
 
             RuutuLista naapurit = haeVapaatNaapurit(nykyinen, salliDiagonaalisiirtymat);
 
-            for (int i = 0; i < naapurit.getRuutuja(); i++) {
+            for (int i = 0; i < naapurit.haePituus(); i++) {
                 Ruutu naapuri = naapurit.haeRuutuIndeksissa(i);
 
                 if (!ruutuKelpaa(naapuri.y, naapuri.x) || vierailtu[naapuri.y][naapuri.x]) {
