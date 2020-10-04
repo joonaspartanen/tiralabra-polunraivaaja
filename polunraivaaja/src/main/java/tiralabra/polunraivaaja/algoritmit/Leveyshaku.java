@@ -1,11 +1,9 @@
 package tiralabra.polunraivaaja.algoritmit;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-
 import tiralabra.polunraivaaja.kartta.Kartta;
 import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
 import tiralabra.polunraivaaja.apurakenteet.Ruutu;
+import tiralabra.polunraivaaja.apurakenteet.RuutuJono;
 import tiralabra.polunraivaaja.apurakenteet.Suunta;
 
 /**
@@ -45,13 +43,13 @@ public class Leveyshaku extends HakuPohja {
         this.alku = alku;
         this.loppu = loppu;
 
-        Queue<Ruutu> jono = new ArrayDeque<>();
+        RuutuJono jono = new RuutuJono();
 
-        jono.add(alku);
+        jono.lisaaJonoon(alku);
         vieraile(alku.y, alku.x);
 
-        while (!jono.isEmpty()) {
-            Ruutu nykyinenRuutu = jono.remove();
+        while (!jono.onTyhja()) {
+            Ruutu nykyinenRuutu = jono.otaJonosta();
 
             for (int i = 0; i < 4; i++) {
                 int y = nykyinenRuutu.y + Suunta.riviSiirtymat[i];
@@ -68,7 +66,7 @@ public class Leveyshaku extends HakuPohja {
                     return muodostaHakutulos();
                 }
 
-                jono.add(new Ruutu(y, x));
+                jono.lisaaJonoon(new Ruutu(y, x));
             }
         }
 
