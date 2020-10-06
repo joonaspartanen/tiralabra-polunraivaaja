@@ -1,6 +1,6 @@
 package tiralabra.polunraivaaja.algoritmit.heuristiikka;
 
-import tiralabra.polunraivaaja.apurakenteet.Ruutu;
+import tiralabra.polunraivaaja.mallit.Ruutu;
 
 public interface Heuristiikka {
 

@@ -3,8 +3,8 @@ package tiralabra.polunraivaaja.suorituskykytestit.tietorakenteet;
 import java.util.ArrayList;
 import java.util.List;
 
-import tiralabra.polunraivaaja.apurakenteet.Ruutu;
-import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
+import tiralabra.polunraivaaja.mallit.Ruutu;
+import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
 
 /**
  * Alustava toteutus suorituskykytestistä, joka vertailee omaa

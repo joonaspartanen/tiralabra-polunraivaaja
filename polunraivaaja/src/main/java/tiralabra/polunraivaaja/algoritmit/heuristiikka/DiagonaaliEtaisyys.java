@@ -1,7 +1,7 @@
 package tiralabra.polunraivaaja.algoritmit.heuristiikka;
 
-import tiralabra.polunraivaaja.apurakenteet.Laskin;
-import tiralabra.polunraivaaja.apurakenteet.Ruutu;
+import tiralabra.polunraivaaja.tyokalut.Laskin;
+import tiralabra.polunraivaaja.mallit.Ruutu;
 
 public class DiagonaaliEtaisyys implements Heuristiikka {
 

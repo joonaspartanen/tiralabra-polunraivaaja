@@ -4,10 +4,10 @@ import tiralabra.polunraivaaja.kartta.Kartta;
 import tiralabra.polunraivaaja.algoritmit.heuristiikka.DiagonaaliEtaisyys;
 import tiralabra.polunraivaaja.algoritmit.heuristiikka.Heuristiikka;
 import tiralabra.polunraivaaja.algoritmit.heuristiikka.ManhattanEtaisyys;
-import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
-import tiralabra.polunraivaaja.apurakenteet.Ruutu;
-import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
-import tiralabra.polunraivaaja.apurakenteet.Suunta;
+import tiralabra.polunraivaaja.mallit.Hakutulos;
+import tiralabra.polunraivaaja.mallit.Ruutu;
+import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
+import tiralabra.polunraivaaja.mallit.Suunta;
 
 /**
  * Abstrakti luokka, joka sisältää useille reitinhakualgoritmeille yhteiset

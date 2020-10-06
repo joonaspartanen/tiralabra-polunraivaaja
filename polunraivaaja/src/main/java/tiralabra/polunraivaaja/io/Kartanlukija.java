@@ -35,7 +35,7 @@ public class Kartanlukija {
     public Kartta lueKarttatiedosto(String tiedostonimi) {
         File karttatiedosto = new File(kansio + "/" + tiedostonimi);
 
-        try ( Scanner lukija = new Scanner(karttatiedosto)) {
+        try (Scanner lukija = new Scanner(karttatiedosto)) {
 
             // Kartan tyyppi – ei tarvita
             lukija.nextLine();

@@ -3,8 +3,8 @@ package tiralabra.polunraivaaja.kartta;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import tiralabra.polunraivaaja.apurakenteet.Ruutu;
-import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
+import tiralabra.polunraivaaja.mallit.Ruutu;
+import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
 
 /**
  * Piirtää kartan graafiseen käyttöliittymään.

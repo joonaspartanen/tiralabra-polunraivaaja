@@ -1,10 +1,10 @@
 package tiralabra.polunraivaaja.algoritmit;
 
 import tiralabra.polunraivaaja.kartta.Kartta;
-import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
-import tiralabra.polunraivaaja.apurakenteet.Ruutu;
-import tiralabra.polunraivaaja.apurakenteet.RuutuJono;
-import tiralabra.polunraivaaja.apurakenteet.Suunta;
+import tiralabra.polunraivaaja.mallit.Hakutulos;
+import tiralabra.polunraivaaja.mallit.Ruutu;
+import tiralabra.polunraivaaja.tietorakenteet.RuutuJono;
+import tiralabra.polunraivaaja.mallit.Suunta;
 
 /**
  * Leveyshakualgoritmin (BFS) toteutus. Hakee kartalta lyhimmän reitin kahden
@@ -52,8 +52,8 @@ public class Leveyshaku extends HakuPohja {
             Ruutu nykyinenRuutu = jono.otaJonosta();
 
             for (int i = 0; i < 4; i++) {
-                int y = nykyinenRuutu.y + Suunta.riviSiirtymat[i];
-                int x = nykyinenRuutu.x + Suunta.sarakeSiirtymat[i];
+                int y = nykyinenRuutu.y + Suunta.RIVISIIRTYMAT[i];
+                int x = nykyinenRuutu.x + Suunta.SARAKESIIRTYMAT[i];
 
                 if (!ruutuKelpaa(y, x) || vierailtu[y][x]) {
                     continue;

@@ -1,8 +1,8 @@
 package tiralabra.polunraivaaja.algoritmit;
 
-import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
-import tiralabra.polunraivaaja.apurakenteet.Ruutu;
-import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
+import tiralabra.polunraivaaja.mallit.Hakutulos;
+import tiralabra.polunraivaaja.mallit.Ruutu;
+import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
 import tiralabra.polunraivaaja.kartta.Kartta;
 
 /**
