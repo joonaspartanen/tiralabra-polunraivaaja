@@ -1,4 +1,4 @@
-package tiralabra.polunraivaaja.apurakenteet;
+package tiralabra.polunraivaaja.mallit;
 
 import static org.junit.Assert.assertEquals;
 

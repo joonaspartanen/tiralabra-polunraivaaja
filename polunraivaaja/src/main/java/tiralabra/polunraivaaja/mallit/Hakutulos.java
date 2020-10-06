@@ -1,4 +1,7 @@
-package tiralabra.polunraivaaja.apurakenteet;
+package tiralabra.polunraivaaja.mallit;
+
+import tiralabra.polunraivaaja.tyokalut.Laskin;
+import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
 
 /**
  * Luokka, joka käärii reittihaun lopputuloksena saadun reitin ja muita haun

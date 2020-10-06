@@ -1,5 +1,16 @@
-package tiralabra.polunraivaaja.apurakenteet;
+package tiralabra.polunraivaaja.tietorakenteet;
 
+import tiralabra.polunraivaaja.mallit.Ruutu;
+import tiralabra.polunraivaaja.tyokalut.RuutuKomparaattori;
+import tiralabra.polunraivaaja.tyokalut.Taulukonkasittelija;
+
+/**
+ * Ruutu-olioita säilövä binäärikeko. Vaatii komparaattorin, jonka perusteella
+ * ruudut järjestetään kekoon. Indeksi 0 pidetään tyhjänä laskutoimitusten
+ * yksinkertaistamiseksi.
+ *
+ * @author Joonas Partanen <joonas.partanen@helsinki.fi>
+ */
 public class RuutuKeko {
 
     private Ruutu[] keko;
@@ -12,7 +23,16 @@ public class RuutuKeko {
         this.komparaattori = komparaattori;
     }
 
+    /**
+     * Lisää parametrina annetun ruudun oikealle paikalle kekoon.
+     *
+     * @param ruutu
+     */
     public void lisaaRuutu(Ruutu ruutu) {
+        if (Taulukonkasittelija.taulukkoTaynna(keko, ruutuja + 1)) {
+            keko = Taulukonkasittelija.kasvataTaulukko(keko);
+        }
+
         int indeksi = ++ruutuja;
         keko[indeksi] = ruutu;
 
@@ -53,10 +73,20 @@ public class RuutuKeko {
         keko[indeksi2] = temp;
     }
 
+    /**
+     * Palauttaa keon päällimmäisen ruudun poistamatta sitä keosta.
+     *
+     * @return Keon päällimmäinen ruutu.
+     */
     public Ruutu kurkistaKekoon() {
         return keko[1];
     }
 
+    /**
+     * Palauttaa keon päällimmäisen ruudun ja poistaa sen keosta.
+     *
+     * @return Keon päällimmäinen ruutu.
+     */
     public Ruutu otaKeosta() {
         Ruutu ruutu = keko[1];
 
@@ -72,27 +102,38 @@ public class RuutuKeko {
         keko[indeksi] = pohjimmainen;
         keko[ruutuja--] = null;
 
-        int pienemmanLapsenIndeksi = laskePienemmanLapsenIndeksi(indeksi);
-        Ruutu pienempiLapsi = keko[pienemmanLapsenIndeksi];
+        int sopivammanLapsenIndeksi = laskeSopivammanLapsenIndeksi(indeksi);
+        Ruutu sopivampiLapsi = keko[sopivammanLapsenIndeksi];
 
-        while (komparaattori.vertaaRuutuja(keko[indeksi], pienempiLapsi) == 1) {
-            vaihdaRuudutKeskenaan(indeksi, pienemmanLapsenIndeksi);
-            indeksi = pienemmanLapsenIndeksi;
-            pienemmanLapsenIndeksi = laskePienemmanLapsenIndeksi(indeksi);
-            if (keko[pienemmanLapsenIndeksi] == null) {
+        while (komparaattori.vertaaRuutuja(keko[indeksi], sopivampiLapsi) == 1) {
+            vaihdaRuudutKeskenaan(indeksi, sopivammanLapsenIndeksi);
+            indeksi = sopivammanLapsenIndeksi;
+            sopivammanLapsenIndeksi = laskeSopivammanLapsenIndeksi(indeksi);
+            if (indeksi > ruutuja) {
                 break;
             }
         }
     }
 
-    private int laskePienemmanLapsenIndeksi(int indeksi) {
+    private int laskeSopivammanLapsenIndeksi(int indeksi) {
         int pienemmanLapsenIndeksi;
+        Ruutu vasenLapsi;
+        Ruutu oikeaLapsi;
 
         int vasemmanLapsenIndeksi = laskeVasemmanLapsenIndeksi(indeksi);
         int oikeanLapsenIndeksi = laskeOikeanLapsenIndeksi(indeksi);
 
-        Ruutu vasenLapsi = keko[vasemmanLapsenIndeksi];
-        Ruutu oikeaLapsi = keko[oikeanLapsenIndeksi];
+        if (vasemmanLapsenIndeksi > ruutuja) {
+            vasenLapsi = null;
+        } else {
+            vasenLapsi = keko[vasemmanLapsenIndeksi];
+        }
+
+        if (oikeanLapsenIndeksi > ruutuja) {
+            oikeaLapsi = null;
+        } else {
+            oikeaLapsi = keko[oikeanLapsenIndeksi];
+        }
 
         if (komparaattori.vertaaRuutuja(vasenLapsi, oikeaLapsi) == -1) {
             pienemmanLapsenIndeksi = vasemmanLapsenIndeksi;
@@ -103,8 +144,22 @@ public class RuutuKeko {
         return pienemmanLapsenIndeksi;
     }
 
-    public int haePituus() {
+    /**
+     * Ilmoittaa, kuinka monta ruutua keossa on.
+     *
+     * @return Keon koko.
+     */
+    public int haeKoko() {
         return ruutuja;
+    }
+
+    /**
+     * Ilmoittaa, onko keko tyhjä.
+     *
+     * @return true jos keko on tyhjä; false jos keossa on ruutuja.
+     */
+    public boolean onTyhja() {
+        return ruutuja == 0;
     }
 
 }

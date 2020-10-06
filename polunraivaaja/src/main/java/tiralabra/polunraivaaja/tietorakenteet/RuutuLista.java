@@ -1,4 +1,7 @@
-package tiralabra.polunraivaaja.apurakenteet;
+package tiralabra.polunraivaaja.tietorakenteet;
+
+import tiralabra.polunraivaaja.mallit.Ruutu;
+import tiralabra.polunraivaaja.tyokalut.Taulukonkasittelija;
 
 /**
  * Yksinkertainen, Ruutu-olioita säilövä lista, joka tarjoaa metodit Ruutujen
@@ -17,32 +20,23 @@ public class RuutuLista {
         ruutuja = 0;
     }
 
+    /**
+     * Lisää parametrina annetun ruudun listalle.
+     *
+     * @param ruutu
+     */
     public void lisaaRuutu(Ruutu ruutu) {
-        if (listaTaynna()) {
-            kasvata();
+        if (Taulukonkasittelija.taulukkoTaynna(lista, ruutuja)) {
+            lista = Taulukonkasittelija.kasvataTaulukko(lista);
         }
         lista[ruutuja++] = ruutu;
     }
 
-    private boolean listaTaynna() {
-        return ruutuja == lista.length;
-    }
-
-    private void kasvata() {
-        int uusiKoko = lista.length + lista.length / 2;
-        Ruutu[] uusiLista = new Ruutu[uusiKoko];
-
-        kopioiTaulukko(lista, uusiLista);
-
-        lista = uusiLista;
-    }
-
-    private void kopioiTaulukko(Ruutu[] taulukko, Ruutu[] kopio) {
-        for (int i = 0; i < ruutuja; i++) {
-            kopio[i] = taulukko[i];
-        }
-    }
-
+    /**
+     * Palauttaa ruudun, joka sijaitsee listalla parametrina annetussa indeksissä.
+     *
+     * @param indeksi
+     */
     public Ruutu haeRuutuIndeksissa(int indeksi) {
         if (indeksi < 0 || indeksi >= ruutuja) {
             return null;
@@ -50,6 +44,11 @@ public class RuutuLista {
         return lista[indeksi];
     }
 
+    /**
+     * Poistaa listalta ruudun, joka sijaitsee parametrina annetussa indeksissä.
+     *
+     * @param indeksi
+     */
     public Ruutu poistaRuutuIndeksissa(int indeksi) {
         Ruutu ruutu = lista[indeksi];
         siirraVasemmalle(indeksi);
@@ -63,10 +62,16 @@ public class RuutuLista {
         }
     }
 
+    /**
+     * Palauttaa listan tämänhetkisen kapasiteetin.
+     */
     public int haeKapasiteetti() {
         return lista.length;
     }
 
+    /**
+     * Ilmoittaa, kuinka monta ruutua lista sisältää.
+     */
     public int haePituus() {
         return ruutuja;
     }

@@ -1,7 +1,8 @@
-package tiralabra.polunraivaaja.apurakenteet;
+package tiralabra.polunraivaaja.tietorakenteet;
 
+import tiralabra.polunraivaaja.tyokalut.RuutuKomparaattori;
+import tiralabra.polunraivaaja.mallit.Ruutu;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import static org.hamcrest.CoreMatchers.*;
 
@@ -36,7 +37,15 @@ public class RuutuKekoTest {
         keko.lisaaRuutu(new Ruutu(2, 2));
         keko.lisaaRuutu(new Ruutu(3, 3));
 
-        assertThat(keko.haePituus(), is(3));
+        assertThat(keko.haeKoko(), is(3));
+    }
+
+    @Test
+    public void kekoKasvaaTarvittaessa() {
+        for (int i = 0; i < 50; i++) {
+          keko.lisaaRuutu(new Ruutu(0, 0));
+        }
+        assertThat(keko.haeKoko(), is(50));
     }
 
     @Test
@@ -61,7 +70,7 @@ public class RuutuKekoTest {
         assertThat(ruutu.x, is(1));
         assertThat(ruutu.y, is(1));
 
-        assertThat(keko.haePituus(), is(3));
+        assertThat(keko.haeKoko(), is(3));
     }
 
     // Apumetodi debuggaukseen.

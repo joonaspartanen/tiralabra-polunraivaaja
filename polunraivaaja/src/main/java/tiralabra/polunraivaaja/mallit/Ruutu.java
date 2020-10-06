@@ -1,4 +1,4 @@
-package tiralabra.polunraivaaja.apurakenteet;
+package tiralabra.polunraivaaja.mallit;
 
 /**
  * Kuvaa karttaruutua ja sen sijaintia.

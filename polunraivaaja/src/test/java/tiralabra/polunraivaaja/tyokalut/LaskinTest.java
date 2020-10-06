@@ -1,4 +1,4 @@
-package tiralabra.polunraivaaja.apurakenteet;
+package tiralabra.polunraivaaja.tyokalut;
 
 import static org.junit.Assert.assertThat;
 

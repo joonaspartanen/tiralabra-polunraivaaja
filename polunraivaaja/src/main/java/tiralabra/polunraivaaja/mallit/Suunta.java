@@ -1,4 +1,4 @@
-package tiralabra.polunraivaaja.apurakenteet;
+package tiralabra.polunraivaaja.mallit;
 
 /**
  * Apuluokka, joka tarjoaa hakualgoritmeille tiedon mahdollisista kulkusuunnista
@@ -69,6 +69,6 @@ public enum Suunta {
     }
 
     // Vanha implementaatio, joka on vielä käytössä Leveyshaussa.
-    public static final int[] riviSiirtymat = { -1, 0, 0, 1, -1, -1, 1, 1 };
-    public static final int[] sarakeSiirtymat = { 0, -1, 1, 0, -1, 1, -1, 1 };
+    public static final int[] RIVISIIRTYMAT = { -1, 0, 0, 1, -1, -1, 1, 1 };
+    public static final int[] SARAKESIIRTYMAT = { 0, -1, 1, 0, -1, 1, -1, 1 };
 }

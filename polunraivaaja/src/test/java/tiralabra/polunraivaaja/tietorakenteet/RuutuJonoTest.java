@@ -1,5 +1,6 @@
-package tiralabra.polunraivaaja.apurakenteet;
+package tiralabra.polunraivaaja.tietorakenteet;
 
+import tiralabra.polunraivaaja.mallit.Ruutu;
 import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import static org.hamcrest.CoreMatchers.*;
