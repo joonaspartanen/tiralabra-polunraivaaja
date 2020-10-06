@@ -7,12 +7,14 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -56,6 +58,8 @@ public class GUI extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Polunraivaaja");
 
+        Alert ilmoitus = new Alert(AlertType.INFORMATION);
+
         lukija = new Kartanlukija("kartat");
 
         alustaKarttalista();
@@ -72,7 +76,7 @@ public class GUI extends Application {
         RadioButton aStarNappi = new RadioButton("A*");
         aStarNappi.setToggleGroup(algoritmiToggleGroup);
         aStarNappi.setOnAction(e -> salliDiagonaaliSiirtymat.setDisable(false));
-        
+
         RadioButton jpsNappi = new RadioButton("JPS");
         jpsNappi.setToggleGroup(algoritmiToggleGroup);
         jpsNappi.setOnAction(e -> {
@@ -112,6 +116,10 @@ public class GUI extends Application {
         Button piirraReittiNappi = new Button("Piirrä reitti");
         piirraReittiNappi.setOnAction(e -> {
             if (alkupiste == null || loppupiste == null) {
+                ilmoitus.setContentText("Valitse reitin päät hiirellä kartalta.");
+                ilmoitus.setTitle("Virhe");
+                ilmoitus.setHeaderText("Reitin alku- tai loppupiste puuttuu");
+                ilmoitus.show();
                 return;
             }
 
@@ -168,8 +176,6 @@ public class GUI extends Application {
 
         primaryStage.setScene(new Scene(mainContainer, 1600, 1200));
         primaryStage.show();
-
-        System.out.println(RuutuListaSuorituskykytesti.suorita());
     }
 
     private void alustaKarttalista() {
