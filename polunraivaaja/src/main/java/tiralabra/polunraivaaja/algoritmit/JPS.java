@@ -1,12 +1,11 @@
 package tiralabra.polunraivaaja.algoritmit;
 
-import java.util.PriorityQueue;
-import java.util.Queue;
-
-import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
-import tiralabra.polunraivaaja.apurakenteet.Ruutu;
-import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
-import tiralabra.polunraivaaja.apurakenteet.Suunta;
+import tiralabra.polunraivaaja.mallit.Hakutulos;
+import tiralabra.polunraivaaja.mallit.Ruutu;
+import tiralabra.polunraivaaja.tietorakenteet.RuutuKeko;
+import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
+import tiralabra.polunraivaaja.tyokalut.RuutuKomparaattori;
+import tiralabra.polunraivaaja.mallit.Suunta;
 import tiralabra.polunraivaaja.kartta.Kartta;
 
 /**
@@ -44,15 +43,15 @@ public class JPS extends HakuPohja {
 
         alustaEtaisyysTaulukot(alku);
 
-        Queue<Ruutu> jono = new PriorityQueue<>(
-                (a, b) -> etaisyysarvioLoppuun[a.y][a.x] - etaisyysarvioLoppuun[b.y][b.x] < 0 ? -1 : 1);
+        RuutuKomparaattori komparaattori = new RuutuKomparaattori(etaisyysarvioLoppuun);
+        RuutuKeko keko = new RuutuKeko(komparaattori);
 
-        jono.add(alku);
+        keko.lisaaRuutu(alku);
 
         vieraile(alku.y, alku.x);
 
-        while (!jono.isEmpty()) {
-            Ruutu nykyinen = jono.remove();
+        while (!keko.onTyhja()) {
+            Ruutu nykyinen = keko.otaKeosta();
 
             if (loppuSaavutettu(nykyinen.y, nykyinen.x)) {
                 return muodostaHakutulos();
@@ -75,7 +74,7 @@ public class JPS extends HakuPohja {
                     edeltajat[seuraaja.y][seuraaja.x] = nykyinen;
                     vieraile(seuraaja.y, seuraaja.x);
 
-                    jono.add(new Ruutu(seuraaja.y, seuraaja.x));
+                    keko.lisaaRuutu(new Ruutu(seuraaja.y, seuraaja.x));
                     ruutujaTarkasteltu++;
                 }
             }

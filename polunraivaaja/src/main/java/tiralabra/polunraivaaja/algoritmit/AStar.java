@@ -1,14 +1,12 @@
 package tiralabra.polunraivaaja.algoritmit;
 
-import java.util.PriorityQueue;
-import java.util.Queue;
-
-import tiralabra.polunraivaaja.apurakenteet.Hakutulos;
-import tiralabra.polunraivaaja.apurakenteet.Ruutu;
-import tiralabra.polunraivaaja.apurakenteet.RuutuLista;
-import tiralabra.polunraivaaja.apurakenteet.Laskin;
-
-import tiralabra.polunraivaaja.apurakenteet.Suunta;
+import tiralabra.polunraivaaja.mallit.Hakutulos;
+import tiralabra.polunraivaaja.mallit.Ruutu;
+import tiralabra.polunraivaaja.tietorakenteet.RuutuKeko;
+import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
+import tiralabra.polunraivaaja.tyokalut.Laskin;
+import tiralabra.polunraivaaja.tyokalut.RuutuKomparaattori;
+import tiralabra.polunraivaaja.mallit.Suunta;
 import tiralabra.polunraivaaja.kartta.Kartta;
 
 /**
@@ -49,12 +47,13 @@ public class AStar extends HakuPohja {
 
         alustaEtaisyysTaulukot(alku);
 
-        Queue<Ruutu> jono = new PriorityQueue<>((a, b) -> etaisyysarvioLoppuun[a.y][a.x] - etaisyysarvioLoppuun[b.y][b.x] < 0 ? -1 : 1);
+        RuutuKomparaattori komparaattori = new RuutuKomparaattori(etaisyysarvioLoppuun);
+        RuutuKeko jono = new RuutuKeko(komparaattori);
 
-        jono.add(alku);
+        jono.lisaaRuutu(alku);
 
-        while (!jono.isEmpty()) {
-            Ruutu nykyinen = jono.remove();
+        while (!jono.onTyhja()) {
+            Ruutu nykyinen = jono.otaKeosta();
 
             if (loppuSaavutettu(nykyinen.y, nykyinen.x)) {
                 return muodostaHakutulos();
@@ -81,7 +80,7 @@ public class AStar extends HakuPohja {
                     vieraile(naapuri.y, naapuri.x);
                     edeltajat[naapuri.y][naapuri.x] = nykyinen;
 
-                    jono.add(naapuri);
+                    jono.lisaaRuutu(naapuri);
                 }
             }
         }
