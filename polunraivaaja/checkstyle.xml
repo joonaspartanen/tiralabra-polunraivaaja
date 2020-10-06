@@ -31,7 +31,7 @@
     <module name="OneStatementPerLine" />
     <module name="MethodLength">
       <property name="tokens" value="METHOD_DEF" />
-      <property name="max" value="20" />
+      <property name="max" value="40" />
       <property name="countEmpty" value="false" />
     </module>
 
@@ -41,7 +41,6 @@
     <module name="ConstantName" />
     <module name="LocalFinalVariableName" />
     <module name="LocalVariableName" />
-    <module name="MemberName" />
     <module name="MethodName" />
     <module name="MethodTypeParameterName" />
 
@@ -71,7 +70,6 @@
 
     <module name="ParenPad" />
     <module name="TypecastParenPad" />
-    <module name="WhitespaceAfter" />
 
     <module name="WhitespaceAround">
       <property name="allowEmptyConstructors" value="true" />
