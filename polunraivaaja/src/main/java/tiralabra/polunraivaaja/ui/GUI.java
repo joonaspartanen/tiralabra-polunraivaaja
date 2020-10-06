@@ -27,7 +27,6 @@ import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
 import tiralabra.polunraivaaja.io.Kartanlukija;
 import tiralabra.polunraivaaja.kartta.Kartanpiirtaja;
 import tiralabra.polunraivaaja.kartta.Kartta;
-import tiralabra.polunraivaaja.suorituskykytestit.tietorakenteet.RuutuListaSuorituskykytesti;
 import tiralabra.polunraivaaja.algoritmit.Haku;
 import tiralabra.polunraivaaja.algoritmit.JPS;
 
