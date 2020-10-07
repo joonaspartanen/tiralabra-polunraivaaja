@@ -26,3 +26,5 @@ Toteutan kurssilla ohjelman, joka vertailee erilaisia reitinhakualgoritmeja ([BF
 * [Viikko 4](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/viikkoraportit/vk4.md)
 
 * [Viikko 5](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/viikkoraportit/vk5.md)
+
+* [Viikko 6](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/viikkoraportit/vk6.md)
