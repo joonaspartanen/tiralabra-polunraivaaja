@@ -6,11 +6,10 @@ Ohjelmassa on jonkin verran yksikkötestejä, jotka testaavat hakualgoritmien to
 
 Käyttöliittymä ja kartan piirtävät luokat ovat tällä hetkellä testauksen ulkopuolella. Kartanpiirtäjille saatan kirjoittaa myöhemmin joitain testejä.
 
-![Testikattavuus viikolla 5](https://raw.githubusercontent.com/joonaspartanen/tiralabra-polunraivaaja/master/dokumentaatio/kuvat/testikattavuus_vk5.png)
+![Testikattavuus viikolla 6](https://raw.githubusercontent.com/joonaspartanen/tiralabra-polunraivaaja/master/dokumentaatio/kuvat/testikattavuus_vk6.png)
 
 ## Suorituskykytestit
 
 Suorituskykytestien tarkoituksena on vertailla sekä omien tietorakenteita Javan valmiisiin tietorakenteisiin että reitinhakualgoritmien keskinäistä suorituskykyä. Keskeisenä mittarina on molemmissa tapauksissa suoritukseen kulunut aika. Algoritmien kohdalla tarkastellaan myös sitä, kuinka monia kartan ruutuja ne joutuvat käsittelemään suorituksen aikana.
 
 Aloitin suorituskykytestien laatimisen viikolla 5 alustavalla toteutuksella, joka vertailee oman RuutuLista-luokan suoriutumista verrattuna Javan ArrayList-luokkaan.
- 
