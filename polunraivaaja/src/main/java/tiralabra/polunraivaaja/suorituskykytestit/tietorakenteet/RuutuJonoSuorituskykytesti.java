@@ -1,20 +1,12 @@
 package tiralabra.polunraivaaja.suorituskykytestit.tietorakenteet;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 import tiralabra.polunraivaaja.mallit.Ruutu;
-import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
+import tiralabra.polunraivaaja.tietorakenteet.RuutuJono;
 
-/**
- * Alustava toteutus suorituskykytestistä, joka vertailee omaa
- * RuutuLista-tietorakennetta ja Javan ArrayListia suurella määrällä listaan
- * lisäämisiä ja listalta lukemisia.
- *
- * @author Joonas Partanen <joonas.partanen@helsinki.fi>
- */
-public class RuutuListaSuorituskykytesti implements TietorakenneSuorituskykytesti {
+public class RuutuJonoSuorituskykytesti implements TietorakenneSuorituskykytesti {
 
     @Override
     public long suoritaJavaRakenteella(int iteraatiot) {
@@ -22,14 +14,14 @@ public class RuutuListaSuorituskykytesti implements TietorakenneSuorituskykytest
 
         long alku = System.nanoTime();
 
-        List<Ruutu> lista = new ArrayList<>();
+        Queue<Ruutu> jono = new ArrayDeque<>();
 
         for (int i = 0; i < iteraatiot; i++) {
-            lista.add(ruutu);
+            jono.add(ruutu);
         }
 
         for (int i = 0; i < iteraatiot; i++) {
-            lista.get(i);
+            jono.remove();
         }
 
         long loppu = System.nanoTime();
@@ -43,18 +35,19 @@ public class RuutuListaSuorituskykytesti implements TietorakenneSuorituskykytest
 
         long alku = System.nanoTime();
 
-        RuutuLista lista = new RuutuLista();
+        RuutuJono jono = new RuutuJono();
 
         for (int i = 0; i < iteraatiot; i++) {
-            lista.lisaaRuutu(ruutu);
+            jono.lisaaJonoon(ruutu);
         }
 
         for (int i = 0; i < iteraatiot; i++) {
-            lista.haeRuutuIndeksissa(i);
+            jono.otaJonosta();
         }
 
         long loppu = System.nanoTime();
 
         return loppu - alku;
     }
+
 }
