@@ -22,9 +22,9 @@ public class Vertailutulos extends Suorituskykytulos {
 
     @Override
     public String toString() {
-        return "\n SUORITUSKYKYVERTAILU: \n" + "Iteraatioita: " + iteraatioita + "\n" + "Oman rakenteen aika: "
+        return "SUORITUSKYKYVERTAILU: \n" + "Iteraatioita: " + iteraatioita + "\n" + "Oman rakenteen aika: "
                 + aikaMillisekunteina(omanRakenteenAika) + " ms \n" + "Javan valmiin tietorakenteen aika "
-                + aikaMillisekunteina(javaRakenteenAika) + " ms";
+                + aikaMillisekunteina(javaRakenteenAika) + " ms \n";
     }
 
 }
