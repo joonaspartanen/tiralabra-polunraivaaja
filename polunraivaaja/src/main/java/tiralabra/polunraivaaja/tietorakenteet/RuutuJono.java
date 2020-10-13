@@ -10,10 +10,14 @@ import tiralabra.polunraivaaja.mallit.Ruutu;
  */
 public class RuutuJono {
 
-    private RuutuLista lista;
+    private final RuutuLista lista;
+    private int vanhimmanIndeksi;
+    private int ruutuja;
 
     public RuutuJono() {
         this.lista = new RuutuLista();
+        this.vanhimmanIndeksi = 0;
+        this.ruutuja = 0;
     }
 
     /**
@@ -23,6 +27,7 @@ public class RuutuJono {
      */
     public void lisaaJonoon(Ruutu ruutu) {
         lista.lisaaRuutu(ruutu);
+        ruutuja++;
     }
 
     /**
@@ -31,7 +36,8 @@ public class RuutuJono {
      * @return Jonon etummainen (=pisimpään jonossa ollut) ruutu.
      */
     public Ruutu otaJonosta() {
-        return lista.haePituus() > 0 ? lista.poistaRuutuIndeksissa(0) : null;
+        ruutuja--;
+        return lista.haeRuutuIndeksissa(vanhimmanIndeksi++);
     }
 
     /**
@@ -49,6 +55,6 @@ public class RuutuJono {
      * @return true jos jono on tyhjä; false jos jonossa on ruutuja.
      */
     public boolean onTyhja() {
-        return haePituus() == 0;
+        return ruutuja == 0;
     }
 }
