@@ -15,7 +15,7 @@ public class RuutuKeko {
 
     private Ruutu[] keko;
     private int ruutuja;
-    private RuutuKomparaattori komparaattori;
+    private final RuutuKomparaattori komparaattori;
 
     public RuutuKeko(RuutuKomparaattori komparaattori) {
         this.keko = new Ruutu[40];
