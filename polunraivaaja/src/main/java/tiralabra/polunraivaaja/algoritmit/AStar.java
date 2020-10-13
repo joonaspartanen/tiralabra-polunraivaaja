@@ -48,16 +48,19 @@ public class AStar extends HakuPohja {
         alustaEtaisyysTaulukot(alku);
 
         RuutuKomparaattori komparaattori = new RuutuKomparaattori(etaisyysarvioLoppuun);
-        RuutuKeko jono = new RuutuKeko(komparaattori);
+        RuutuKeko keko = new RuutuKeko(komparaattori);
 
-        jono.lisaaRuutu(alku);
+        keko.lisaaRuutu(alku);
+        vieraile(alku.y, alku.x);
 
-        while (!jono.onTyhja()) {
-            Ruutu nykyinen = jono.otaKeosta();
+        while (!keko.onTyhja()) {
+            Ruutu nykyinen = keko.otaKeosta();
 
             if (loppuSaavutettu(nykyinen.y, nykyinen.x)) {
                 return muodostaHakutulos();
             }
+
+            vieraile(nykyinen.y, nykyinen.x);
 
             RuutuLista naapurit = haeVapaatNaapurit(nykyinen, salliDiagonaalisiirtymat);
 
@@ -80,7 +83,7 @@ public class AStar extends HakuPohja {
                     vieraile(naapuri.y, naapuri.x);
                     edeltajat[naapuri.y][naapuri.x] = nykyinen;
 
-                    jono.lisaaRuutu(naapuri);
+                    keko.lisaaRuutu(naapuri);
                 }
             }
         }
