@@ -10,7 +10,14 @@ import tiralabra.polunraivaaja.suorituskykytestit.Suorituskykytulos;
  */
 public class Vertailutulos extends Suorituskykytulos {
 
+    /**
+     * Oman tietorakenteen suoritusaika nanosekunteina.
+     */
     private long omanRakenteenAika;
+
+    /**
+     * Javan valmiin tietorakenteen suoritusaika nanosekunteina.
+     */
     private long javaRakenteenAika;
 
     public Vertailutulos(long omanRakenteenAika, long javaRakenteenAika, int iteraatioita) {
@@ -22,7 +29,7 @@ public class Vertailutulos extends Suorituskykytulos {
 
     @Override
     public String toString() {
-        return "SUORITUSKYKYVERTAILU: \n" + "Iteraatioita: " + iteraatioita + "\n" + "Oman rakenteen aika: "
+        return "Iteraatioita: " + iteraatioita + "\n" + "Oman rakenteen aika: "
                 + aikaMillisekunteina(omanRakenteenAika) + " ms \n" + "Javan valmiin tietorakenteen aika "
                 + aikaMillisekunteina(javaRakenteenAika) + " ms \n";
     }
