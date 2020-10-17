@@ -1,6 +1,5 @@
 package tiralabra.polunraivaaja.mallit;
 
-import tiralabra.polunraivaaja.tyokalut.Laskin;
 import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
 
 /**
@@ -77,10 +76,14 @@ public class Hakutulos {
         return reitinPituus;
     }
 
+    public long getHaunKesto() {
+        return haunKesto;
+    }
+
     @Override
     public String toString() {
         return viesti + "\n" + "Ruutuja tarkasteltu: " + ruutujaTarkasteltu + "\n" + "Reitin pituus: "
-                + Laskin.pyoristaKokonaislukuun(reitinPituus) + "\n" + "Aikaa kului: " + haunKesto / 1000000 + " ms";
+                + reitinPituus + "\n" + "Aikaa kului: " + haunKesto / 1000000 + " ms";
     }
 
 }
