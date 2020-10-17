@@ -1,16 +1,14 @@
 package tiralabra.polunraivaaja.suorituskykytestit.tietorakenteet;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import tiralabra.polunraivaaja.mallit.Ruutu;
 import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
 
 /**
- * Alustava toteutus suorituskykytestistä, joka vertailee omaa
- * RuutuLista-tietorakennetta ja Javan ArrayListia suurella määrällä listaan
- * lisäämisiä ja listalta lukemisia.
+ * Vertailee omaa RuutuLista-tietorakennetta ja Javan ArrayListia halutulla
+ * määrällä listaan lisäämisiä ja listalta lukemisia.
  *
  * @author Joonas Partanen <joonas.partanen@helsinki.fi>
  */

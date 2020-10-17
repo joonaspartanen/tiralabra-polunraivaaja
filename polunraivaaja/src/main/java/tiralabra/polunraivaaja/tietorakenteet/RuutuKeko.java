@@ -13,12 +13,30 @@ import tiralabra.polunraivaaja.tyokalut.Taulukonkasittelija;
  */
 public class RuutuKeko {
 
+    /**
+     * Taulukko, jossa keon sisältämät ruudut säilötään.
+     */
     private Ruutu[] keko;
+
+    /**
+     * Keossa olevien ruutujen määrä.
+     */
     private int ruutuja;
+
+    /**
+     * Komparaattori, jota käytetään ruutujen keskinäiseen järjestämiseen.
+     */
     private final RuutuKomparaattori komparaattori;
 
-    public RuutuKeko(RuutuKomparaattori komparaattori) {
-        this.keko = new Ruutu[40];
+    /**
+     * Konstruktori. Kekoon mahtuu aluksi 100 ruutua, ja keon kokoa kasvatetaan
+     * tarvittaessa.
+     *
+     * @param komparaattori Komparaattori, jota käytetään ruutujen keskinäiseen
+     *                      järjestämiseen.
+     */
+    public RuutuKeko(final RuutuKomparaattori komparaattori) {
+        this.keko = new Ruutu[100];
         this.ruutuja = 0;
         this.komparaattori = komparaattori;
     }
@@ -26,9 +44,9 @@ public class RuutuKeko {
     /**
      * Lisää parametrina annetun ruudun oikealle paikalle kekoon.
      *
-     * @param ruutu
+     * @param ruutu Lisättävä ruutu.
      */
-    public void lisaaRuutu(Ruutu ruutu) {
+    public void lisaaRuutu(final Ruutu ruutu) {
         if (Taulukonkasittelija.taulukkoTaynna(keko, ruutuja + 1)) {
             keko = Taulukonkasittelija.kasvataTaulukko(keko);
         }
@@ -36,39 +54,32 @@ public class RuutuKeko {
         int indeksi = ++ruutuja;
         keko[indeksi] = ruutu;
 
-        if (ruutuja == 1) {
-            return;
-        }
-
         int vanhemmanIndeksi = laskeVanhemmanIndeksi(indeksi);
 
-        while (komparaattori.vertaaRuutuja(keko[vanhemmanIndeksi], keko[indeksi]) == 1) {
+        while (indeksi > 1 && komparaattori.vertaaRuutuja(keko[vanhemmanIndeksi], keko[indeksi]) == 1) {
             vaihdaRuudutKeskenaan(vanhemmanIndeksi, indeksi);
             indeksi = vanhemmanIndeksi;
             vanhemmanIndeksi = laskeVanhemmanIndeksi(indeksi);
-            if (vanhemmanIndeksi == 0) {
-                break;
-            }
         }
     }
 
-    private int laskeVasemmanLapsenIndeksi(int indeksi) {
+    private int laskeVasemmanLapsenIndeksi(final int indeksi) {
         return 2 * indeksi;
     }
 
-    private int laskeOikeanLapsenIndeksi(int indeksi) {
+    private int laskeOikeanLapsenIndeksi(final int indeksi) {
         return 2 * indeksi + 1;
     }
 
-    private int laskeVanhemmanIndeksi(int indeksi) {
+    private int laskeVanhemmanIndeksi(final int indeksi) {
         return indeksi / 2;
     }
 
-    private void vaihdaRuudutKeskenaan(int indeksi1, int indeksi2) {
+    private void vaihdaRuudutKeskenaan(final int indeksi1, final int indeksi2) {
         if (indeksi1 > ruutuja || indeksi2 > ruutuja) {
             return;
         }
-        Ruutu temp = keko[indeksi1];
+        final Ruutu temp = keko[indeksi1];
         keko[indeksi1] = keko[indeksi2];
         keko[indeksi2] = temp;
     }
@@ -88,7 +99,7 @@ public class RuutuKeko {
      * @return Keon päällimmäinen ruutu.
      */
     public Ruutu otaKeosta() {
-        Ruutu ruutu = keko[1];
+        final Ruutu ruutu = keko[1];
 
         poistaPaallimmainenRuutu();
 
@@ -98,42 +109,32 @@ public class RuutuKeko {
     private void poistaPaallimmainenRuutu() {
         int indeksi = 1;
 
-        Ruutu pohjimmainen = keko[ruutuja];
+        final Ruutu pohjimmainen = keko[ruutuja];
         keko[indeksi] = pohjimmainen;
         keko[ruutuja--] = null;
 
-        int sopivammanLapsenIndeksi = laskeSopivammanLapsenIndeksi(indeksi);
-        Ruutu sopivampiLapsi = keko[sopivammanLapsenIndeksi];
+        while (laskeOikeanLapsenIndeksi(indeksi) <= ruutuja) {
+            final int sopivammanLapsenIndeksi = laskeSopivammanLapsenIndeksi(indeksi);
 
-        while (komparaattori.vertaaRuutuja(keko[indeksi], sopivampiLapsi) == 1) {
-            vaihdaRuudutKeskenaan(indeksi, sopivammanLapsenIndeksi);
-            indeksi = sopivammanLapsenIndeksi;
-            sopivammanLapsenIndeksi = laskeSopivammanLapsenIndeksi(indeksi);
-            if (indeksi > ruutuja) {
+            final Ruutu sopivampiLapsi = keko[sopivammanLapsenIndeksi];
+
+            if (komparaattori.vertaaRuutuja(keko[indeksi], sopivampiLapsi) == -1) {
                 break;
             }
+
+            vaihdaRuudutKeskenaan(indeksi, sopivammanLapsenIndeksi);
+            indeksi = sopivammanLapsenIndeksi;
         }
     }
 
-    private int laskeSopivammanLapsenIndeksi(int indeksi) {
+    private int laskeSopivammanLapsenIndeksi(final int indeksi) {
         int pienemmanLapsenIndeksi;
-        Ruutu vasenLapsi;
-        Ruutu oikeaLapsi;
 
-        int vasemmanLapsenIndeksi = laskeVasemmanLapsenIndeksi(indeksi);
-        int oikeanLapsenIndeksi = laskeOikeanLapsenIndeksi(indeksi);
+        final int vasemmanLapsenIndeksi = laskeVasemmanLapsenIndeksi(indeksi);
+        final int oikeanLapsenIndeksi = laskeOikeanLapsenIndeksi(indeksi);
 
-        if (vasemmanLapsenIndeksi > ruutuja) {
-            vasenLapsi = null;
-        } else {
-            vasenLapsi = keko[vasemmanLapsenIndeksi];
-        }
-
-        if (oikeanLapsenIndeksi > ruutuja) {
-            oikeaLapsi = null;
-        } else {
-            oikeaLapsi = keko[oikeanLapsenIndeksi];
-        }
+        final Ruutu vasenLapsi = keko[vasemmanLapsenIndeksi];
+        final Ruutu oikeaLapsi = keko[oikeanLapsenIndeksi];
 
         if (komparaattori.vertaaRuutuja(vasenLapsi, oikeaLapsi) == -1) {
             pienemmanLapsenIndeksi = vasemmanLapsenIndeksi;

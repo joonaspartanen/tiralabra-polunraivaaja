@@ -6,6 +6,13 @@ import java.util.Queue;
 import tiralabra.polunraivaaja.mallit.Ruutu;
 import tiralabra.polunraivaaja.tietorakenteet.RuutuJono;
 
+/**
+ * Testi, joka vertaa oman RuutuJono-luokan suorituskykyä Javan
+ * ArrayDeque-rakenteeseen. Kummallakin tietorakenteella lisätään haluttu määrä
+ * kertoja Ruutu-olio jonoon ja poistetaan jonon ensimmäinen alkio.
+ *
+ * @author Joonas Partanen <joonas.partanen@helsinki.fi>
+ */
 public class RuutuJonoSuorituskykytesti implements TietorakenneSuorituskykytesti {
 
     @Override

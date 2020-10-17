@@ -4,14 +4,27 @@ import tiralabra.polunraivaaja.mallit.Ruutu;
 
 /**
  * Ruutu-olioita säilövä jono. Mahdollistaa ruutujen lisäämisen jonoon ja jonon
- * etummaisen ruudun poistamisen jonosta.
+ * etummaisen ruudun poistamisen jonosta. Tämän hetkinen toteutus ei
+ * varsinaisesti poista ruutuja pohjalla olevalta listalta, koska siihen kuluisi
+ * nyt liikaa aikaa, joten ratkaisu ei ole muistinkäytön kannalta tehokas.
  *
  * @author Joonas Partanen <joonas.partanen@helsinki.fi>
  */
 public class RuutuJono {
 
+    /**
+     * RuutuLista-olio, johon jonon sisältämät ruudut tallennetaan.
+     */
     private final RuutuLista lista;
+
+    /**
+     * Indeksi, jossa vanhin kullakin hetkellä jonossa oleva ruutu sijaitsee.
+     */
     private int vanhimmanIndeksi;
+
+    /**
+     * Jonon sisältämien ruutujen määrä.
+     */
     private int ruutuja;
 
     public RuutuJono() {
@@ -32,7 +45,7 @@ public class RuutuJono {
 
     /**
      * Palauttaa jonon kärjessä olevan ruudun ja poistaa sen jonosta.
-     * 
+     *
      * @return Jonon etummainen (=pisimpään jonossa ollut) ruutu.
      */
     public Ruutu otaJonosta() {
@@ -42,7 +55,7 @@ public class RuutuJono {
 
     /**
      * Ilmoittaa, kuinka monta ruutua jono sisältää.
-     * 
+     *
      * @return Jonon pituus.
      */
     public int haePituus() {
@@ -51,7 +64,7 @@ public class RuutuJono {
 
     /**
      * Ilmoittaa, onko jono tyhjä.
-     * 
+     *
      * @return true jos jono on tyhjä; false jos jonossa on ruutuja.
      */
     public boolean onTyhja() {

@@ -12,11 +12,21 @@ import tiralabra.polunraivaaja.tyokalut.Taulukonkasittelija;
  */
 public class RuutuLista {
 
+    /**
+     * Taulukko, johon listan sisältämät ruudut säilötään.
+     */
     private Ruutu[] lista;
+
+    /**
+     * Listan sisältämien ruutujen määrä.
+     */
     private int ruutuja;
 
+    /**
+     * Konstruktori. Listaan mahtuu aluksi 100 ruutua ja listan kokoa kasvatetaan tarvittaessa.
+     */
     public RuutuLista() {
-        this.lista = new Ruutu[40];
+        this.lista = new Ruutu[100];
         ruutuja = 0;
     }
 
