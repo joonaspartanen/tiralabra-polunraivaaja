@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import tiralabra.polunraivaaja.kartta.Kartta;
+import tiralabra.polunraivaaja.mallit.Ruutu;
+import tiralabra.polunraivaaja.suorituskykytestit.algoritmit.Reittikuvaus;
+import tiralabra.polunraivaaja.suorituskykytestit.algoritmit.Skenaario;
 
 /**
  * Lukee tekstitiedostona tallennetun kartan ja muodostaa siitä
@@ -32,7 +35,7 @@ public class Kartanlukija {
      * @param tiedostonimi Luettavan kartan tiedostonimi.
      * @return Luetusta tekstitiedostosta muodostettu Kartta-olio,
      */
-    public Kartta lueKarttatiedosto(String tiedostonimi) {
+    public Kartta lueKarttatiedosto(String tiedostonimi) throws Tiedostonlukupoikkeus {
         File karttatiedosto = new File(kansio + "/" + tiedostonimi);
 
         try (Scanner lukija = new Scanner(karttatiedosto)) {
@@ -48,10 +51,12 @@ public class Kartanlukija {
 
             muodostaKartta(lukija);
         } catch (FileNotFoundException e) {
-            // TODO: Heitä poikkeus ja muodosta siitä virheilmoitus UI-kerroksessa.
-            System.out.println("Tiedostoa ei löytynyt.");
-            System.out.println(karttatiedosto.getAbsolutePath());
+            throw new Tiedostonlukupoikkeus(String.format("Tiedostoa %s ei löytynyt.", karttatiedosto.getAbsolutePath()) , e);
+
+        } catch (NumberFormatException e) {
+            throw new Tiedostonlukupoikkeus("Karttadata ei kelpaa.", e);
         }
+
         return kartta;
     }
 
@@ -71,5 +76,51 @@ public class Kartanlukija {
             byte merkki = (byte) (rivi.charAt(i) == 64 ? 1 : 0);
             kartta.setRuutu(rivinumero, i, merkki);
         }
+    }
+
+    /**
+     * Lukee tekstitiedostona tallennetun kartan.
+     *
+     * @param tiedostonimi Luettavan kartan tiedostonimi.
+     * @return Luetusta tekstitiedostosta muodostettu Kartta-olio,
+     */
+    public Skenaario lueSkenaario(String tiedostonimi) throws Tiedostonlukupoikkeus {
+
+        File tiedosto = new File(kansio + "/testikartat/skenaariot/" + tiedostonimi);
+        String kartanNimi = tiedostonimi.substring(0, tiedostonimi.length() - 5);
+        Kartta skenaarioKartta = lueKarttatiedosto(kartanNimi);
+
+        Skenaario skenaario = new Skenaario(skenaarioKartta);
+
+        try (Scanner lukija = new Scanner(tiedosto)) {
+            // Versio – ei tarvita
+            lukija.nextLine();
+
+            while (lukija.hasNextLine()) {
+                Reittikuvaus reittikuvaus = lueSkenaarioRivi(lukija);
+                skenaario.lisaaReittikuvaus(reittikuvaus);
+            }
+        } catch (FileNotFoundException e) {
+            throw new Tiedostonlukupoikkeus(String.format("Tiedostoa %s ei löytynyt.", tiedosto.getAbsolutePath()) , e);
+        } catch (NumberFormatException e) {
+            throw new Tiedostonlukupoikkeus("Skenaariodata ei kelpaa.", e);
+        }
+        return skenaario;
+    }
+
+    private Reittikuvaus lueSkenaarioRivi(Scanner lukija) {
+        String rivi = lukija.nextLine();
+
+        String[] palat = rivi.split("\t");
+
+        int alkuX = Integer.parseInt(palat[4]);
+        int alkuY = Integer.parseInt(palat[5]);
+        int loppuX = Integer.parseInt(palat[6]);
+        int loppuY = Integer.parseInt(palat[7]);
+
+        Ruutu alku = new Ruutu(alkuY, alkuX);
+        Ruutu loppu = new Ruutu(loppuY, loppuX);
+
+        return new Reittikuvaus(alku, loppu);
     }
 }
