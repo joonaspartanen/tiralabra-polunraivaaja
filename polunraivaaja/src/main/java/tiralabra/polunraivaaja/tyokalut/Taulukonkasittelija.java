@@ -41,4 +41,44 @@ public class Taulukonkasittelija {
     public static boolean taulukkoTaynna(Ruutu[] taulukko, int ruutuja) {
         return ruutuja == taulukko.length;
     }
+
+    /**
+     * Alustaa parametrina saamansa liukulukutaulukon jokaisen solun arvoksi
+     * suurimman liukulukuarvon.
+     *
+     * @param taulukko Alustettava taulukko.
+     */
+    public static void alustaLiukulukuTaulukko(double[][] taulukko) {
+        for (int i = 0; i < taulukko.length; i++) {
+            for (int j = 0; j < taulukko[0].length; j++) {
+                taulukko[i][j] = Laskin.DOUBLE_MAX_VALUE;
+            }
+        }
+    }
+
+    /**
+     * Alustaa parametrina saamansa boolean-taulukon jokaisen solun arvoksi false.
+     *
+     * @param taulukko Alustettava taulukko.
+     */
+    public static void alustaBooleanTaulukko(boolean[][] taulukko) {
+        for (int i = 0; i < taulukko.length; i++) {
+            for (int j = 0; j < taulukko[0].length; j++) {
+                taulukko[i][j] = false;
+            }
+        }
+    }
+
+    /**
+     * Alustaa parametrina saamansa Ruutu-taulukon jokaisen solun arvoksi null.
+     *
+     * @param taulukko Alustettava taulukko.
+     */
+    public static void alustaRuutuTaulukko(Ruutu[][] taulukko) {
+        for (int i = 0; i < taulukko.length; i++) {
+            for (int j = 0; j < taulukko[0].length; j++) {
+                taulukko[i][j] = null;
+            }
+        }
+    }
 }
