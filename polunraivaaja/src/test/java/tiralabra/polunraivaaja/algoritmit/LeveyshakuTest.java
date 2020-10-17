@@ -18,6 +18,7 @@ import tiralabra.polunraivaaja.mallit.Hakutulos;
 import tiralabra.polunraivaaja.mallit.Ruutu;
 import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
 import tiralabra.polunraivaaja.io.Kartanlukija;
+import tiralabra.polunraivaaja.io.Tiedostonlukupoikkeus;
 
 /**
  *
@@ -33,7 +34,7 @@ public class LeveyshakuTest {
     }
 
     @Test
-    public void loytaaReitinTriviaaliKartta() {
+    public void loytaaReitinTriviaaliKartta() throws Tiedostonlukupoikkeus {
         Kartta kartta = lukija.lueKarttatiedosto("test_0_5.map");
         Haku leveyshaku = new Leveyshaku(kartta);
 
@@ -43,7 +44,7 @@ public class LeveyshakuTest {
     }
 
     @Test
-    public void loytaaLyhimmänReitinTriviaaliKartta() {
+    public void loytaaLyhimmänReitinTriviaaliKartta() throws Tiedostonlukupoikkeus {
         Kartta kartta = lukija.lueKarttatiedosto("test_0_5.map");
         Haku leveyshaku = new Leveyshaku(kartta);
 
@@ -54,7 +55,7 @@ public class LeveyshakuTest {
     }
 
     @Test
-    public void loytaaLyhimmanReitinHelppoKartta() {
+    public void loytaaLyhimmanReitinHelppoKartta() throws Tiedostonlukupoikkeus {
         Kartta kartta = lukija.lueKarttatiedosto("test_0_10.map");
         Haku leveyshaku = new Leveyshaku(kartta);
 
@@ -65,7 +66,7 @@ public class LeveyshakuTest {
     }
 
     @Test
-    public void loytaaLyhimmanReitinVaikeaKartta() {
+    public void loytaaLyhimmanReitinVaikeaKartta() throws Tiedostonlukupoikkeus {
         Kartta kartta = lukija.lueKarttatiedosto("Berlin_0_512.map");
         Haku leveyshaku = new Leveyshaku(kartta);
 
@@ -76,7 +77,7 @@ public class LeveyshakuTest {
     }
 
     @Test
-    public void ilmoittaaJosReittiEiMahdollinen() {
+    public void ilmoittaaJosReittiEiMahdollinen() throws Tiedostonlukupoikkeus {
         Kartta kartta = lukija.lueKarttatiedosto("test_1_10.map");
         Haku leveyshaku = new Leveyshaku(kartta);
 
@@ -86,7 +87,7 @@ public class LeveyshakuTest {
     }
 
     @Test
-    public void ilmoittaaJosReitinPaatEivatKelpaa() {
+    public void ilmoittaaJosReitinPaatEivatKelpaa() throws Tiedostonlukupoikkeus {
         Kartta kartta = lukija.lueKarttatiedosto("test_1_10.map");
         Haku leveyshaku = new Leveyshaku(kartta);
 
