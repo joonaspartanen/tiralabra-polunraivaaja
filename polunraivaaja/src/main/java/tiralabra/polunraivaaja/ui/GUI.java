@@ -2,6 +2,8 @@ package tiralabra.polunraivaaja.ui;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.List;
+import java.util.Map;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -13,18 +15,27 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import tiralabra.polunraivaaja.algoritmit.AStar;
 import tiralabra.polunraivaaja.algoritmit.Leveyshaku;
 import tiralabra.polunraivaaja.mallit.Hakutulos;
 import tiralabra.polunraivaaja.mallit.Ruutu;
+import tiralabra.polunraivaaja.suorituskykytestit.SuorituskykyTestaaja;
+import tiralabra.polunraivaaja.suorituskykytestit.algoritmit.Mittaustulos;
+import tiralabra.polunraivaaja.suorituskykytestit.tietorakenteet.Vertailutulos;
 import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
 import tiralabra.polunraivaaja.io.Kartanlukija;
+import tiralabra.polunraivaaja.io.Tiedostonlukupoikkeus;
 import tiralabra.polunraivaaja.kartta.Kartanpiirtaja;
 import tiralabra.polunraivaaja.kartta.Kartta;
 import tiralabra.polunraivaaja.algoritmit.Haku;
@@ -39,9 +50,9 @@ import tiralabra.polunraivaaja.algoritmit.JPS;
 public class GUI extends Application {
 
     private Canvas karttapohja;
-    Kartta kartta;
-    Kartanlukija lukija;
-    Kartanpiirtaja piirtaja;
+    private Kartta kartta;
+    private Kartanlukija lukija;
+    private Kartanpiirtaja piirtaja;
     private VBox valikko;
     private Ruutu alkupiste;
     private Ruutu loppupiste;
@@ -52,12 +63,18 @@ public class GUI extends Application {
     private CheckBox salliDiagonaaliSiirtymat;
     private Label hakutulosnakyma;
     private ComboBox<String> karttalista;
+    private Alert ilmoitus;
+    private final String BORDER_BLACK = "-fx-border-color: black";
 
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Polunraivaaja");
 
-        Alert ilmoitus = new Alert(AlertType.INFORMATION);
+        ilmoitus = new Alert(AlertType.INFORMATION);
+
+        TabPane valilehdet = new TabPane();
+        valilehdet.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+        Tab hakuValilehti = new Tab("Reittihaku");
 
         lukija = new Kartanlukija("kartat");
 
@@ -88,11 +105,20 @@ public class GUI extends Application {
 
         piirtaja.piirraKartta();
 
-        HBox mainContainer = new HBox(20);
-        mainContainer.setPadding(new Insets(50, 50, 50, 50));
+        HBox hakuWrapper = new HBox(20);
+        hakuWrapper.setPadding(new Insets(50, 50, 50, 50));
 
         karttapohja = piirtaja.getKarttapohja();
-        mainContainer.getChildren().add(karttapohja);
+
+        hakuValilehti.setContent(hakuWrapper);
+
+        HBox karttaWrapper = new HBox();
+        karttaWrapper.setMaxHeight(512);
+        karttaWrapper.setMaxWidth(512);
+        karttaWrapper.setStyle(BORDER_BLACK);
+        karttaWrapper.getChildren().add(karttapohja);
+
+        hakuWrapper.getChildren().add(karttaWrapper);
 
         karttapohja.setOnMouseClicked(e -> {
             if (alkupiste == null) {
@@ -171,9 +197,13 @@ public class GUI extends Application {
         valikko.setSpacing(20);
         valikko.setPadding(new Insets(0, 0, 0, 50));
 
-        mainContainer.getChildren().add(valikko);
+        hakuWrapper.getChildren().add(valikko);
 
-        primaryStage.setScene(new Scene(mainContainer, 1600, 1200));
+        Tab testiValilehti = alustaTestiValilehti();
+
+        valilehdet.getTabs().addAll(hakuValilehti, testiValilehti);
+
+        primaryStage.setScene(new Scene(valilehdet, 1600, 1200));
         primaryStage.show();
     }
 
@@ -187,20 +217,103 @@ public class GUI extends Application {
 
         karttalista.getItems().addAll(karttatiedostot);
         karttalista.getSelectionModel().selectFirst();
-        kartta = lukija.lueKarttatiedosto(karttalista.getSelectionModel().getSelectedItem());
+
+        lueKartta(karttalista.getSelectionModel().getSelectedItem());
+
         piirtaja = new Kartanpiirtaja(kartta);
 
         karttalista.setOnAction(e -> {
-            kartta = lukija.lueKarttatiedosto(karttalista.getSelectionModel().getSelectedItem());
+            lueKartta(karttalista.getSelectionModel().getSelectedItem());
             piirtaja.setKartta(kartta);
             piirtaja.piirraKartta();
             karttapohja = piirtaja.getKarttapohja();
         });
     }
 
+    private void lueKartta(String tiedostonimi) {
+        try {
+            kartta = lukija.lueKarttatiedosto(tiedostonimi);
+        } catch (Tiedostonlukupoikkeus ex) {
+            ilmoitus.setTitle("Virhe!");
+            ilmoitus.setHeaderText("Tiedoston lukeminen epäonnistui.");
+            ilmoitus.setContentText(ex.getMessage());
+            ilmoitus.show();
+        }
+    }
+
     private void paivitaHakupalkki() {
         alkupisteLabel.setText(alkupiste == null ? "Alku: " : "Alku: " + alkupiste.toString());
         loppupisteLabel.setText(loppupiste == null ? "Loppu: " : "Loppu: " + loppupiste.toString());
+    }
+
+    private Tab alustaTestiValilehti() {
+        Tab testiValilehti = new Tab("Suorituskykytestit");
+
+        VBox testiWrapper = new VBox(20);
+        testiWrapper.setPadding(new Insets(50, 50, 50, 50));
+
+        HBox nappiWrapper = new HBox(20);
+        VBox tulosalue = new VBox(20);
+
+        Button suoritaAlgoritmiTestitNappi = new Button("Suorita algoritmien suorituskykytestit");
+        suoritaAlgoritmiTestitNappi.setOnAction(e -> {
+            try {
+                Map<String, Mittaustulos> tulokset = SuorituskykyTestaaja.suoritaAlgoritmienTestit();
+
+                tulosalue.getChildren().clear();
+
+                for (Map.Entry<String, Mittaustulos> tulos : tulokset.entrySet()) {
+                    TextFlow tulosteksti = new TextFlow();
+                    tulosteksti.setStyle(BORDER_BLACK);
+                    tulosteksti.setPadding(new Insets(25, 25, 25, 25));
+                    Text otsikko = new Text(tulos.getKey() + "\n");
+                    otsikko.setStyle("-fx-font-weight: bold");
+                    Text tuloskuvaus = new Text(tulos.getValue().toString());
+                    tulosteksti.getChildren().addAll(otsikko, tuloskuvaus);
+                    tulosalue.getChildren().add(tulosteksti);
+                }
+
+            } catch (Tiedostonlukupoikkeus ex) {
+                ex.printStackTrace();
+            }
+
+        });
+
+        Button suoritaTietorakenneTestitNappi = new Button("Suorita tietorakenteiden suorituskykytestit");
+        suoritaTietorakenneTestitNappi.setOnAction(e -> {
+            try {
+                Map<String, List<Vertailutulos>> tulokset = SuorituskykyTestaaja.suoritaTietorakenteidenTestit();
+
+                tulosalue.getChildren().clear();
+
+                for (Map.Entry<String, List<Vertailutulos>> tulos : tulokset.entrySet()) {
+                    TextFlow tulosteksti = new TextFlow();
+                    tulosteksti.setStyle(BORDER_BLACK);
+                    tulosteksti.setPadding(new Insets(25, 25, 25, 25));
+                    Text otsikko = new Text(tulos.getKey() + "\n");
+                    otsikko.setStyle("-fx-font-weight: bold");
+
+                    StringBuilder builderi = new StringBuilder();
+                    for (Vertailutulos vertailutulos : tulos.getValue()) {
+                        builderi.append(vertailutulos.toString());
+                        builderi.append("\n");
+                    }
+                    builderi.delete(builderi.length() - 2, builderi.length() - 1);
+
+                    Text tuloskuvaus = new Text(builderi.toString());
+                    tulosteksti.getChildren().addAll(otsikko, tuloskuvaus);
+                    tulosalue.getChildren().add(tulosteksti);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        nappiWrapper.getChildren().addAll(suoritaAlgoritmiTestitNappi, suoritaTietorakenneTestitNappi);
+        testiWrapper.getChildren().addAll(nappiWrapper, tulosalue);
+        testiValilehti.setContent(testiWrapper);
+
+        return testiValilehti;
     }
 
     /**
