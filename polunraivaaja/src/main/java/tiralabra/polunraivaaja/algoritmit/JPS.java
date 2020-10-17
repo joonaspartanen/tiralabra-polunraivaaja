@@ -41,6 +41,8 @@ public class JPS extends HakuPohja {
         this.alku = alku;
         this.loppu = loppu;
 
+        alustaEdeltajatTaulukko();
+        alustaVierailtuTaulukko();
         alustaEtaisyysTaulukot(alku);
 
         RuutuKomparaattori komparaattori = new RuutuKomparaattori(etaisyysarvioLoppuun);

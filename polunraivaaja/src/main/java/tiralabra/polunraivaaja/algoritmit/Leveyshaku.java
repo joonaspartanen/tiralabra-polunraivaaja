@@ -1,5 +1,6 @@
 package tiralabra.polunraivaaja.algoritmit;
 
+import tiralabra.polunraivaaja.algoritmit.heuristiikka.ManhattanEtaisyys;
 import tiralabra.polunraivaaja.kartta.Kartta;
 import tiralabra.polunraivaaja.mallit.Hakutulos;
 import tiralabra.polunraivaaja.mallit.Ruutu;
@@ -20,6 +21,7 @@ public class Leveyshaku extends HakuPohja {
      */
     public Leveyshaku(Kartta kartta) {
         super(kartta);
+        this.heuristiikka = new ManhattanEtaisyys();
     }
 
     /**
@@ -42,6 +44,9 @@ public class Leveyshaku extends HakuPohja {
 
         this.alku = alku;
         this.loppu = loppu;
+
+        alustaEdeltajatTaulukko();
+        alustaVierailtuTaulukko();
 
         RuutuJono jono = new RuutuJono();
 

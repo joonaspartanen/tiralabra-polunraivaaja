@@ -22,6 +22,12 @@ public class AStar extends HakuPohja {
 
     public AStar(Kartta kartta) {
         super(kartta);
+        setSalliDiagonaalisiirtymat(false);
+    }
+
+    public AStar(Kartta kartta, boolean salliDiagonaalisiirtymat) {
+        super(kartta);
+        setSalliDiagonaalisiirtymat(salliDiagonaalisiirtymat);
     }
 
     /**
@@ -45,6 +51,8 @@ public class AStar extends HakuPohja {
         this.alku = alku;
         this.loppu = loppu;
 
+        alustaEdeltajatTaulukko();
+        alustaVierailtuTaulukko();
         alustaEtaisyysTaulukot(alku);
 
         RuutuKomparaattori komparaattori = new RuutuKomparaattori(etaisyysarvioLoppuun);
@@ -60,14 +68,12 @@ public class AStar extends HakuPohja {
                 return muodostaHakutulos();
             }
 
-            vieraile(nykyinen.y, nykyinen.x);
-
             RuutuLista naapurit = haeVapaatNaapurit(nykyinen, salliDiagonaalisiirtymat);
 
             for (int i = 0; i < naapurit.haePituus(); i++) {
                 Ruutu naapuri = naapurit.haeRuutuIndeksissa(i);
 
-                if (!ruutuKelpaa(naapuri.y, naapuri.x) || vierailtu[naapuri.y][naapuri.x]) {
+                if (!ruutuKelpaa(naapuri.y, naapuri.x)) {
                     continue;
                 }
 
@@ -75,7 +81,7 @@ public class AStar extends HakuPohja {
 
                 double uusiEtaisyys = etaisyysAlusta[nykyinen.y][nykyinen.x] + etaisyysTahan;
 
-                if (uusiEtaisyys < etaisyysAlusta[naapuri.y][naapuri.x]) {
+                if (uusiEtaisyys < etaisyysAlusta[naapuri.y][naapuri.x] || !vierailtu[naapuri.y][naapuri.x]) {
                     etaisyysAlusta[naapuri.y][naapuri.x] = uusiEtaisyys;
                     etaisyysarvioLoppuun[naapuri.y][naapuri.x] = uusiEtaisyys
                             + heuristiikka.laskeEtaisyys(naapuri, loppu);

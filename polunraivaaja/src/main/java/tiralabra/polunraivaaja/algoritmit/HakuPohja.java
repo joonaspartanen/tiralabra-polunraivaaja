@@ -7,6 +7,7 @@ import tiralabra.polunraivaaja.algoritmit.heuristiikka.ManhattanEtaisyys;
 import tiralabra.polunraivaaja.mallit.Hakutulos;
 import tiralabra.polunraivaaja.mallit.Ruutu;
 import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
+import tiralabra.polunraivaaja.tyokalut.Taulukonkasittelija;
 import tiralabra.polunraivaaja.mallit.Suunta;
 
 /**
@@ -20,28 +21,28 @@ public abstract class HakuPohja implements Haku {
     /**
      * Reittihaun kohteena oleva suorakulmion muotoinen kartta.
      */
-    protected Kartta kartta;
+    protected final Kartta kartta;
 
     /**
      * Kohteena olevan kartan korkeus.
      */
-    protected int korkeus;
+    protected final int korkeus;
 
     /**
      * Kohteena olevan kartan leveys.
      */
-    protected int leveys;
+    protected final int leveys;
 
     /**
      * Pitää kirjaa siitä, minkä ruudun kautta kulloinkin tarkasteltavaan ruutuun on
      * saavuttu.
      */
-    protected Ruutu[][] edeltajat;
+    protected final Ruutu[][] edeltajat;
 
     /**
      * Pitää kirjaa jo vierailluista ruuduista.
      */
-    protected boolean[][] vierailtu;
+    protected final boolean[][] vierailtu;
 
     /**
      * Ruutu, josta haettava reitti alkaa.
@@ -99,12 +100,6 @@ public abstract class HakuPohja implements Haku {
         leveys = kartta.getLeveys();
         edeltajat = new Ruutu[korkeus][leveys];
         vierailtu = new boolean[korkeus][leveys];
-        this.heuristiikka = new ManhattanEtaisyys();
-    }
-
-    @Override
-    public void setKartta(Kartta kartta) {
-        this.kartta = kartta;
     }
 
     @Override
@@ -119,7 +114,7 @@ public abstract class HakuPohja implements Haku {
      */
     public void setSalliDiagonaalisiirtymat(boolean salliDiagonaalisiirtymat) {
         this.salliDiagonaalisiirtymat = salliDiagonaalisiirtymat;
-        this.heuristiikka = new DiagonaaliEtaisyys();
+        this.heuristiikka = salliDiagonaalisiirtymat ? new DiagonaaliEtaisyys() : new ManhattanEtaisyys();
     }
 
     /**
@@ -173,8 +168,8 @@ public abstract class HakuPohja implements Haku {
     }
 
     protected Hakutulos muodostaHakutulos() {
-        long loppuAika = System.nanoTime();
-        long haunKesto = loppuAika - alkuAika;
+        final long loppuAika = System.nanoTime();
+        final long haunKesto = loppuAika - alkuAika;
 
         muodostaReitti();
         double reitinPituus = !salliDiagonaalisiirtymat ? reitti.haePituus() - 1 : etaisyysAlusta[loppu.y][loppu.x];
@@ -208,18 +203,18 @@ public abstract class HakuPohja implements Haku {
     }
 
     protected RuutuLista haeVapaatNaapurit(Ruutu ruutu, boolean salliDiagonaalisiirtymat) {
-        RuutuLista naapurit = new RuutuLista();
+        final RuutuLista naapurit = new RuutuLista();
 
-        int y = ruutu.y;
-        int x = ruutu.x;
+        final int y = ruutu.y;
+        final int x = ruutu.x;
 
         for (Suunta suunta : Suunta.values()) {
             if (!salliDiagonaalisiirtymat && suunta.isDiagonaalinen()) {
                 continue;
             }
 
-            int uusiY = ruutu.y + suunta.getDY();
-            int uusiX = ruutu.x + suunta.getDX();
+            final int uusiY = ruutu.y + suunta.getDY();
+            final int uusiX = ruutu.x + suunta.getDX();
 
             // Varmistetaan ettei haku kulje kulmien välistä.
             if (suunta.isDiagonaalinen() && !ruutuKelpaa(uusiY, x) && !ruutuKelpaa(y, uusiX)) {
@@ -236,18 +231,19 @@ public abstract class HakuPohja implements Haku {
         etaisyysAlusta = new double[korkeus][leveys];
         etaisyysarvioLoppuun = new double[korkeus][leveys];
 
-        alustaTaulukko(etaisyysAlusta);
-        alustaTaulukko(etaisyysarvioLoppuun);
+        Taulukonkasittelija.alustaLiukulukuTaulukko(etaisyysAlusta);
+        Taulukonkasittelija.alustaLiukulukuTaulukko(etaisyysarvioLoppuun);
 
         etaisyysAlusta[alku.y][alku.x] = 0;
         etaisyysarvioLoppuun[alku.y][alku.x] = heuristiikka.laskeEtaisyys(alku, loppu);
     }
 
-    private void alustaTaulukko(double[][] taulukko) {
-        for (int i = 0; i < korkeus; i++) {
-            for (int j = 0; j < leveys; j++) {
-                taulukko[i][j] = Double.MAX_VALUE;
-            }
-        }
+    protected void alustaVierailtuTaulukko() {
+        Taulukonkasittelija.alustaBooleanTaulukko(vierailtu);
     }
+
+    protected void alustaEdeltajatTaulukko() {
+        Taulukonkasittelija.alustaRuutuTaulukko(edeltajat);
+    }
+
 }

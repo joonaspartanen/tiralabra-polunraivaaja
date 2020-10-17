@@ -3,7 +3,6 @@ package tiralabra.polunraivaaja.algoritmit;
 import tiralabra.polunraivaaja.mallit.Hakutulos;
 import tiralabra.polunraivaaja.mallit.Ruutu;
 import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
-import tiralabra.polunraivaaja.kartta.Kartta;
 
 /**
  * Erilaisia reitinhakualgoritmeja kuvaava rajapinta.
@@ -28,12 +27,6 @@ public interface Haku {
      * @return Lista Ruutuja.
      */
     RuutuLista getReitti();
-
-    /**
-     *
-     * @param kartta Reittihaun kohteena oleva kartta.
-     */
-    void setKartta(Kartta kartta);
 
     /**
      *
