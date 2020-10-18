@@ -48,10 +48,10 @@ public class Taulukonkasittelija {
      *
      * @param taulukko Alustettava taulukko.
      */
-    public static void alustaLiukulukuTaulukko(double[][] taulukko) {
+    public static void alustaIntTaulukko(int[][] taulukko) {
         for (int i = 0; i < taulukko.length; i++) {
             for (int j = 0; j < taulukko[0].length; j++) {
-                taulukko[i][j] = Laskin.DOUBLE_MAX_VALUE;
+                taulukko[i][j] = Integer.MAX_VALUE;
             }
         }
     }

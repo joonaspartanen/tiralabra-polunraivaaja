@@ -61,7 +61,7 @@ public class SuorituskykyTestaaja {
      *         suorituskykytestien tulokset.
      */
     public static Map<String, Mittaustulos> suoritaAlgoritmienTestit(String skenaariotiedosto) throws Tiedostonlukupoikkeus {
-        int iteraatiot = 1;
+        int iteraatiot = 100;
 
         Map<String, Mittaustulos> tulokset = new HashMap<>();
 

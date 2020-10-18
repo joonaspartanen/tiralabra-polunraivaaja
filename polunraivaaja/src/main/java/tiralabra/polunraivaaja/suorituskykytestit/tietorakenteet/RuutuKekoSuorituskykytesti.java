@@ -21,7 +21,7 @@ public class RuutuKekoSuorituskykytesti implements TietorakenneSuorituskykytesti
      * Liukulukutaulukko, jota käytetään vertailuperusteena tietorakenteiden
      * sisältämien ruutujen keskinäiseen järjestämiseen.
      */
-    private final double[][] vertailuperuste;
+    private final int[][] vertailuperuste;
 
     /**
      * Konstruktori. RuutuKeko tarvitsee Komparaattori-olion, jonka käyttämä
@@ -30,7 +30,7 @@ public class RuutuKekoSuorituskykytesti implements TietorakenneSuorituskykytesti
      *
      */
     public RuutuKekoSuorituskykytesti() {
-        vertailuperuste = new double[10][10];
+        vertailuperuste = new int[10][10];
 
         for (int i = 0; i < vertailuperuste.length; i++) {
             for (int j = 0; j < vertailuperuste[0].length; j++) {

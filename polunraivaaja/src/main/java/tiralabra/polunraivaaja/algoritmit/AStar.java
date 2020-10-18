@@ -70,9 +70,9 @@ public class AStar extends HakuPohja {
             for (int i = 0; i < naapurit.haePituus(); i++) {
                 Ruutu naapuri = naapurit.haeRuutuIndeksissa(i);
 
-                double etaisyysTahan = nykyinen.y == naapuri.y || nykyinen.x == naapuri.x ? 1 : Laskin.SQRT_2;
+                int etaisyysTahan = nykyinen.y == naapuri.y || nykyinen.x == naapuri.x ? 10 : 14;
 
-                double uusiEtaisyys = etaisyysAlusta[nykyinen.y][nykyinen.x] + etaisyysTahan;
+                int uusiEtaisyys = etaisyysAlusta[nykyinen.y][nykyinen.x] + etaisyysTahan;
 
                 if (uusiEtaisyys < etaisyysAlusta[naapuri.y][naapuri.x]) {
                     etaisyysAlusta[naapuri.y][naapuri.x] = uusiEtaisyys;

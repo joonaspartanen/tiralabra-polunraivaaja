@@ -64,9 +64,9 @@ public class JPS extends HakuPohja {
             for (int i = 0; i < seuraajat.haePituus(); i++) {
                 Ruutu seuraaja = seuraajat.haeRuutuIndeksissa(i);
 
-                double etaisyysTahan = heuristiikka.laskeEtaisyys(nykyinen, seuraaja);
+                int etaisyysTahan = heuristiikka.laskeEtaisyys(nykyinen, seuraaja);
 
-                double uusiEtaisyys = etaisyysAlusta[nykyinen.y][nykyinen.x] + etaisyysTahan;
+                int uusiEtaisyys = etaisyysAlusta[nykyinen.y][nykyinen.x] + etaisyysTahan;
 
                 if (uusiEtaisyys < etaisyysAlusta[seuraaja.y][seuraaja.x] || !vierailtu[seuraaja.y][seuraaja.x]) {
                     etaisyysAlusta[seuraaja.y][seuraaja.x] = uusiEtaisyys;

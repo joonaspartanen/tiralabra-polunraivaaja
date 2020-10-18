@@ -15,7 +15,7 @@ public class Hakutulos {
     private RuutuLista reitti;
     private int ruutujaTarkasteltu;
     private boolean[][] vierailtu;
-    private double reitinPituus;
+    private int reitinPituus;
     private long haunKesto;
 
     /**
@@ -42,7 +42,7 @@ public class Hakutulos {
     }
 
     public Hakutulos(boolean onnistui, String viesti, int tarkasteltujaSolmuja, RuutuLista reitti,
-            boolean[][] vierailtu, double reitinPituus, long haunKesto) {
+            boolean[][] vierailtu, int reitinPituus, long haunKesto) {
         this.onnistui = onnistui;
         this.viesti = viesti;
         this.reitti = reitti;
@@ -72,7 +72,7 @@ public class Hakutulos {
         return vierailtu;
     }
 
-    public double getReitinPituus() {
+    public int getReitinPituus() {
         return reitinPituus;
     }
 

@@ -82,13 +82,13 @@ public abstract class HakuPohja implements Haku {
     /**
      * Taulukko, jossa A* ja JPS pitävät kirjaa ruutujen etäisyydestä reitin alkuun.
      */
-    protected double[][] etaisyysAlusta;
+    protected int[][] etaisyysAlusta;
 
     /**
      * Taulukko, jossa A* ja JPS pitävät kirjaa heuristisen funktion laskemista
      * etäisyysarvioista kustakin ruudusta reitin loppuun.
      */
-    protected double[][] etaisyysarvioLoppuun;
+    protected int[][] etaisyysarvioLoppuun;
 
     /**
      *
@@ -172,7 +172,7 @@ public abstract class HakuPohja implements Haku {
         final long haunKesto = loppuAika - alkuAika;
 
         muodostaReitti();
-        double reitinPituus = !salliDiagonaalisiirtymat ? reitti.haePituus() - 1 : etaisyysAlusta[loppu.y][loppu.x];
+        int reitinPituus = !salliDiagonaalisiirtymat ? reitti.haePituus() - 1 : etaisyysAlusta[loppu.y][loppu.x] * 10;
 
         return new Hakutulos(true, "Reitti löytyi.", ruutujaTarkasteltu, reitti, vierailtu, reitinPituus, haunKesto);
     }
@@ -232,11 +232,11 @@ public abstract class HakuPohja implements Haku {
     }
 
     protected void alustaEtaisyysTaulukot(Ruutu alku) {
-        etaisyysAlusta = new double[korkeus][leveys];
-        etaisyysarvioLoppuun = new double[korkeus][leveys];
+        etaisyysAlusta = new int[korkeus][leveys];
+        etaisyysarvioLoppuun = new int[korkeus][leveys];
 
-        Taulukonkasittelija.alustaLiukulukuTaulukko(etaisyysAlusta);
-        Taulukonkasittelija.alustaLiukulukuTaulukko(etaisyysarvioLoppuun);
+        Taulukonkasittelija.alustaIntTaulukko(etaisyysAlusta);
+        Taulukonkasittelija.alustaIntTaulukko(etaisyysarvioLoppuun);
 
         etaisyysAlusta[alku.y][alku.x] = 0;
         etaisyysarvioLoppuun[alku.y][alku.x] = heuristiikka.laskeEtaisyys(alku, loppu);

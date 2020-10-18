@@ -10,7 +10,7 @@ import tiralabra.polunraivaaja.mallit.Ruutu;
  */
 public class RuutuKomparaattori {
 
-    private double[][] vertailuperuste;
+    private int[][] vertailuperuste;
 
     /**
      * Konstruktori. Ottaa parametrina liukulukutaulukon, jota käytetään
@@ -19,7 +19,7 @@ public class RuutuKomparaattori {
      * @param vertailuperuste Esim. taulukko, joka ruutujen etäisyyden reitin
      *                        alusta.
      */
-    public RuutuKomparaattori(double[][] vertailuperuste) {
+    public RuutuKomparaattori(int[][] vertailuperuste) {
         this.vertailuperuste = vertailuperuste;
     }
 

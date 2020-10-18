@@ -12,11 +12,11 @@ import org.junit.Test;
 public class RuutuKekoTest {
 
     private RuutuKeko keko;
-    private double[][] etaisyys;
+    private int[][] etaisyys;
 
     @Before
     public void alustaKeko() {
-        etaisyys = new double[5][5];
+        etaisyys = new int[5][5];
 
         for (int i = 0; i < etaisyys.length; i++) {
             for (int j = 0; j < etaisyys.length; j++) {
