@@ -1,13 +1,13 @@
 package tiralabra.polunraivaaja.suorituskykytestit.algoritmit;
 
-import tiralabra.polunraivaaja.suorituskykytestit.Suorituskykytulos;
+import tiralabra.polunraivaaja.tyokalut.Laskin;
 
 /**
  * Luokka, johon algoritmien suorituskykytestin mittaustulos kääritään.
  *
  * @author Joonas Partanen <joonas.partanen@helsinki.fi>
  */
-public class Mittaustulos extends Suorituskykytulos {
+public class Mittaustulos {
 
     /**
      * Algoritmin suoritukseen kulunut aika nanosekunteina.
@@ -20,23 +20,30 @@ public class Mittaustulos extends Suorituskykytulos {
     private int etsittyjaReitteja;
 
     /**
+     * Määrittää, kuinka monta kertaa testiskenaarion reittien haku tehdään.
+     * Lopullisessa mittaustuloksessa käytetään aikana eri suorituskertojen kestojen
+     * mediaania.
+     */
+    private int suorituskertoja;
+
+    /**
      * Konstruktori.
      *
-     * @param aika         Algoritmin suoritukseen kulunut aika nanosekunteina.
-     * @param iteraatioita Suorituskykytestin aikana suoritettujen iteraatioiden
-     *                     määrä.
-     * @ etsittyjaReitteja Testin aikana etsittyjen reittien maara.
+     * @param aika            Algoritmin suoritukseen kulunut aika nanosekunteina.
+     * @param suorituskertoja Suorituskykytestin aikana suoritettujen iteraatioiden
+     *                        määrä. @ etsittyjaReitteja Testin aikana etsittyjen
+     *                        reittien maara.
      */
-    public Mittaustulos(long aika, int iteraatioita, int etsittyjaReitteja) {
-        super(iteraatioita);
+    public Mittaustulos(long aika, int etsittyjaReitteja, int suorituskertoja) {
         this.aika = aika;
         this.etsittyjaReitteja = etsittyjaReitteja;
+        this.suorituskertoja = suorituskertoja;
     }
 
     @Override
     public String toString() {
-        return "Suorituskertoja: " + iteraatioita + "\n" + "Etsittyjä reittejä: " + etsittyjaReitteja + "\n" + "Kokonaissuoritusaika: "
-                + aikaMillisekunteina(aika) + " ms";
+        return "Suorituskertoja: " + suorituskertoja + "\n" + "Etsittyjä reittejä: " + etsittyjaReitteja + "\n"
+                + "Kokonaissuoritusaika: " + Laskin.aikaMillisekunteina(aika) + " ms";
     }
 
 }

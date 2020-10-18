@@ -16,18 +16,18 @@ import tiralabra.polunraivaaja.tietorakenteet.RuutuJono;
 public class RuutuJonoSuorituskykytesti implements TietorakenneSuorituskykytesti {
 
     @Override
-    public long suoritaJavaRakenteella(int iteraatiot) {
+    public long suoritaJavaRakenteella(int operaatioita) {
         Ruutu ruutu = new Ruutu(0, 0);
 
         long alku = System.nanoTime();
 
         Queue<Ruutu> jono = new ArrayDeque<>();
 
-        for (int i = 0; i < iteraatiot; i++) {
+        for (int i = 0; i < operaatioita; i++) {
             jono.add(ruutu);
         }
 
-        for (int i = 0; i < iteraatiot; i++) {
+        for (int i = 0; i < operaatioita; i++) {
             jono.remove();
         }
 
@@ -37,18 +37,18 @@ public class RuutuJonoSuorituskykytesti implements TietorakenneSuorituskykytesti
     }
 
     @Override
-    public long suoritaOmallaRakenteella(int iteraatiot) {
+    public long suoritaOmallaRakenteella(int operaatioita) {
         Ruutu ruutu = new Ruutu(0, 0);
 
         long alku = System.nanoTime();
 
         RuutuJono jono = new RuutuJono();
 
-        for (int i = 0; i < iteraatiot; i++) {
+        for (int i = 0; i < operaatioita; i++) {
             jono.lisaaJonoon(ruutu);
         }
 
-        for (int i = 0; i < iteraatiot; i++) {
+        for (int i = 0; i < operaatioita; i++) {
             jono.otaJonosta();
         }
 

@@ -5,17 +5,17 @@ package tiralabra.polunraivaaja.io;
  */
 public class Tiedostonlukupoikkeus extends Exception {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Konstruktori.
-   * 
-   * @param viesti               Informatiivinen viesti, joka näytetään
-   *                             käyttäjälle.
-   * @param alkuperainenPoikkeus Alkuperainen poikkeus säilytetään debuggausta
-   *                             varten.
-   */
-  public Tiedostonlukupoikkeus(String viesti, Throwable alkuperainenPoikkeus) {
-    super(viesti, alkuperainenPoikkeus);
-  }
+    /**
+     * Konstruktori.
+     * 
+     * @param viesti               Informatiivinen viesti, joka näytetään
+     *                             käyttäjälle.
+     * @param alkuperainenPoikkeus Alkuperainen poikkeus säilytetään debuggausta
+     *                             varten.
+     */
+    public Tiedostonlukupoikkeus(String viesti, Throwable alkuperainenPoikkeus) {
+        super(viesti, alkuperainenPoikkeus);
+    }
 }

@@ -37,7 +37,7 @@ public class SuorituskykyTestaaja {
      */
     public static Map<String, List<Vertailutulos>> suoritaTietorakenteidenTestit() {
 
-        List<Integer> iteraatioMaarat = Arrays.asList(1000, 10000, 100000);
+        List<Integer> operaatioMaarat = Arrays.asList(1000, 10000, 100000, 1000000, 10000000);
 
         Map<String, List<Vertailutulos>> tulokset = new HashMap<>();
 
@@ -45,10 +45,10 @@ public class SuorituskykyTestaaja {
         tulokset.put("RuutuJono", new ArrayList<>());
         tulokset.put("RuutuKeko", new ArrayList<>());
 
-        for (int iteraatiot : iteraatioMaarat) {
-            tulokset.get("RuutuLista").add(suoritaTietorakennetesti(new RuutuListaSuorituskykytesti(), iteraatiot));
-            tulokset.get("RuutuJono").add(suoritaTietorakennetesti(new RuutuJonoSuorituskykytesti(), iteraatiot));
-            tulokset.get("RuutuKeko").add(suoritaTietorakennetesti(new RuutuKekoSuorituskykytesti(), iteraatiot));
+        for (int operaatioita : operaatioMaarat) {
+            tulokset.get("RuutuLista").add(suoritaTietorakennetesti(new RuutuListaSuorituskykytesti(), operaatioita));
+            tulokset.get("RuutuJono").add(suoritaTietorakennetesti(new RuutuJonoSuorituskykytesti(), operaatioita));
+            tulokset.get("RuutuKeko").add(suoritaTietorakennetesti(new RuutuKekoSuorituskykytesti(), operaatioita));
         }
 
         return tulokset;
@@ -61,7 +61,7 @@ public class SuorituskykyTestaaja {
      *         suorituskykytestien tulokset.
      */
     public static Map<String, Mittaustulos> suoritaAlgoritmienTestit(String skenaariotiedosto) throws Tiedostonlukupoikkeus {
-        int iteraatiot = 1;
+        int suorituskerrat = 100;
 
         Map<String, Mittaustulos> tulokset = new HashMap<>();
 
@@ -69,28 +69,28 @@ public class SuorituskykyTestaaja {
 
         Skenaario skenaario = lukija.lueSkenaario(skenaariotiedosto);
 
-        tulokset.put("Leveyshaku", suoritaAlgoritmitesti(new Leveyshaku(skenaario.getKartta()), skenaario, iteraatiot));
+        tulokset.put("Leveyshaku", suoritaAlgoritmitesti(new Leveyshaku(skenaario.getKartta()), skenaario, suorituskerrat));
         tulokset.put("A* (ilman diagonaalisiirtymiä)",
-                suoritaAlgoritmitesti(new AStar(skenaario.getKartta(), false), skenaario, iteraatiot));
+                suoritaAlgoritmitesti(new AStar(skenaario.getKartta(), false), skenaario, suorituskerrat));
         tulokset.put("A* (diagonaalisiirtymillä)",
-                suoritaAlgoritmitesti(new AStar(skenaario.getKartta(), true), skenaario, iteraatiot));
-        tulokset.put("JPS", suoritaAlgoritmitesti(new JPS(skenaario.getKartta()), skenaario, iteraatiot));
+                suoritaAlgoritmitesti(new AStar(skenaario.getKartta(), true), skenaario, suorituskerrat));
+        tulokset.put("JPS", suoritaAlgoritmitesti(new JPS(skenaario.getKartta()), skenaario, suorituskerrat));
 
         return tulokset;
     }
 
-    private static Vertailutulos suoritaTietorakennetesti(TietorakenneSuorituskykytesti testi, int iteraatiot) {
+    private static Vertailutulos suoritaTietorakennetesti(TietorakenneSuorituskykytesti testi, int operaatioita) {
         int suorituskerrat = 1;
 
         long[] javaRakenteenAjat = new long[suorituskerrat];
         long[] omanRakenteenAjat = new long[suorituskerrat];
 
         for (int i = 0; i < suorituskerrat; i++) {
-            javaRakenteenAjat[i] = testi.suoritaJavaRakenteella(iteraatiot);
+            javaRakenteenAjat[i] = testi.suoritaJavaRakenteella(operaatioita);
         }
 
         for (int i = 0; i < suorituskerrat; i++) {
-            omanRakenteenAjat[i] = testi.suoritaOmallaRakenteella(iteraatiot);
+            omanRakenteenAjat[i] = testi.suoritaOmallaRakenteella(operaatioita);
         }
 
         Arrays.sort(javaRakenteenAjat);
@@ -99,20 +99,20 @@ public class SuorituskykyTestaaja {
         long javaRakenteenMediaani = javaRakenteenAjat[javaRakenteenAjat.length / 2];
         long omanRakenteenMediaani = omanRakenteenAjat[omanRakenteenAjat.length / 2];
 
-        return new Vertailutulos(omanRakenteenMediaani, javaRakenteenMediaani, iteraatiot);
+        return new Vertailutulos(omanRakenteenMediaani, javaRakenteenMediaani, operaatioita);
     }
 
-    private static Mittaustulos suoritaAlgoritmitesti(Haku haku, Skenaario skenaario, int iteraatiot) {
+    private static Mittaustulos suoritaAlgoritmitesti(Haku haku, Skenaario skenaario, int suorituskerrat) {
         AlgoritmiSuorituskykytesti testi = new AlgoritmiSuorituskykytesti(haku);
         long kokonaisaika = 0;
 
         for (Reittikuvaus reittikuvaus : skenaario.getReittikuvaukset()) {
-            long[] ajat = new long[iteraatiot];
+            long[] ajat = new long[suorituskerrat];
 
             // Hylätään ensimmäinen suoritus.
             testi.suorita(reittikuvaus);
 
-            for (int i = 0; i < iteraatiot; i++) {
+            for (int i = 0; i < suorituskerrat; i++) {
                 ajat[i] = testi.suorita(reittikuvaus);
             }
 
@@ -122,7 +122,7 @@ public class SuorituskykyTestaaja {
             kokonaisaika += mediaani;
         }
 
-        return new Mittaustulos(kokonaisaika, iteraatiot, skenaario.getReittikuvaukset().size());
+        return new Mittaustulos(kokonaisaika, suorituskerrat, skenaario.getReittikuvaukset().size());
     }
 
 }

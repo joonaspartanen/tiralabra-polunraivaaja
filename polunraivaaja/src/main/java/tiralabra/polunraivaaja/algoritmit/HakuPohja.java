@@ -167,6 +167,11 @@ public abstract class HakuPohja implements Haku {
         return rivi == loppu.y && sarake == loppu.x;
     }
 
+    /**
+     * Muodostaa haun lopputulosta kuvaavan Hakutulos-olion.
+     *
+     * @return Haun lopputulosta kuvaava Hakutulos-olio.
+     */
     protected Hakutulos muodostaHakutulos() {
         final long loppuAika = System.nanoTime();
         final long haunKesto = loppuAika - alkuAika;

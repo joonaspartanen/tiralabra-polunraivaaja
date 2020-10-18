@@ -40,19 +40,18 @@ public class RuutuKekoSuorituskykytesti implements TietorakenneSuorituskykytesti
     }
 
     @Override
-    public long suoritaJavaRakenteella(int iteraatiot) {
+    public long suoritaJavaRakenteella(int operaatioita) {
         Ruutu ruutu = new Ruutu(0, 0);
 
         long alku = System.nanoTime();
 
-        Queue<Ruutu> jono = new PriorityQueue<>(
-                (a, b) -> vertailuperuste[a.y][a.x] - vertailuperuste[b.y][b.x] < 0 ? -1 : 1);
+        Queue<Ruutu> jono = new PriorityQueue<>((a, b) -> vertailuperuste[a.y][a.x] - vertailuperuste[b.y][b.x] < 0 ? -1 : 1);
 
-        for (int i = 0; i < iteraatiot; i++) {
+        for (int i = 0; i < operaatioita; i++) {
             jono.add(ruutu);
         }
 
-        for (int i = 0; i < iteraatiot; i++) {
+        for (int i = 0; i < operaatioita; i++) {
             jono.remove();
         }
 
@@ -62,7 +61,7 @@ public class RuutuKekoSuorituskykytesti implements TietorakenneSuorituskykytesti
     }
 
     @Override
-    public long suoritaOmallaRakenteella(int iteraatiot) {
+    public long suoritaOmallaRakenteella(int operaatioita) {
         Ruutu ruutu = new Ruutu(0, 0);
 
         RuutuKomparaattori komparaattori = new RuutuKomparaattori(vertailuperuste);
@@ -71,11 +70,11 @@ public class RuutuKekoSuorituskykytesti implements TietorakenneSuorituskykytesti
 
         RuutuKeko keko = new RuutuKeko(komparaattori);
 
-        for (int i = 0; i < iteraatiot; i++) {
+        for (int i = 0; i < operaatioita; i++) {
             keko.lisaaRuutu(ruutu);
         }
 
-        for (int i = 0; i < iteraatiot; i++) {
+        for (int i = 0; i < operaatioita; i++) {
             keko.otaKeosta();
         }
 

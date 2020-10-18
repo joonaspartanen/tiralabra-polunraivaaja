@@ -20,6 +20,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -55,13 +56,17 @@ public class GUI extends Application {
     private Kartanlukija lukija;
     private Kartanpiirtaja piirtaja;
     private VBox valikko;
+    private ToggleGroup algoritmiToggleGroup;
+    private RadioButton leveyshakuNappi;
+    private RadioButton aStarNappi;
+    private RadioButton jpsNappi;
     private Ruutu alkupiste;
     private Ruutu loppupiste;
     private Label alkupisteLabel;
     private Label loppupisteLabel;
     private HBox hakupalkki;
     private Haku haku;
-    private CheckBox salliDiagonaaliSiirtymat;
+    private CheckBox salliDiagonaaliSiirtymatCheckBox;
     private Label hakutulosnakyma;
     private ComboBox<String> karttalista;
     private Alert ilmoitus;
@@ -76,70 +81,74 @@ public class GUI extends Application {
 
         TabPane valilehdet = new TabPane();
         valilehdet.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+
+        Tab hakuValilehti = alustaHakuValilehti();
+        Tab testiValilehti = alustaTestiValilehti();
+
+        valilehdet.getTabs().addAll(hakuValilehti, testiValilehti);
+
+        primaryStage.setScene(new Scene(valilehdet, 1600, 1200));
+        primaryStage.show();
+    }
+
+    private Tab alustaHakuValilehti() {
         Tab hakuValilehti = new Tab("Reittihaku");
 
         lukija = new Kartanlukija("kartat");
 
         alustaKarttalista();
 
-        ToggleGroup algoritmiToggleGroup = new ToggleGroup();
-        RadioButton leveyshakuNappi = new RadioButton("Leveyshaku");
-        leveyshakuNappi.setToggleGroup(algoritmiToggleGroup);
-        leveyshakuNappi.setSelected(true);
-        leveyshakuNappi.setOnAction(e -> {
-            salliDiagonaaliSiirtymat.setSelected(false);
-            salliDiagonaaliSiirtymat.setDisable(true);
-        });
-
-        RadioButton aStarNappi = new RadioButton("A*");
-        aStarNappi.setToggleGroup(algoritmiToggleGroup);
-        aStarNappi.setOnAction(e -> salliDiagonaaliSiirtymat.setDisable(false));
-
-        RadioButton jpsNappi = new RadioButton("JPS");
-        jpsNappi.setToggleGroup(algoritmiToggleGroup);
-        jpsNappi.setOnAction(e -> {
-            salliDiagonaaliSiirtymat.setSelected(true);
-            salliDiagonaaliSiirtymat.setDisable(true);
-        });
+        alustaAlgoritmiValikko();
 
         hakutulosnakyma = new Label();
         hakutulosnakyma.setFont(new Font("Segoe UI", 20));
 
         piirtaja.piirraKartta();
+        karttapohja = piirtaja.getKarttapohja();
 
         HBox hakuWrapper = new HBox(20);
         hakuWrapper.setPadding(new Insets(50, 50, 50, 50));
-
-        karttapohja = piirtaja.getKarttapohja();
+        hakuWrapper.getChildren().add(alustaKarttaWrapper());
 
         hakuValilehti.setContent(hakuWrapper);
 
+        alustaReitinPaaLabelit();
+
+        karttapohja.setOnMouseClicked(e -> valitseReitinPaat(e));
+
+        Button piirraReittiNappi = alustaPiirraReittiNappi();
+
+        Button pyyhiReittiNappi = alustaPyyhiReittiNappi();
+
+        salliDiagonaaliSiirtymatCheckBox = new CheckBox("Salli diagonaalisiirtymät");
+        salliDiagonaaliSiirtymatCheckBox.setDisable(true);
+
+        HBox algoritmivalikko = new HBox(leveyshakuNappi, aStarNappi, jpsNappi, salliDiagonaaliSiirtymatCheckBox);
+        algoritmivalikko.setSpacing(20);
+
+        hakupalkki = new HBox(alkupisteLabel, loppupisteLabel, piirraReittiNappi, pyyhiReittiNappi);
+        hakupalkki.setSpacing(20);
+
+        valikko = new VBox(karttalista, algoritmivalikko, hakupalkki, hakutulosnakyma);
+        valikko.setSpacing(20);
+        valikko.setPadding(new Insets(0, 0, 0, 50));
+
+        hakuWrapper.getChildren().add(valikko);
+
+        return hakuValilehti;
+    }
+
+    private HBox alustaKarttaWrapper() {
         HBox karttaWrapper = new HBox();
         karttaWrapper.setMaxHeight(512);
         karttaWrapper.setMaxWidth(512);
         karttaWrapper.setStyle(BORDER_BLACK);
         karttaWrapper.getChildren().add(karttapohja);
 
-        hakuWrapper.getChildren().add(karttaWrapper);
+        return karttaWrapper;
+    }
 
-        karttapohja.setOnMouseClicked(e -> {
-            if (alkupiste == null) {
-                alkupiste = new Ruutu((int) e.getY() / (int) piirtaja.getRuudunKorkeus(),
-                        (int) e.getX() / (int) piirtaja.getRuudunLeveys());
-                piirtaja.piirraPiste(alkupiste);
-            } else if (loppupiste == null) {
-                loppupiste = new Ruutu((int) e.getY() / (int) piirtaja.getRuudunKorkeus(),
-                        (int) e.getX() / (int) piirtaja.getRuudunLeveys());
-                piirtaja.piirraPiste(loppupiste);
-            } else {
-                alkupiste = null;
-                loppupiste = null;
-                piirtaja.piirraKartta();
-            }
-            karttapohja = piirtaja.getKarttapohja();
-            paivitaHakupalkki();
-        });
-
+    private Button alustaPiirraReittiNappi() {
         Button piirraReittiNappi = new Button("Piirrä reitti");
         piirraReittiNappi.setOnAction(e -> {
             if (alkupiste == null || loppupiste == null) {
@@ -154,7 +163,7 @@ public class GUI extends Application {
                 haku = new Leveyshaku(kartta);
             } else if (algoritmiToggleGroup.getSelectedToggle() == aStarNappi) {
                 haku = new AStar(kartta);
-                haku.setSalliDiagonaalisiirtymat(salliDiagonaaliSiirtymat.isSelected());
+                haku.setSalliDiagonaalisiirtymat(salliDiagonaaliSiirtymatCheckBox.isSelected());
             } else if (algoritmiToggleGroup.getSelectedToggle() == jpsNappi) {
                 haku = new JPS(kartta);
             }
@@ -170,11 +179,10 @@ public class GUI extends Application {
             }
         });
 
-        alkupisteLabel = new Label("Alku: ");
-        alkupisteLabel.setMinWidth(120);
-        loppupisteLabel = new Label("Loppu: ");
-        loppupisteLabel.setMinWidth(120);
+        return piirraReittiNappi;
+    }
 
+    private Button alustaPyyhiReittiNappi() {
         Button pyyhiReittiNappi = new Button("Pyyhi reitti");
 
         pyyhiReittiNappi.setOnAction(e -> {
@@ -186,27 +194,32 @@ public class GUI extends Application {
             hakutulosnakyma.setText("");
         });
 
-        salliDiagonaaliSiirtymat = new CheckBox("Salli diagonaalisiirtymät");
-        salliDiagonaaliSiirtymat.setDisable(true);
+        return pyyhiReittiNappi;
+    }
 
-        HBox algoritmivalikko = new HBox(leveyshakuNappi, aStarNappi, jpsNappi, salliDiagonaaliSiirtymat);
-        algoritmivalikko.setSpacing(20);
+    private void alustaReitinPaaLabelit() {
+        alkupisteLabel = new Label("Alku: ");
+        alkupisteLabel.setMinWidth(120);
+        loppupisteLabel = new Label("Loppu: ");
+        loppupisteLabel.setMinWidth(120);
+    }
 
-        hakupalkki = new HBox(alkupisteLabel, loppupisteLabel, piirraReittiNappi, pyyhiReittiNappi);
-        hakupalkki.setSpacing(20);
-
-        valikko = new VBox(karttalista, algoritmivalikko, hakupalkki, hakutulosnakyma);
-        valikko.setSpacing(20);
-        valikko.setPadding(new Insets(0, 0, 0, 50));
-
-        hakuWrapper.getChildren().add(valikko);
-
-        Tab testiValilehti = alustaTestiValilehti();
-
-        valilehdet.getTabs().addAll(hakuValilehti, testiValilehti);
-
-        primaryStage.setScene(new Scene(valilehdet, 1600, 1200));
-        primaryStage.show();
+    private void valitseReitinPaat(MouseEvent e) {
+        if (alkupiste == null) {
+            alkupiste = new Ruutu((int) e.getY() / (int) piirtaja.getRuudunKorkeus(),
+                    (int) e.getX() / (int) piirtaja.getRuudunLeveys());
+            piirtaja.piirraPiste(alkupiste);
+        } else if (loppupiste == null) {
+            loppupiste = new Ruutu((int) e.getY() / (int) piirtaja.getRuudunKorkeus(),
+                    (int) e.getX() / (int) piirtaja.getRuudunLeveys());
+            piirtaja.piirraPiste(loppupiste);
+        } else {
+            alkupiste = null;
+            loppupiste = null;
+            piirtaja.piirraKartta();
+        }
+        karttapohja = piirtaja.getKarttapohja();
+        paivitaHakupalkki();
     }
 
     private void alustaKarttalista() {
@@ -243,6 +256,28 @@ public class GUI extends Application {
         }
     }
 
+    private void alustaAlgoritmiValikko() {
+        algoritmiToggleGroup = new ToggleGroup();
+        leveyshakuNappi = new RadioButton("Leveyshaku");
+        leveyshakuNappi.setToggleGroup(algoritmiToggleGroup);
+        leveyshakuNappi.setSelected(true);
+        leveyshakuNappi.setOnAction(e -> {
+            salliDiagonaaliSiirtymatCheckBox.setSelected(false);
+            salliDiagonaaliSiirtymatCheckBox.setDisable(true);
+        });
+
+        aStarNappi = new RadioButton("A*");
+        aStarNappi.setToggleGroup(algoritmiToggleGroup);
+        aStarNappi.setOnAction(e -> salliDiagonaaliSiirtymatCheckBox.setDisable(false));
+
+        jpsNappi = new RadioButton("JPS");
+        jpsNappi.setToggleGroup(algoritmiToggleGroup);
+        jpsNappi.setOnAction(e -> {
+            salliDiagonaaliSiirtymatCheckBox.setSelected(true);
+            salliDiagonaaliSiirtymatCheckBox.setDisable(true);
+        });
+    }
+
     private void paivitaHakupalkki() {
         alkupisteLabel.setText(alkupiste == null ? "Alku: " : "Alku: " + alkupiste.toString());
         loppupisteLabel.setText(loppupiste == null ? "Loppu: " : "Loppu: " + loppupiste.toString());
@@ -254,7 +289,7 @@ public class GUI extends Application {
         VBox testiWrapper = new VBox(20);
         testiWrapper.setPadding(new Insets(50, 50, 50, 50));
 
-        HBox nappiWrapper = new HBox(20);
+        HBox valikkoWrapper = new HBox(20);
         VBox tulosalue = new VBox(20);
 
         ComboBox<String> skenaariolista = alustaSkenaariolista();
@@ -273,7 +308,7 @@ public class GUI extends Application {
                 for (Map.Entry<String, Mittaustulos> tulos : tulokset.entrySet()) {
                     TextFlow tulosteksti = new TextFlow();
                     tulosteksti.setStyle(BORDER_BLACK);
-                    tulosteksti.setPadding(new Insets(25, 25, 25, 25));
+                    tulosteksti.setPadding(new Insets(15, 15, 15, 15));
                     Text otsikko = new Text(tulos.getKey() + "\n");
                     otsikko.setStyle("-fx-font-weight: bold");
                     Text tuloskuvaus = new Text(tulos.getValue().toString());
@@ -302,14 +337,13 @@ public class GUI extends Application {
             for (Map.Entry<String, List<Vertailutulos>> tulos : tulokset.entrySet()) {
                 TextFlow tulosteksti = new TextFlow();
                 tulosteksti.setStyle(BORDER_BLACK);
-                tulosteksti.setPadding(new Insets(25, 25, 25, 25));
+                tulosteksti.setPadding(new Insets(15, 15, 0 , 15));
                 Text otsikko = new Text(tulos.getKey() + "\n");
                 otsikko.setStyle("-fx-font-weight: bold");
 
                 StringBuilder builderi = new StringBuilder();
                 for (Vertailutulos vertailutulos : tulos.getValue()) {
                     builderi.append(vertailutulos.toString());
-                    builderi.append("\n");
                 }
                 builderi.delete(builderi.length() - 2, builderi.length() - 1);
 
@@ -319,9 +353,9 @@ public class GUI extends Application {
             }
         });
 
-        nappiWrapper.getChildren().addAll(suoritaAlgoritmiTestitNappi, suoritaTietorakenneTestitNappi);
-        testiWrapper.getChildren().addAll(new Label("Valitse testiskenaario:"), skenaariolista, nappiWrapper,
-                tulosalue);
+        valikkoWrapper.getChildren().addAll(new Label("Valitse testiskenaario:"), skenaariolista,
+                suoritaAlgoritmiTestitNappi, suoritaTietorakenneTestitNappi);
+        testiWrapper.getChildren().addAll(valikkoWrapper, tulosalue);
         testiValilehti.setContent(testiWrapper);
 
         return testiValilehti;

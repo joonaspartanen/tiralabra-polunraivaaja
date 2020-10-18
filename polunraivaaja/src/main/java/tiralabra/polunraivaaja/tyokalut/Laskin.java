@@ -66,4 +66,14 @@ public class Laskin {
     public static int valitsePienempi(int luku1, int luku2) {
         return luku1 <= luku2 ? luku1 : luku2;
     }
+
+    /**
+     * Apumetodi nanosekunteina mitatun ajan muuttamiseksi millisekunneiksi.
+     *
+     * @param aika Aika nanosekunteina.
+     * @return Aika millisekunteina.
+     */
+    public static double aikaMillisekunteina(long aika) {
+        return aika / 1000000.0;
+    }
 }

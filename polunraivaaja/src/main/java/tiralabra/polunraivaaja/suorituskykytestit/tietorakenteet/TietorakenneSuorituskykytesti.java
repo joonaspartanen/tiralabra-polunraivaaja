@@ -12,18 +12,18 @@ public interface TietorakenneSuorituskykytesti {
     /**
      * Suorittaa testin Javan valmiilla tietorakenteella.
      *
-     * @param iteraatiot Määrittää, kuinka monta kertaa sama testattavat operaatiot
+     * @param operaatioita Määrittää, kuinka monta kertaa sama testattavat operaatiot
      *                   suoritetaan.
      * @return Suoritukseen kulunut aika.
      */
-    long suoritaJavaRakenteella(int iteraatiot);
+    long suoritaJavaRakenteella(int operaatioita);
 
     /**
      * Suorittaa testin omalla tietorakenteella.
      *
-     * @param iteraatiot Määrittää, kuinka monta kertaa sama testattavat operaatiot
+     * @param operaatioita Määrittää, kuinka monta kertaa sama testattavat operaatiot
      *                   suoritetaan.
      * @return Suoritukseen kulunut aika.
      */
-    long suoritaOmallaRakenteella(int iteraatiot);
+    long suoritaOmallaRakenteella(int operaatioita);
 }

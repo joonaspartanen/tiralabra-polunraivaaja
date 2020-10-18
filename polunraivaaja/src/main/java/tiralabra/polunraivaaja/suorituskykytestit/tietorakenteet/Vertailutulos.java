@@ -1,6 +1,6 @@
 package tiralabra.polunraivaaja.suorituskykytestit.tietorakenteet;
 
-import tiralabra.polunraivaaja.suorituskykytestit.Suorituskykytulos;
+import tiralabra.polunraivaaja.tyokalut.Laskin;
 
 /**
  * Omia ja Javan valmiita tietorakenteita testaavien suorituskykytestien
@@ -8,7 +8,7 @@ import tiralabra.polunraivaaja.suorituskykytestit.Suorituskykytulos;
  *
  * @author Joonas Partanen <joonas.partanen@helsinki.fi>
  */
-public class Vertailutulos extends Suorituskykytulos {
+public class Vertailutulos {
 
     /**
      * Oman tietorakenteen suoritusaika nanosekunteina.
@@ -20,18 +20,22 @@ public class Vertailutulos extends Suorituskykytulos {
      */
     private long javaRakenteenAika;
 
-    public Vertailutulos(long omanRakenteenAika, long javaRakenteenAika, int iteraatioita) {
-        super(iteraatioita);
+    /**
+     * Kertoo, kuinka monta tietorakennetta rasittavaa operaatiota testin aikana suoritettiin.
+     */
+    private int operaatioita;
+
+    public Vertailutulos(long omanRakenteenAika, long javaRakenteenAika, int operaatioita) {
         this.omanRakenteenAika = omanRakenteenAika;
         this.javaRakenteenAika = javaRakenteenAika;
-        this.iteraatioita = iteraatioita;
+        this.operaatioita = operaatioita;
     }
 
     @Override
     public String toString() {
-        return "Iteraatioita: " + iteraatioita + "\n" + "Oman rakenteen aika: "
-                + aikaMillisekunteina(omanRakenteenAika) + " ms \n" + "Javan valmiin tietorakenteen aika "
-                + aikaMillisekunteina(javaRakenteenAika) + " ms \n";
+        return "Suoritettuja operaatioita: " + operaatioita + "\nOman rakenteen aika: "
+                + Laskin.aikaMillisekunteina(omanRakenteenAika) + " ms\nJavan valmiin tietorakenteen aika "
+                + Laskin.aikaMillisekunteina(javaRakenteenAika) + " ms\n";
     }
 
 }

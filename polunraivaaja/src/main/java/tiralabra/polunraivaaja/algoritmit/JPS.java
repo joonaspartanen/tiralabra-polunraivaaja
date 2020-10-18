@@ -126,6 +126,8 @@ public class JPS extends HakuPohja {
             if (!ruutuKelpaa(y - dy, x)) {
                 lisaaRuutuJosKelpaa(naapurit, y - dy, x + dx);
             }
+
+            // Tutkitaan pystysuunnassa.
         } else if (dx == 0) {
             if (ruutuKelpaa(y + dy, x)) {
                 naapurit.lisaaRuutu(new Ruutu(y + dy, x));
@@ -137,6 +139,7 @@ public class JPS extends HakuPohja {
                     lisaaRuutuJosKelpaa(naapurit, y + dy, x - 1);
                 }
             }
+            // Tutkitaan vaakasuunnassa.
         } else {
             if (ruutuKelpaa(y, x + dx)) {
                 naapurit.lisaaRuutu(new Ruutu(y, x + dx));
@@ -180,12 +183,13 @@ public class JPS extends HakuPohja {
                 return kohde;
             }
         } else {
-
+            // Tutkitaan pystysuunnassa.
             if (dx != 0) {
                 if ((ruutuKelpaa(y + 1, x + dx) && !ruutuKelpaa(y + 1, x))
                         || (ruutuKelpaa(y - 1, x + dx) && !ruutuKelpaa(y - 1, x))) {
                     return kohde;
                 }
+                // Tutkitaan vaakasuunnassa.
             } else {
                 if ((ruutuKelpaa(y + dy, x + 1) && !ruutuKelpaa(y, x + 1))
                         || (ruutuKelpaa(y + dy, x - 1) && !ruutuKelpaa(y, x - 1))) {
@@ -209,6 +213,11 @@ public class JPS extends HakuPohja {
 
     }
 
+    /*
+     * Muodostaa lopullisen reitin täyttämällä JPS:n hypyistä johtuvat aukot
+     * algoritmin löytämällä reitillä.
+     *
+     */
     @Override
     public void muodostaReitti() {
         super.muodostaReitti();
@@ -225,11 +234,7 @@ public class JPS extends HakuPohja {
 
             while (true) {
                 lahto = Ruutu.haeSeuraavaRuutu(lahto, suunta);
-                int lahtoY = lahto.y;
-                int lahtoX = lahto.x;
-                int kohdeY = kohde.y;
-                int kohdeX = kohde.x;
-                if (lahtoY == kohdeY && lahtoX == kohdeX) {
+                if (lahto.y == kohde.y && lahto.x == kohde.x) {
                     break;
                 }
                 taysiReitti.lisaaRuutu(lahto);
