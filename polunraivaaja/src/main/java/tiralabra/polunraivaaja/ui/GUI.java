@@ -21,6 +21,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -71,6 +72,7 @@ public class GUI extends Application {
         primaryStage.setTitle("Polunraivaaja");
 
         ilmoitus = new Alert(AlertType.INFORMATION);
+        ilmoitus.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 
         TabPane valilehdet = new TabPane();
         valilehdet.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -234,7 +236,7 @@ public class GUI extends Application {
         try {
             kartta = lukija.lueKarttatiedosto(tiedostonimi);
         } catch (Tiedostonlukupoikkeus ex) {
-            ilmoitus.setTitle("Virhe!");
+            ilmoitus.setTitle("Virhe");
             ilmoitus.setHeaderText("Tiedoston lukeminen epäonnistui.");
             ilmoitus.setContentText(ex.getMessage());
             ilmoitus.show();
@@ -255,10 +257,16 @@ public class GUI extends Application {
         HBox nappiWrapper = new HBox(20);
         VBox tulosalue = new VBox(20);
 
+        ComboBox<String> skenaariolista = alustaSkenaariolista();
+
         Button suoritaAlgoritmiTestitNappi = new Button("Suorita algoritmien suorituskykytestit");
         suoritaAlgoritmiTestitNappi.setOnAction(e -> {
+            tulosalue.getChildren().clear();
+            tulosalue.getChildren().add(new Label("Suoritetaan testejä..."));
+
             try {
-                Map<String, Mittaustulos> tulokset = SuorituskykyTestaaja.suoritaAlgoritmienTestit();
+                Map<String, Mittaustulos> tulokset = SuorituskykyTestaaja
+                        .suoritaAlgoritmienTestit(skenaariolista.getSelectionModel().getSelectedItem());
 
                 tulosalue.getChildren().clear();
 
@@ -274,46 +282,63 @@ public class GUI extends Application {
                 }
 
             } catch (Tiedostonlukupoikkeus ex) {
-                ex.printStackTrace();
+                tulosalue.getChildren().clear();
+                ilmoitus.setTitle("Virhe!");
+                ilmoitus.setHeaderText("Tiedoston lukeminen epäonnistui.");
+                ilmoitus.setContentText(ex.getMessage());
+                ilmoitus.show();
             }
 
         });
 
         Button suoritaTietorakenneTestitNappi = new Button("Suorita tietorakenteiden suorituskykytestit");
         suoritaTietorakenneTestitNappi.setOnAction(e -> {
-            try {
-                Map<String, List<Vertailutulos>> tulokset = SuorituskykyTestaaja.suoritaTietorakenteidenTestit();
+            tulosalue.getChildren().clear();
+            tulosalue.getChildren().add(new Label("Suoritetaan testejä..."));
 
-                tulosalue.getChildren().clear();
+            Map<String, List<Vertailutulos>> tulokset = SuorituskykyTestaaja.suoritaTietorakenteidenTestit();
+            tulosalue.getChildren().clear();
 
-                for (Map.Entry<String, List<Vertailutulos>> tulos : tulokset.entrySet()) {
-                    TextFlow tulosteksti = new TextFlow();
-                    tulosteksti.setStyle(BORDER_BLACK);
-                    tulosteksti.setPadding(new Insets(25, 25, 25, 25));
-                    Text otsikko = new Text(tulos.getKey() + "\n");
-                    otsikko.setStyle("-fx-font-weight: bold");
+            for (Map.Entry<String, List<Vertailutulos>> tulos : tulokset.entrySet()) {
+                TextFlow tulosteksti = new TextFlow();
+                tulosteksti.setStyle(BORDER_BLACK);
+                tulosteksti.setPadding(new Insets(25, 25, 25, 25));
+                Text otsikko = new Text(tulos.getKey() + "\n");
+                otsikko.setStyle("-fx-font-weight: bold");
 
-                    StringBuilder builderi = new StringBuilder();
-                    for (Vertailutulos vertailutulos : tulos.getValue()) {
-                        builderi.append(vertailutulos.toString());
-                        builderi.append("\n");
-                    }
-                    builderi.delete(builderi.length() - 2, builderi.length() - 1);
-
-                    Text tuloskuvaus = new Text(builderi.toString());
-                    tulosteksti.getChildren().addAll(otsikko, tuloskuvaus);
-                    tulosalue.getChildren().add(tulosteksti);
+                StringBuilder builderi = new StringBuilder();
+                for (Vertailutulos vertailutulos : tulos.getValue()) {
+                    builderi.append(vertailutulos.toString());
+                    builderi.append("\n");
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                builderi.delete(builderi.length() - 2, builderi.length() - 1);
+
+                Text tuloskuvaus = new Text(builderi.toString());
+                tulosteksti.getChildren().addAll(otsikko, tuloskuvaus);
+                tulosalue.getChildren().add(tulosteksti);
             }
         });
 
         nappiWrapper.getChildren().addAll(suoritaAlgoritmiTestitNappi, suoritaTietorakenneTestitNappi);
-        testiWrapper.getChildren().addAll(nappiWrapper, tulosalue);
+        testiWrapper.getChildren().addAll(new Label("Valitse testiskenaario:"), skenaariolista, nappiWrapper,
+                tulosalue);
         testiValilehti.setContent(testiWrapper);
 
         return testiValilehti;
+    }
+
+    private ComboBox<String> alustaSkenaariolista() {
+        File skenaariokansio = new File("kartat/testikartat/skenaariot");
+
+        FilenameFilter suodatin = (tiedosto, nimi) -> nimi.endsWith(".map.scen");
+
+        String[] skenaariotiedostot = skenaariokansio.list(suodatin);
+        ComboBox<String> skenaariolista = new ComboBox<>();
+
+        skenaariolista.getItems().addAll(skenaariotiedostot);
+        skenaariolista.getSelectionModel().selectFirst();
+
+        return skenaariolista;
     }
 
     /**

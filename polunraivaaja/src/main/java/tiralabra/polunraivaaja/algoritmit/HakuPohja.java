@@ -203,7 +203,7 @@ public abstract class HakuPohja implements Haku {
     }
 
     protected RuutuLista haeVapaatNaapurit(Ruutu ruutu, boolean salliDiagonaalisiirtymat) {
-        final RuutuLista naapurit = new RuutuLista();
+        final RuutuLista naapurit = new RuutuLista(8);
 
         final int y = ruutu.y;
         final int x = ruutu.x;
@@ -213,8 +213,12 @@ public abstract class HakuPohja implements Haku {
                 continue;
             }
 
-            final int uusiY = ruutu.y + suunta.getDY();
-            final int uusiX = ruutu.x + suunta.getDX();
+            final int uusiY = y + suunta.getDY();
+            final int uusiX = x + suunta.getDX();
+
+            if (!ruutuKelpaa(uusiY, uusiX)) {
+                continue;
+            }
 
             // Varmistetaan ettei haku kulje kulmien välistä.
             if (suunta.isDiagonaalinen() && !ruutuKelpaa(uusiY, x) && !ruutuKelpaa(y, uusiX)) {

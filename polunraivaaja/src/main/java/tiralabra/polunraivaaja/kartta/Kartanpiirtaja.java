@@ -108,7 +108,6 @@ public class Kartanpiirtaja {
     /**
      * Käytetään piirtämään karttaan reitin alku- ja loppupisteet.
      *
-     * TODO: Poista taikanumerot.
      */
     public void piirraPiste(Ruutu sijainti) {
         gc.setFill(Color.CRIMSON);

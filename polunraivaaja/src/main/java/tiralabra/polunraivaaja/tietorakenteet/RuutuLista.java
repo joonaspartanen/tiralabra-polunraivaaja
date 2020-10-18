@@ -23,10 +23,19 @@ public class RuutuLista {
     private int ruutuja;
 
     /**
-     * Konstruktori. Listaan mahtuu aluksi 100 ruutua ja listan kokoa kasvatetaan tarvittaessa.
+     * Konstruktori. Listaan mahtuu aluksi 100 ruutua ja listan kokoa kasvatetaan
+     * tarvittaessa.
      */
     public RuutuLista() {
         this.lista = new Ruutu[100];
+        ruutuja = 0;
+    }
+
+    /**
+     * Konstruktori, jolla voi luoda alkukooltaan pienemmän RuutuListan.
+     */
+    public RuutuLista(int koko) {
+        this.lista = new Ruutu[koko];
         ruutuja = 0;
     }
 

@@ -6,7 +6,6 @@ import tiralabra.polunraivaaja.tietorakenteet.RuutuKeko;
 import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
 import tiralabra.polunraivaaja.tyokalut.Laskin;
 import tiralabra.polunraivaaja.tyokalut.RuutuKomparaattori;
-import tiralabra.polunraivaaja.mallit.Suunta;
 import tiralabra.polunraivaaja.kartta.Kartta;
 
 /**
@@ -14,8 +13,6 @@ import tiralabra.polunraivaaja.kartta.Kartta;
  * käyttäen apuna heuristista funktiota, joka arvioi tarkasteltavien solmujen
  * etäisyyttä reitin loppuun.
  * 
- * TODO: Tutki miksi löytää joskus hieman pidemmän reitin kuin JPS.
- *
  * @author Joonas Partanen <joonas.partanen@helsinki.fi>
  */
 public class AStar extends HakuPohja {
@@ -73,15 +70,11 @@ public class AStar extends HakuPohja {
             for (int i = 0; i < naapurit.haePituus(); i++) {
                 Ruutu naapuri = naapurit.haeRuutuIndeksissa(i);
 
-                if (!ruutuKelpaa(naapuri.y, naapuri.x)) {
-                    continue;
-                }
-
-                double etaisyysTahan = Suunta.laskeSuunta(nykyinen, naapuri).isDiagonaalinen() ? Laskin.SQRT_2 : 1;
+                double etaisyysTahan = nykyinen.y == naapuri.y || nykyinen.x == naapuri.x ? 1 : Laskin.SQRT_2;
 
                 double uusiEtaisyys = etaisyysAlusta[nykyinen.y][nykyinen.x] + etaisyysTahan;
 
-                if (uusiEtaisyys < etaisyysAlusta[naapuri.y][naapuri.x] || !vierailtu[naapuri.y][naapuri.x]) {
+                if (uusiEtaisyys < etaisyysAlusta[naapuri.y][naapuri.x]) {
                     etaisyysAlusta[naapuri.y][naapuri.x] = uusiEtaisyys;
                     etaisyysarvioLoppuun[naapuri.y][naapuri.x] = uusiEtaisyys
                             + heuristiikka.laskeEtaisyys(naapuri, loppu);

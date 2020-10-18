@@ -51,8 +51,6 @@ public class SuorituskykyTestaaja {
             tulokset.get("RuutuKeko").add(suoritaTietorakennetesti(new RuutuKekoSuorituskykytesti(), iteraatiot));
         }
 
-        System.out.println(tulokset.toString());
-
         return tulokset;
     }
 
@@ -62,14 +60,14 @@ public class SuorituskykyTestaaja {
      * @return HashMap, jossa avaimina algoritmien nimet ja arvoina
      *         suorituskykytestien tulokset.
      */
-    public static Map<String, Mittaustulos> suoritaAlgoritmienTestit() throws Tiedostonlukupoikkeus {
+    public static Map<String, Mittaustulos> suoritaAlgoritmienTestit(String skenaariotiedosto) throws Tiedostonlukupoikkeus {
         int iteraatiot = 1;
 
         Map<String, Mittaustulos> tulokset = new HashMap<>();
 
         Kartanlukija lukija = new Kartanlukija("kartat");
 
-        Skenaario skenaario = lukija.lueSkenaario("Berlin_0_256.map.scen");
+        Skenaario skenaario = lukija.lueSkenaario(skenaariotiedosto);
 
         tulokset.put("Leveyshaku", suoritaAlgoritmitesti(new Leveyshaku(skenaario.getKartta()), skenaario, iteraatiot));
         tulokset.put("A* (ilman diagonaalisiirtymiä)",

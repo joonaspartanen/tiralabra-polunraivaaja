@@ -2,8 +2,6 @@ package tiralabra.polunraivaaja.kartta;
 
 /**
  * Luokka, joka esittää karttaa binääritaulukkona (0 = kulkuväylä, 1 = este).
- * TODO: Muuta kartan esitysmuoto niin, että 0 = este. Näin on helpompi esittää
- * erilaisia maastoja (1=helppokulkuinen, esim tie, 2=vaikeakulkuisempi, jne.)
  *
  * @author Joonas Partanen <joonas.partanen@helsinki.fi>
  */
