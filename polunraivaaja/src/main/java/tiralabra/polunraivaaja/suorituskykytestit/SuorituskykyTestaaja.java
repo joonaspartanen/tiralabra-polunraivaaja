@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import tiralabra.polunraivaaja.algoritmit.AStar;
+import tiralabra.polunraivaaja.algoritmit.Dijkstra;
 import tiralabra.polunraivaaja.algoritmit.Haku;
 import tiralabra.polunraivaaja.algoritmit.JPS;
 import tiralabra.polunraivaaja.algoritmit.Leveyshaku;
@@ -60,7 +61,8 @@ public class SuorituskykyTestaaja {
      * @return HashMap, jossa avaimina algoritmien nimet ja arvoina
      *         suorituskykytestien tulokset.
      */
-    public static Map<String, Mittaustulos> suoritaAlgoritmienTestit(String skenaariotiedosto) throws Tiedostonlukupoikkeus {
+    public static Map<String, Mittaustulos> suoritaAlgoritmienTestit(String skenaariotiedosto)
+            throws Tiedostonlukupoikkeus {
         int iteraatiot = 1;
 
         Map<String, Mittaustulos> tulokset = new HashMap<>();
@@ -74,6 +76,10 @@ public class SuorituskykyTestaaja {
                 suoritaAlgoritmitesti(new AStar(skenaario.getKartta(), false), skenaario, iteraatiot));
         tulokset.put("A* (diagonaalisiirtymillä)",
                 suoritaAlgoritmitesti(new AStar(skenaario.getKartta(), true), skenaario, iteraatiot));
+        tulokset.put("Dijkstra (ilman diagonaalisiirtymiä)",
+                suoritaAlgoritmitesti(new Dijkstra(skenaario.getKartta(), false), skenaario, iteraatiot));
+        tulokset.put("Dijkstra (diagonaalisiirtymillä)",
+                suoritaAlgoritmitesti(new Dijkstra(skenaario.getKartta(), true), skenaario, iteraatiot));
         tulokset.put("JPS", suoritaAlgoritmitesti(new JPS(skenaario.getKartta()), skenaario, iteraatiot));
 
         return tulokset;

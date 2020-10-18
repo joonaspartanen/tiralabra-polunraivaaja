@@ -28,6 +28,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import tiralabra.polunraivaaja.algoritmit.AStar;
+import tiralabra.polunraivaaja.algoritmit.Dijkstra;
 import tiralabra.polunraivaaja.algoritmit.Leveyshaku;
 import tiralabra.polunraivaaja.mallit.Hakutulos;
 import tiralabra.polunraivaaja.mallit.Ruutu;
@@ -95,6 +96,10 @@ public class GUI extends Application {
         aStarNappi.setToggleGroup(algoritmiToggleGroup);
         aStarNappi.setOnAction(e -> salliDiagonaaliSiirtymat.setDisable(false));
 
+        RadioButton dijkstraNappi = new RadioButton("Dijkstra");
+        dijkstraNappi.setToggleGroup(algoritmiToggleGroup);
+        dijkstraNappi.setOnAction(e -> salliDiagonaaliSiirtymat.setDisable(false));
+
         RadioButton jpsNappi = new RadioButton("JPS");
         jpsNappi.setToggleGroup(algoritmiToggleGroup);
         jpsNappi.setOnAction(e -> {
@@ -155,6 +160,9 @@ public class GUI extends Application {
             } else if (algoritmiToggleGroup.getSelectedToggle() == aStarNappi) {
                 haku = new AStar(kartta);
                 haku.setSalliDiagonaalisiirtymat(salliDiagonaaliSiirtymat.isSelected());
+            } else if (algoritmiToggleGroup.getSelectedToggle() == dijkstraNappi) {
+                haku = new Dijkstra(kartta);
+                haku.setSalliDiagonaalisiirtymat(salliDiagonaaliSiirtymat.isSelected());
             } else if (algoritmiToggleGroup.getSelectedToggle() == jpsNappi) {
                 haku = new JPS(kartta);
             }
@@ -189,7 +197,8 @@ public class GUI extends Application {
         salliDiagonaaliSiirtymat = new CheckBox("Salli diagonaalisiirtymät");
         salliDiagonaaliSiirtymat.setDisable(true);
 
-        HBox algoritmivalikko = new HBox(leveyshakuNappi, aStarNappi, jpsNappi, salliDiagonaaliSiirtymat);
+        HBox algoritmivalikko = new HBox(leveyshakuNappi, aStarNappi, dijkstraNappi, jpsNappi,
+                salliDiagonaaliSiirtymat);
         algoritmivalikko.setSpacing(20);
 
         hakupalkki = new HBox(alkupisteLabel, loppupisteLabel, piirraReittiNappi, pyyhiReittiNappi);
