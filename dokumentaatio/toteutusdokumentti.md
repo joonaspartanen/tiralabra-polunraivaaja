@@ -50,7 +50,7 @@ Kuten muutkin tietorakenteet, myös RuutuKeko perustuu taulukkoon, jonka koko ka
 
 Leveyshaun odotettu aikavaativuus on tunnetusti _O(\|V\|+\|E\|)_, missä |V| on verkon solmujen ja |E| kaarien määrä.
 
-Kuten testausdokumentissa tarkemmin esitellään, osoittautui leveyshaku käytännössä varsin tehokkaaksi algoritmiksi A\*:iin verrattuna, kun kartan koko on suhteellisen pieni (512x512 ruutua). Tällaisessa tilanteessa leveyshaku ei ehdi "harhailemaan" kovin kauaa vääriin suuntiin ennen maalin löytymistä, ja algoritmitoteuksen yksinkertaisuuden ansiosta, tulokset voivat olla jopa A\*:a parempia. Kuitenkin kun kartan koko kasvaa 1024x1024 ruutuun, jää leveyshaku suorituskykytestien perusteella selvästi A\*:n jalkoihin.
+Kuten testausdokumentissa tarkemmin esitellään, osoittautui leveyshaku käytännössä varsin tehokkaaksi algoritmiksi A\*:iin verrattuna, kun kartan koko on suhteellisen pieni (512x512 ruutua). Tällaisessa tilanteessa leveyshaku ei ehdi "harhailemaan" kovin kauaa vääriin suuntiin ennen maalin löytymistä, ja algoritmitoteuksen yksinkertaisuuden ansiosta, tulokset voivat olla jopa A\*:a parempia. Kuitenkin kun kartan koko kasvaa 1024x1024 ruutuun, jää leveyshaku suorituskykytestien perusteella ilman diagonaalisiirtymiä toimivan A\*:n taakse.
 
 Samalla on muistettava, että leveyshaku on hyvin rajoittunut algoritmi, sillä se toimii vain painottamattomissa verkoissa. Omassa sovelluksessani tämä näkyy siinä, ettei leveyshaku mahdollista lainkaan diagonaalisia siirtymiä – näin ollen se ei useimmiten kykene löytämään yhtä lyhyttä reittiä kuin sovelluksen muut algoritmit.
 
@@ -60,7 +60,7 @@ A\*-algoritmin odotettu aikavaativuus on _O(\|E\|)_. Pienillä kartoilla (512x51
 
 Etsin suorituskykytestien avulla A\*-implementaatiostani mahdollisia pullonkauloja, mutta ainakaan oman kekorakenteeni vaihtaminen takaisin Javan PriorityQueueksi tai liukulukuetäisyyksien vaihtaminen likimääräisiksi kokonaisluvuiksi ei vaikuttanut tuloksiin merkittävästi.
 
-Kuitenkin kartan koon kasvaessa A\* ohittaa selvästi leveyshaun suorituksen nopeudessa. Suurimmat testikarttani olivat kokoa 1024x1024 ruutua, mutta on odotettavissa, että algoritmien nopeusero kasvaisi edelleen suuremmilla kartoilla.
+Kuitenkin kartan koon kasvaessa ilman diagonaalisiirtymiä toimiva A\* ohittaa leveyshaun suorituksen nopeudessa. Suurimmat testikarttani olivat kokoa 1024x1024 ruutua, mutta on odotettavissa, että algoritmien nopeusero kasvaisi edelleen suuremmilla kartoilla. 
 
 On myös hyvä muistaa, että sovellukseni kartat muodostavat hyvin tiheitä ja painottamattomia verkkoja, jotka eivät millään muotoa suosi A\*:a, joka kykenisi löytämään lyhimmän reitin myös painotetuissa verkoissa. Siksi en ole ollenkaan varma, onko algoritmia ylipäänsä mielekästä verrata yksinkertaiseen mutta rajalliseen leveyshakuun.
 
