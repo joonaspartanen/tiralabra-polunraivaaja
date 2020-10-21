@@ -20,6 +20,14 @@ Suorituskykytestien tarkoituksena on vertailla sekä omien tietorakenteita Javan
 
 Suorituskykytestit voi ajaa käyttöliittymän Suorituskykytestit-välilehdeltä.
 
+### Testikokoonpano
+
+Lenovo ThinkPad T490
+
+- prosessori 4-ytiminen, 8-säikeinen Intel Core i5-8265U, 1,6-3,9 GHz
+- keskusmuisti 16 Gt
+- SSD-levy 512 Gt
+
 ### Tietorakenteiden suorituskykytestit
 
 Tietorakenteiden suorituskykytestit vertaavat itse toteuttamiani tietorakenteita Javan vastaaviin rakenteisiin eri määrillä suoritettuja operaatioita (kuten alkioiden lisäämisiä listalle/jonoon/kekoon).
@@ -62,3 +70,19 @@ Alla olevissa kuvaajissa tietorakenteiden suoritusaika on suhteutettu toisiinsa 
 
 ### Algoritmien suorituskykytestit
 
+Reitinhakualgoritmien suorituskykytestit testaavat kunkin algoritmin suoritusnopeutta skenaarioilla, joihin kuuluu satoja reittikuvauksia tietyllä kartalla.
+
+Suorituskykytestin aikana kukin skenaarioon kuuluva reitti haetaan kullakin algoritmilla 41 kertaa (ensimmäinen suorituskerta hylätään). Kunkin suorituskerran kesto otetaan muistiin, minkä jälkeen lasketaan kestojen mediaani. Lopullisessa mittaustuloksessa raportoidaan näiden mediaanien yhteenlaskettu kesto.
+
+Testit voi ajaa sovelluksen Suorituskykytestit-välilehdeltä useilla eri testiskenaarioilla. Dokumentoin tähän tiedostoon tulokset, jotka saavutin skenaarioilla _Berlin_0_512.map.scen_ (512x512 ruutua, 1870 reittikuvausta) ja _Berlin_0_1024.map.scen_ (1024x1024 ruutua, xxx reittikuvausta). Skenaariot käyttävät siis datana kartan _Berlin_0_ eri resoluutioisia versioita.
+
+Analysoin algoritmien eroja tarkemmin [toteutusdokumentissa](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/toteutusdokumentti.md), mutta tässäkin yhteydessä voidaan nostaa esiin joitain keskeisiä havaintoja.
+
+Tulokset vastaavat varsin hyvin ennakko-odotuksiani: suurella kartalla leveyshaku jää algoritmeista hitaimmaksi ja JPS toimii selvästi nopeimmin. Kuitenkin pienemmällä kartalla leveyshaku on jopa A\*:a nopeampi, mikä selittynee ennen kaikkea sillä, että algoritmi-implementaatio on A\*:a yksinkertaisempi ja kevyempi.
+
+|          Skenaario           | Leveyshaku | A\* (ilman diagonaalisiirtymiä) | A\* (diagonaalisiirtymillä) |  JPS   |
+| :--------------------------: | :--------: | :-----------------------------: | :-------------------------: | :----: |
+| Berlin_0_512 (1870 reittiä)  |  10,24 s   |             14,50 s             |           22,10 s           | 3,52 s |
+| Berlin_0_1024 (1202 reittiä) |  45,65 s   |             42,31 s             |           67,99 s           | 9,63 s |
+
+![Algoritmien testin tulos](https://raw.githubusercontent.com/joonaspartanen/tiralabra-polunraivaaja/master/dokumentaatio/kuvat/algoritmit.svg)
