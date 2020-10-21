@@ -13,7 +13,7 @@ import static org.hamcrest.CoreMatchers.is;
 import org.junit.Before;
 import org.junit.Test;
 
-import tiralabra.polunraivaaja.kartta.Kartta;
+import tiralabra.polunraivaaja.mallit.Kartta;
 import tiralabra.polunraivaaja.mallit.Hakutulos;
 import tiralabra.polunraivaaja.mallit.Ruutu;
 import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;

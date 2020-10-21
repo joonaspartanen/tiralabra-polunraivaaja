@@ -1,7 +1,7 @@
 package tiralabra.polunraivaaja.algoritmit;
 
 import tiralabra.polunraivaaja.algoritmit.heuristiikka.ManhattanEtaisyys;
-import tiralabra.polunraivaaja.kartta.Kartta;
+import tiralabra.polunraivaaja.mallit.Kartta;
 import tiralabra.polunraivaaja.mallit.Hakutulos;
 import tiralabra.polunraivaaja.mallit.Ruutu;
 import tiralabra.polunraivaaja.tietorakenteet.RuutuJono;

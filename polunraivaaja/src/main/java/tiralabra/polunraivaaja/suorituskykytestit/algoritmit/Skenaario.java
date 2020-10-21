@@ -3,7 +3,7 @@ package tiralabra.polunraivaaja.suorituskykytestit.algoritmit;
 import java.util.ArrayList;
 import java.util.List;
 
-import tiralabra.polunraivaaja.kartta.Kartta;
+import tiralabra.polunraivaaja.mallit.Kartta;
 
 /**
  * Reitinhakualgoritmien suorituskykytestit käyttävät aineistonaan Skenaarioita,

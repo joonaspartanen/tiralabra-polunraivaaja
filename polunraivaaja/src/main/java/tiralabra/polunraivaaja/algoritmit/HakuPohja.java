@@ -1,6 +1,6 @@
 package tiralabra.polunraivaaja.algoritmit;
 
-import tiralabra.polunraivaaja.kartta.Kartta;
+import tiralabra.polunraivaaja.mallit.Kartta;
 import tiralabra.polunraivaaja.algoritmit.heuristiikka.DiagonaaliEtaisyys;
 import tiralabra.polunraivaaja.algoritmit.heuristiikka.Heuristiikka;
 import tiralabra.polunraivaaja.algoritmit.heuristiikka.ManhattanEtaisyys;
@@ -205,6 +205,16 @@ public abstract class HakuPohja implements Haku {
     protected void vieraile(int rivi, int sarake) {
         vierailtu[rivi][sarake] = true;
         ruutujaTarkasteltu++;
+    }
+
+    /**
+     * Tarkistaa, sijaitsevatko kaksi ruutua samalla rivillä tai sarakkeessa.
+     * @param a Ensimmäinen verrattava ruutu.
+     * @param b Toinen verrattava ruutu.
+     * @return true, jos sijaitsevat samalla rivillä tai sarakkeessa; muuten false.
+     */
+    protected boolean samaRiviTaiSarake(Ruutu a, Ruutu b) {
+        return a.y == b.y || a.x == b.x;
     }
 
     protected RuutuLista haeVapaatNaapurit(Ruutu ruutu, boolean salliDiagonaalisiirtymat) {

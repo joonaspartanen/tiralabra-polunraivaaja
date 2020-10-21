@@ -60,8 +60,9 @@ public class SuorituskykyTestaaja {
      * @return HashMap, jossa avaimina algoritmien nimet ja arvoina
      *         suorituskykytestien tulokset.
      */
-    public static Map<String, Mittaustulos> suoritaAlgoritmienTestit(String skenaariotiedosto) throws Tiedostonlukupoikkeus {
-        int suorituskerrat = 100;
+    public static Map<String, Mittaustulos> suoritaAlgoritmienTestit(String skenaariotiedosto)
+            throws Tiedostonlukupoikkeus {
+        int suorituskerrat = 10;
 
         Map<String, Mittaustulos> tulokset = new HashMap<>();
 
@@ -69,18 +70,26 @@ public class SuorituskykyTestaaja {
 
         Skenaario skenaario = lukija.lueSkenaario(skenaariotiedosto);
 
-        tulokset.put("Leveyshaku", suoritaAlgoritmitesti(new Leveyshaku(skenaario.getKartta()), skenaario, suorituskerrat));
+        System.out.println("Aloitetaan testi 1/4");
+        tulokset.put("Leveyshaku",
+                suoritaAlgoritmitesti(new Leveyshaku(skenaario.getKartta()), skenaario, suorituskerrat));
+
+        System.out.println("Aloitetaan testi 2/4");
         tulokset.put("A* (ilman diagonaalisiirtymiä)",
                 suoritaAlgoritmitesti(new AStar(skenaario.getKartta(), false), skenaario, suorituskerrat));
+
+        System.out.println("Aloitetaan testi 3/4");
         tulokset.put("A* (diagonaalisiirtymillä)",
                 suoritaAlgoritmitesti(new AStar(skenaario.getKartta(), true), skenaario, suorituskerrat));
+
+        System.out.println("Aloitetaan testi 4/4");
         tulokset.put("JPS", suoritaAlgoritmitesti(new JPS(skenaario.getKartta()), skenaario, suorituskerrat));
 
         return tulokset;
     }
 
     private static Vertailutulos suoritaTietorakennetesti(TietorakenneSuorituskykytesti testi, int operaatioita) {
-        int suorituskerrat = 1;
+        int suorituskerrat = 100;
 
         long[] javaRakenteenAjat = new long[suorituskerrat];
         long[] omanRakenteenAjat = new long[suorituskerrat];
@@ -122,7 +131,7 @@ public class SuorituskykyTestaaja {
             kokonaisaika += mediaani;
         }
 
-        return new Mittaustulos(kokonaisaika, suorituskerrat, skenaario.getReittikuvaukset().size());
+        return new Mittaustulos(kokonaisaika, skenaario.getReittikuvaukset().size(), suorituskerrat);
     }
 
 }

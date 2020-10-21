@@ -6,7 +6,7 @@ import tiralabra.polunraivaaja.tietorakenteet.RuutuKeko;
 import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
 import tiralabra.polunraivaaja.tyokalut.Laskin;
 import tiralabra.polunraivaaja.tyokalut.RuutuKomparaattori;
-import tiralabra.polunraivaaja.kartta.Kartta;
+import tiralabra.polunraivaaja.mallit.Kartta;
 
 /**
  * A*-algoritmin toteutus. Hakee kartalta lyhimmän reitin kahden pisteen välillä
@@ -70,7 +70,7 @@ public class AStar extends HakuPohja {
             for (int i = 0; i < naapurit.haePituus(); i++) {
                 Ruutu naapuri = naapurit.haeRuutuIndeksissa(i);
 
-                double etaisyysTahan = nykyinen.y == naapuri.y || nykyinen.x == naapuri.x ? 1 : Laskin.SQRT_2;
+                double etaisyysTahan = samaRiviTaiSarake(nykyinen, naapuri) ? 1 : Laskin.SQRT_2;
 
                 double uusiEtaisyys = etaisyysAlusta[nykyinen.y][nykyinen.x] + etaisyysTahan;
 

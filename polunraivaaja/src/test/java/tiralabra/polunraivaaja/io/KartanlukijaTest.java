@@ -12,7 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import tiralabra.polunraivaaja.kartta.Kartta;
+import tiralabra.polunraivaaja.mallit.Kartta;
 import tiralabra.polunraivaaja.suorituskykytestit.algoritmit.Reittikuvaus;
 import tiralabra.polunraivaaja.suorituskykytestit.algoritmit.Skenaario;
 

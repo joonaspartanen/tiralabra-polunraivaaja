@@ -6,7 +6,7 @@ import tiralabra.polunraivaaja.tietorakenteet.RuutuKeko;
 import tiralabra.polunraivaaja.tietorakenteet.RuutuLista;
 import tiralabra.polunraivaaja.tyokalut.RuutuKomparaattori;
 import tiralabra.polunraivaaja.mallit.Suunta;
-import tiralabra.polunraivaaja.kartta.Kartta;
+import tiralabra.polunraivaaja.mallit.Kartta;
 
 /**
  * JPS-algoritmin toteutus, joka kaipaa vielä refaktorointia.
