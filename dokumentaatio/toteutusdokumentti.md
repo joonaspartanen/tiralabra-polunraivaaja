@@ -50,17 +50,19 @@ Kuten muutkin tietorakenteet, myös RuutuKeko perustuu taulukkoon, jonka koko ka
 
 Leveyshaun odotettu aikavaativuus on tunnetusti _O(\|V\|+\|E\|)_, missä |V| on verkon solmujen ja |E| kaarien määrä.
 
-Kuten testausdokumentissa tarkemmin esitellään, osoittautui leveyshaku käytännössä varsin tehokkaaksi algoritmiksi A\*:iin verrattuna. Leveyshaun suhteellista tehokkuutta selittänee ainakin toteutuksen yksinkertaisuus ja käyttämieni karttojen melko pieni koko: koska karttojen koko on korkeintaan 512x512 ruutua, ei leveyshaku ehdi "harhailemaan" kovin kauaa vääriin suuntiin ennen maalin löytymistä.
+Kuten testausdokumentissa tarkemmin esitellään, osoittautui leveyshaku käytännössä varsin tehokkaaksi algoritmiksi A\*:iin verrattuna, kun kartan koko on suhteellisen pieni (512x512 ruutua). Tällaisessa tilanteessa leveyshaku ei ehdi "harhailemaan" kovin kauaa vääriin suuntiin ennen maalin löytymistä, ja algoritmitoteuksen yksinkertaisuuden ansiosta, tulokset voivat olla jopa A\*:a parempia. Kuitenkin kun kartan koko kasvaa 1024x1024 ruutuun, jää leveyshaku suorituskykytestien perusteella selvästi A\*:n jalkoihin.
 
 Samalla on muistettava, että leveyshaku on hyvin rajoittunut algoritmi, sillä se toimii vain painottamattomissa verkoissa. Omassa sovelluksessani tämä näkyy siinä, ettei leveyshaku mahdollista lainkaan diagonaalisia siirtymiä – näin ollen se ei useimmiten kykene löytämään yhtä lyhyttä reittiä kuin sovelluksen muut algoritmit.
 
 #### A\*
 
-A\*-algoritmin odotettu aikavaativuus on _O(\|E\|)_. A\* osoittautui kuitenkin käytännössä sovelluksen hitaimmaksi algoritmiksi, vaikka tehostettua algoritmin toimintaa viimeisellä viikolla poistamalla esimerkiksi turhia tarkistuksia.
+A\*-algoritmin odotettu aikavaativuus on _O(\|E\|)_. Pienillä kartoilla (512x512 ruutua) A\* osoittautui kuitenkin käytännössä sovelluksen hitaimmaksi algoritmiksi, vaikka sain tehostettua algoritmin toimintaa viimeisellä viikolla poistamalla esimerkiksi turhia tarkistuksia.
 
 Etsin suorituskykytestien avulla A\*-implementaatiostani mahdollisia pullonkauloja, mutta ainakaan oman kekorakenteeni vaihtaminen takaisin Javan PriorityQueueksi tai liukulukuetäisyyksien vaihtaminen likimääräisiksi kokonaisluvuiksi ei vaikuttanut tuloksiin merkittävästi.
 
-Uskoisin, että algoritmin suhteellista hitautta selittää etenkin se, että kaikki käyttämäni kartat muodostavat melko pieniä ja erittäin tiheitä painottamattomia verkkoja, jotka eivät millään muotoa suosi A\*:a. Siksi en ole ollenkaan varma, onko algoritmia ylipäänsä mielekästä verrata yksinkertaiseen mutta rajalliseen leveyshakuun.
+Kuitenkin kartan koon kasvaessa A\* ohittaa selvästi leveyshaun suorituksen nopeudessa. Suurimmat testikarttani olivat kokoa 1024x1024 ruutua, mutta on odotettavissa, että algoritmien nopeusero kasvaisi edelleen suuremmilla kartoilla.
+
+On myös hyvä muistaa, että sovellukseni kartat muodostavat hyvin tiheitä ja painottamattomia verkkoja, jotka eivät millään muotoa suosi A\*:a, joka kykenisi löytämään lyhimmän reitin myös painotetuissa verkoissa. Siksi en ole ollenkaan varma, onko algoritmia ylipäänsä mielekästä verrata yksinkertaiseen mutta rajalliseen leveyshakuun.
 
 Toisen mielenkiintoisen näkökulman algoritmien vertailuun tarjoaa kuitenkin sovellukseni käyttöliittymän reittihakutoiminto, piirtää kartalle myös solmut, joissa algoritmi on reitinhaun aikana "vieraillut". Näin on helppo havaita leveyshaun ja A\*:n perustava ero: siinä missä leveyshaku laajenee tasaisesti kaikkiin suuntiin, osaa A\* laajentaa hakua ensisijaisesti kohti maalisolmua – siis suuntaan, jossa optimaalinen reitti luultavimmin sijaitsee.
 
