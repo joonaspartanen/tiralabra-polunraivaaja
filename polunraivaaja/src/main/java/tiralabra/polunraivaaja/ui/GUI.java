@@ -2,11 +2,13 @@ package tiralabra.polunraivaaja.ui;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
@@ -15,6 +17,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.ToggleGroup;
@@ -27,6 +30,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import tiralabra.polunraivaaja.algoritmit.AStar;
 import tiralabra.polunraivaaja.algoritmit.Leveyshaku;
@@ -75,9 +79,18 @@ public class GUI extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Polunraivaaja");
 
-        ilmoitus = new Alert(AlertType.INFORMATION);
-        ilmoitus.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alustaIlmoitus();
 
+        TabPane valilehdet = alustaValilehdet();
+
+        primaryStage.setScene(new Scene(valilehdet));
+        primaryStage.setMaximized(true);
+        primaryStage.setResizable(true);
+
+        primaryStage.show();
+    }
+
+    private TabPane alustaValilehdet() {
         TabPane valilehdet = new TabPane();
         valilehdet.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
@@ -85,9 +98,12 @@ public class GUI extends Application {
         Tab testiValilehti = alustaTestiValilehti();
 
         valilehdet.getTabs().addAll(hakuValilehti, testiValilehti);
+        return valilehdet;
+    }
 
-        primaryStage.setScene(new Scene(valilehdet, 1600, 1200));
-        primaryStage.show();
+    private void alustaIlmoitus() {
+        ilmoitus = new Alert(AlertType.INFORMATION);
+        ilmoitus.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
     }
 
     private Tab alustaHakuValilehti() {
@@ -106,10 +122,13 @@ public class GUI extends Application {
         karttapohja = piirtaja.getKarttapohja();
 
         HBox hakuWrapper = new HBox(20);
-        hakuWrapper.setPadding(new Insets(50, 50, 50, 50));
+        hakuWrapper.setPadding(new Insets(25, 25, 25, 25));
         hakuWrapper.getChildren().add(alustaKarttaWrapper());
 
-        hakuValilehti.setContent(hakuWrapper);
+        ScrollPane scrollPane = new ScrollPane(hakuWrapper);
+        scrollPane.setFitToHeight(true);
+
+        hakuValilehti.setContent(scrollPane);
 
         alustaReitinPaaLabelit();
 
@@ -227,6 +246,8 @@ public class GUI extends Application {
         FilenameFilter suodatin = (tiedosto, nimi) -> nimi.endsWith(".map");
 
         String[] karttatiedostot = karttakansio.list(suodatin);
+        Arrays.sort(karttatiedostot);
+
         karttalista = new ComboBox<>();
 
         karttalista.getItems().addAll(karttatiedostot);
@@ -336,7 +357,7 @@ public class GUI extends Application {
             for (Map.Entry<String, List<Vertailutulos>> tulos : tulokset.entrySet()) {
                 TextFlow tulosteksti = new TextFlow();
                 tulosteksti.setStyle(BORDER_BLACK);
-                tulosteksti.setPadding(new Insets(15, 15, 0 , 15));
+                tulosteksti.setPadding(new Insets(15, 15, 0, 15));
                 Text otsikko = new Text(tulos.getKey() + "\n");
                 otsikko.setStyle("-fx-font-weight: bold");
 

@@ -20,8 +20,13 @@ public class Kartanpiirtaja {
     private int leveys;
     private Canvas karttapohja;
     private GraphicsContext gc;
-    private final double KARTTAPOHJAN_LEVEYS = 512;
-    private final double KARTTAPOHJAN_KORKEUS = 512;
+    private final double KARTTAPOHJAN_LEVEYS = 1024;
+    private final double KARTTAPOHJAN_KORKEUS = 1024;
+
+    private final Color VIERAILTU = Color.LIGHTGREEN;
+    private final Color SEINA = Color.BLACK;
+    private final Color VAPAA = Color.WHITESMOKE;
+    private final Color REITTI = Color.CRIMSON;
 
     private double ruudunLeveys;
     private double ruudunKorkeus;
@@ -82,11 +87,11 @@ public class Kartanpiirtaja {
 
     private void piirraRuutu(int rivi, int sarake, boolean ruutuKuuluuReittiin, boolean ruudussaVierailtu) {
         if (ruutuKuuluuReittiin) {
-            gc.setFill(Color.CRIMSON);
+            gc.setFill(REITTI);
         } else if (ruudussaVierailtu) {
-            gc.setFill(Color.GREENYELLOW);
+            gc.setFill(VIERAILTU);
         } else {
-            gc.setFill(kartta.ruutuVapaa(rivi, sarake) ? Color.WHITESMOKE : Color.BLACK);
+            gc.setFill(kartta.ruutuVapaa(rivi, sarake) ? VAPAA : SEINA);
         }
         gc.fillRect(sarake * ruudunLeveys, rivi * ruudunKorkeus, ruudunLeveys, ruudunKorkeus);
     }
@@ -111,7 +116,7 @@ public class Kartanpiirtaja {
      *
      */
     public void piirraPiste(Ruutu sijainti) {
-        gc.setFill(Color.CRIMSON);
+        gc.setFill(REITTI);
         gc.fillOval(sijainti.x * ruudunLeveys - 3, sijainti.y * ruudunKorkeus - 3, 7, 7);
     }
 
