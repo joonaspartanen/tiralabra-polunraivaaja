@@ -70,6 +70,7 @@ Alla olevissa kuvaajissa tietorakenteiden suoritusaika on suhteutettu toisiinsa 
 
 ### Algoritmien suorituskykytestit
 
+
 Reitinhakualgoritmien suorituskykytestit testaavat kunkin algoritmin suoritusnopeutta skenaarioilla, joihin kuuluu satoja reittikuvauksia tietyllä kartalla.
 
 Suorituskykytestin aikana kukin skenaarioon kuuluva reitti haetaan kullakin algoritmilla 41 kertaa (ensimmäinen suorituskerta hylätään). Kunkin suorituskerran kesto otetaan muistiin, minkä jälkeen lasketaan kestojen mediaani. Lopullisessa mittaustuloksessa raportoidaan näiden mediaanien yhteenlaskettu kesto.
@@ -78,7 +79,7 @@ Testit voi ajaa sovelluksen Suorituskykytestit-välilehdeltä useilla eri testis
 
 Analysoin algoritmien eroja tarkemmin [toteutusdokumentissa](https://github.com/joonaspartanen/tiralabra-polunraivaaja/blob/master/dokumentaatio/toteutusdokumentti.md), mutta tässäkin yhteydessä voidaan nostaa esiin joitain keskeisiä havaintoja.
 
-Tulokset vastaavat varsin hyvin ennakko-odotuksiani: suurella kartalla leveyshaku jää algoritmeista hitaimmaksi ja JPS toimii selvästi nopeimmin. Kuitenkin pienemmällä kartalla leveyshaku on jopa A\*:a nopeampi, mikä selittynee ennen kaikkea sillä, että algoritmi-implementaatio on A\*:a yksinkertaisempi ja kevyempi.
+Tulokset vastaavat varsin hyvin ennakko-odotuksiani: suurella kartalla leveyshaku jää hitaammaksi kuin vastaavan reitin löytävä A\*-implementaatio, ja JPS toimii selvästi nopeimmin. Kuitenkin pienemmällä kartalla leveyshaku on jopa A\*:a nopeampi, mikä selittynee ennen kaikkea sillä, että algoritmi-implementaatio on A\*:a yksinkertaisempi ja kevyempi. Lisäksi testiskenaariot sisältävät useita hyvin lyhyitä reittejä, joiden uskoisin suosivan kevyempää leveyshakua.
 
 |          Skenaario           | Leveyshaku | A\* (ilman diagonaalisiirtymiä) | A\* (diagonaalisiirtymillä) |  JPS   |
 | :--------------------------: | :--------: | :-----------------------------: | :-------------------------: | :----: |
