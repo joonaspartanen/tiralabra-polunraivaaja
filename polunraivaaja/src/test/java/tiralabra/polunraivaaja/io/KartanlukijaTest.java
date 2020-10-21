@@ -59,6 +59,8 @@ public class KartanlukijaTest {
                 assertEquals(0, kartta.getRuutu(i, j));
             }
         }
+
+        assertThat(kartta.getVapaitaRuutuja(), is(25));
     }
 
     @Test
@@ -75,6 +77,8 @@ public class KartanlukijaTest {
         assertEquals(0, kartta.getRuutu(3, 5));
         assertEquals(0, kartta.getRuutu(3, 7));
         assertEquals(1, kartta.getRuutu(4, 7));
+
+        assertThat(kartta.getVapaitaRuutuja(), is(73));
     }
 
     @Test

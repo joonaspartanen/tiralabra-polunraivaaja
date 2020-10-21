@@ -51,7 +51,8 @@ public class Kartanlukija {
 
             muodostaKartta(lukija);
         } catch (FileNotFoundException e) {
-            throw new Tiedostonlukupoikkeus(String.format("Tiedostoa %s ei löytynyt.", karttatiedosto.getAbsolutePath()) , e);
+            throw new Tiedostonlukupoikkeus(
+                    String.format("Tiedostoa %s ei löytynyt.", karttatiedosto.getAbsolutePath()), e);
 
         } catch (NumberFormatException e) {
             throw new Tiedostonlukupoikkeus("Karttadata ei kelpaa.", e);
@@ -75,6 +76,10 @@ public class Kartanlukija {
         for (int i = 0; i < leveys; i++) {
             byte merkki = (byte) (rivi.charAt(i) == 64 ? 1 : 0);
             kartta.setRuutu(rivinumero, i, merkki);
+
+            if (merkki == 0) {
+                kartta.kasvataVapaitaRuutuja();
+            }
         }
     }
 
@@ -101,7 +106,7 @@ public class Kartanlukija {
                 skenaario.lisaaReittikuvaus(reittikuvaus);
             }
         } catch (FileNotFoundException e) {
-            throw new Tiedostonlukupoikkeus(String.format("Tiedostoa %s ei löytynyt.", tiedosto.getAbsolutePath()) , e);
+            throw new Tiedostonlukupoikkeus(String.format("Tiedostoa %s ei löytynyt.", tiedosto.getAbsolutePath()), e);
         } catch (NumberFormatException e) {
             throw new Tiedostonlukupoikkeus("Skenaariodata ei kelpaa.", e);
         }

@@ -11,6 +11,12 @@ public class Kartta {
     private int leveys;
     private byte[][] kartta;
 
+    /**
+     * Reitinhaun tulosten laskentaa varten karttaa luodessa lasketaan, kuinka monta
+     * kuljettavissa olevaa ruutua kartalla on.
+     */
+    private int vapaitaRuutuja;
+
     public Kartta(int korkeus, int leveys) {
         this.korkeus = korkeus;
         this.leveys = leveys;
@@ -37,6 +43,10 @@ public class Kartta {
         kartta[rivi][sarake] = merkki;
     }
 
+    public int getVapaitaRuutuja() {
+        return vapaitaRuutuja;
+    }
+
     /**
      * Tarkistaa, onko jokin karttaruutu kuljettavissa.
      *
@@ -46,6 +56,10 @@ public class Kartta {
      */
     public boolean ruutuVapaa(int rivi, int sarake) {
         return kartta[rivi][sarake] == 0;
+    }
+
+    public void kasvataVapaitaRuutuja() {
+        vapaitaRuutuja++;
     }
 
 }

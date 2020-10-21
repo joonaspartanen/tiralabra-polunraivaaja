@@ -35,7 +35,7 @@ public class JPS extends HakuPohja {
         ruutujaTarkasteltu = 0;
 
         if (!reitinPaatVapaat(alku, loppu)) {
-            return new Hakutulos(false, "Alku- tai loppupiste ei kelpaa.", ruutujaTarkasteltu, vierailtu);
+            return new Hakutulos(false, "Alku- tai loppupiste ei kelpaa.", ruutujaTarkasteltu, kartta.getVapaitaRuutuja(), vierailtu);
         }
 
         this.alku = alku;
@@ -81,7 +81,7 @@ public class JPS extends HakuPohja {
                 }
             }
         }
-        return new Hakutulos(false, "Reitti ei mahdollinen.", ruutujaTarkasteltu, vierailtu);
+        return new Hakutulos(false, "Reitti ei mahdollinen.", ruutujaTarkasteltu, kartta.getVapaitaRuutuja(), vierailtu);
     }
 
     private RuutuLista etsiSeuraajat(Ruutu ruutu) {

@@ -179,7 +179,7 @@ public abstract class HakuPohja implements Haku {
         muodostaReitti();
         double reitinPituus = !salliDiagonaalisiirtymat ? reitti.haePituus() - 1 : etaisyysAlusta[loppu.y][loppu.x];
 
-        return new Hakutulos(true, "Reitti löytyi.", ruutujaTarkasteltu, reitti, vierailtu, reitinPituus, haunKesto);
+        return new Hakutulos(true, "Reitti löytyi.", ruutujaTarkasteltu, kartta.getVapaitaRuutuja(), reitti, vierailtu, reitinPituus, haunKesto);
     }
 
     /**
