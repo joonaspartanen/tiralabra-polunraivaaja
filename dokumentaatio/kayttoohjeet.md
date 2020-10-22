@@ -36,7 +36,7 @@ Ohjelmassa on kaksi näkymää, joiden välillä voi siirtyä yläpalkin välile
 
 ### Reitinhaku-näkymä
 
-![Ohjelman reitinhakunäkymä](https://raw.githubusercontent.com/joonaspartanen/tiralabra-polunraivaaja/master/dokumentaatio/kuvat/reitinhakunakyma.png)
+![Ohjelman reitinhakunäkymä](https://raw.githubusercontent.com/joonaspartanen/tiralabra-polunraivaaja/master/dokumentaatio/kuvat/reittihakunakyma.png)
 
 Reitinhakunäkymässä käyttäjä voi ensin valita pudotusvalikosta kartan, joka piirretään näytölle.
 
@@ -46,7 +46,7 @@ Kartan oikealla puolella on valikko, josta valitaan haluttu reitinhakualgoritmi.
 
 Reitinhaku käynnistetään "Piirrä reitti" -painikkeesta. Haun päätyttyä käyttöliittymään tulostuu tietoa haun tuloksista ja algoritmin löytämä reitti piirtyy kartalle punaisella. Solmut, joissa algoritmi vieraili reitinhaun aikana, piirtyvät kartalle vihreällä. Tämä auttaa hahmottamaan algoritmien toimintaa ja eroja.
 
-![Reitti reitinhakunäkymässä](https://raw.githubusercontent.com/joonaspartanen/tiralabra-polunraivaaja/master/dokumentaatio/kuvat/reitinhakunakyma_reitti.png)
+![Reitti reitinhakunäkymässä](https://raw.githubusercontent.com/joonaspartanen/tiralabra-polunraivaaja/master/dokumentaatio/kuvat/reittihakunakyma_reitti.png)
 
 Reitin voi pyyhkiä "Pyyhi reitti" -painikkeesta.
 
