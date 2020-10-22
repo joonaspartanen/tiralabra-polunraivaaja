@@ -32,14 +32,34 @@ Raportti löytyy polusta `/target/site/checkstyle.html`.
 
 ## Ohjelman käyttäminen
 
-![Ohjelman käyttöliittymä](https://raw.githubusercontent.com/joonaspartanen/tiralabra-polunraivaaja/master/dokumentaatio/kuvat/kayttoliittyma.png)
+Ohjelmassa on kaksi näkymää, joiden välillä voi siirtyä yläpalkin välilehdistä.
 
-Ohjelman käyttöliittymä tarjoaa mahdollisuuden karttapohjan valitsemiseen pudotusvalikosta.
+### Reitinhaku-näkymä
 
-Kun karttapohja on valittu, käyttäjä voi valita hiirellä klikkaamalla haluamansa reitin alku- ja loppupisteet kartalta.
+![Ohjelman reitinhakunäkymä](https://raw.githubusercontent.com/joonaspartanen/tiralabra-polunraivaaja/master/dokumentaatio/kuvat/reitinhakunakyma.png)
 
-Kartan oikealla puolella on valikko, josta valitaan haluttu reitinhakualgoritmi. Joillain algoritmeilla on mahdollista valita erikseen, sallitaanko myös kulmittainen liikkuminen ruudusta toiseen ("Salli diagonaalisiirtymät").
+Reitinhakunäkymässä käyttäjä voi ensin valita pudotusvalikosta kartan, joka piirretään näytölle.
+
+Tämän jälkeen käyttäjä voi valita hiirellä klikkaamalla haluamansa reitin alku- ja loppupisteet kartalta. Jo valitut pisteet voi poistaa klikkaamalla karttaa uudelleen.
+
+Kartan oikealla puolella on valikko, josta valitaan haluttu reitinhakualgoritmi. A\*-algoritmin kohdalla on mahdollista valita erikseen, sallitaanko myös kulmittainen liikkuminen ruudusta toiseen ("Salli diagonaalisiirtymät").
 
 Reitinhaku käynnistetään "Piirrä reitti" -painikkeesta. Haun päätyttyä käyttöliittymään tulostuu tietoa haun tuloksista ja algoritmin löytämä reitti piirtyy kartalle punaisella. Solmut, joissa algoritmi vieraili reitinhaun aikana, piirtyvät kartalle vihreällä. Tämä auttaa hahmottamaan algoritmien toimintaa ja eroja.
 
+![Reitti reitinhakunäkymässä](https://raw.githubusercontent.com/joonaspartanen/tiralabra-polunraivaaja/master/dokumentaatio/kuvat/reitinhakunakyma_reitti.png)
+
 Reitin voi pyyhkiä "Pyyhi reitti" -painikkeesta.
+
+### Suorituskykytestit-näkymä
+
+![Ohjelman testinäkymä](https://raw.githubusercontent.com/joonaspartanen/tiralabra-polunraivaaja/master/dokumentaatio/kuvat/testinakyma.png)
+
+Suorituskykytestit-näkymässä käyttäjä voi ajaa suorituskykytestit sovelluksen reitinhakualgoritmeille ja tietorakenteille.
+
+Algoritmitestejä varten käyttäjä voi valita pudotusvalikosta testiskenaarion, joka sisältää suuren joukon reittikuvauksia johonkin tiettyyn karttaan.
+
+Käyttäjä voi käynnistää algoritmien ja tietorakenteiden testit käyttöliittymän painikkeista.
+
+Testin päätyttyä saadut mittaustulokset tulostetaan käyttöliittymään.
+
+Huom: Etenkin algoritmien suorituskykytestien suorittaminen saattaa kestää kauan. Testit blokkaavat suorittavan säikeen, joten käyttöliittymä ei ole käytettävissä testien suorituksen aikana.
