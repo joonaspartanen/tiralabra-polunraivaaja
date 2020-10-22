@@ -48,7 +48,7 @@ Taulukossa |V| = solmujen määrä ja |E| = kaarien määrä.
 | :-------: | :------------: | :-----------: |
 |    BFS    | O(\|V\|+\|E\|) |   O(\|V\|)    |
 |    A\*    |    O(\|E\|)    |   O(\|V\|)    |
-|    JPS    |   O(\|E\|) ?   |   O(\|V\|)?   |
+|    JPS    |    O(\|E\|)    |   O(\|V\|)    |
 
 ## Lähteet
 
